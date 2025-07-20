@@ -23,14 +23,16 @@ In the `PuDB` style, you can install all debugging tools and enter the debugging
 
 ```python
 import debug_dojo.all; b()
+
+i(object_1)  # Inspect an object
+c(object_1, object_2)  # Compare two objects side-by-side
 ```
 
-Where`b()` is a builtin-injected function that sets a breakpoint using PuDB's `set_trace()`.
-In the PuDB interface, you can use the following functions:
+Where:
 
+- `b()` is a builtin-injected function that sets a breakpoint using PuDB's `set_trace()`.
 - `i(object_1)` to inspect an object.
 - `c(object_1, object_2)` to compare two objects side-by-side.
-
 
 ### Use individual tools
 
@@ -66,11 +68,3 @@ pytest
 ruff check src/debug_dojo --fix
 basedpyright src/debug_dojo
 ```
-
-## License
-
-MIT License
-
----
-
-*Debugging made delightful!*
