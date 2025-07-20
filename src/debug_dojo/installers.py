@@ -13,6 +13,9 @@ from rich import (
     inspect,
     traceback,
 )
+from rich import (
+    print as rich_print,
+)
 
 from .compareres import inspect_objects_side_by_side
 
@@ -62,6 +65,12 @@ def install_breakpoint() -> None:
     builtins.b = pudb.set_trace  # pyright: ignore[reportAttributeAccessIssue]
 
 
+def install_rich_print() -> None:
+    """Install the breakpoint function."""
+    # Set the breakpoint function to use PuDB's set_trace
+    builtins.p = rich_print  # pyright: ignore[reportAttributeAccessIssue]
+
+
 def install_all() -> None:
     """Install debugging tools."""
     use_pudb()
@@ -70,3 +79,4 @@ def install_all() -> None:
     install_inspect()
     install_compare()
     install_breakpoint()
+    install_rich_print()

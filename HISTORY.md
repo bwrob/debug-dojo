@@ -5,6 +5,7 @@
 ### What's Changed
 
 - Added `dojo` command for easy debugging setup.
+- Added `p()` function for rich printing.
 - Added history file for tracking changes.
 - Moved to `hatch` for building and packaging.
 
