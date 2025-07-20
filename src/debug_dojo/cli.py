@@ -3,6 +3,7 @@
 import os
 import runpy
 import sys
+from bdb import BdbQuit
 from pathlib import Path
 
 from rich import print as rich_print
@@ -41,5 +42,8 @@ def main() -> None:
 
     target_name = sys.argv[1]
     args_for_target = sys.argv[2:]
-
-    execute_with_debug(target_name, args_for_target)
+    try:
+        execute_with_debug(target_name, args_for_target)
+    except BdbQuit:
+        rich_print("[red]Debugging session terminated by user.[/red]")
+        sys.exit(0)

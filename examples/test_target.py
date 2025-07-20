@@ -15,8 +15,9 @@ def main() -> None:
         "key2": "value2",
         "key3": "value3",
     }
+    b()
 
-    i(example_dict)  # noqa: F821
+    i(example_dict)
 
 
 if __name__ == "__main__":
