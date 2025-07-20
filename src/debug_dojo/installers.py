@@ -66,8 +66,7 @@ def install_breakpoint() -> None:
 
 
 def install_rich_print() -> None:
-    """Install the breakpoint function."""
-    # Set the breakpoint function to use PuDB's set_trace
+    """Install the print from rich."""
     builtins.p = rich_print  # pyright: ignore[reportAttributeAccessIssue]
 
 

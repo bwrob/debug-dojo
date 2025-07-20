@@ -1,6 +1,6 @@
 ## v0.2.0 (2025-07-20)
 
-*release tag*: [v0.2.0](https://github.com/pydantic/pydantic/releases/tag/v2.11.6)
+*release tag*: [v0.2.0]
 
 ### What's Changed
 
@@ -13,9 +13,9 @@
 
 - Fixed `pyproject.toml` to point to GitHub repository as the homepage.
 
-## v0.1.0 (2025-07-20)
+## v0.1.0 (2025-07-19)
 
-*release tag*: [v0.1.0](https://github.com/pydantic/pydantic/releases/tag/v2.11.6)
+*release tag*: [v0.1.0]
 
 ### What's Changed
 
