@@ -60,3 +60,13 @@ def install_breakpoint() -> None:
     """Install the breakpoint function."""
     # Set the breakpoint function to use PuDB's set_trace
     builtins.b = pudb.set_trace  # pyright: ignore[reportAttributeAccessIssue]
+
+
+def install_all() -> None:
+    """Install debugging tools."""
+    use_pudb()
+    use_rich_traceback()
+
+    install_inspect()
+    install_compare()
+    install_breakpoint()

@@ -36,6 +36,10 @@
         Source        = "https://github.com/bwrob/debug-dojo/tree/main/src/debug_dojo"
         Changelog     = "https://github.com/bwrob/debug-dojo/blob/main/HISTORY.md"
 
+    [project.scripts]
+        # This defines your command-line script!
+        # It points to the 'main' function in your 'cli' module.
+        "dojo" = "debug_dojo.cli:main"
 
 [dependency-groups]
     dev = ["basedpyright>=1.31.0", "ruff>=0.12.4"]
