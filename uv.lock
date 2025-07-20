@@ -34,7 +34,6 @@ wheels = [
 
 [[package]]
 name = "debug-dojo"
-version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "pudb" },

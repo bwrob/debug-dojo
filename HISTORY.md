@@ -5,10 +5,11 @@
 ### What's Changed
 
 - Added `dojo` command for easy debugging setup.
+- Added history file for tracking changes.
+- Moved to `hatch` for building and packaging.
 
 #### Fixes
 
-- Added history file for tracking changes.
 - Fixed `pyproject.toml` to point to GitHub repository as the homepage.
 
 ## v0.1.0 (2025-07-20)
