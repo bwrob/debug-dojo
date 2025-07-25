@@ -1,9 +1,16 @@
-# debug-dojo
+<p align="center">
+  <img src="https://github.com/bwrob/debug-dojo/blob/main/logo/logo_black.png?raw=true" alt="debug dojo"/>
+</p>
+
+<p align="center">
+    <em>debug dojo, a place for zen debug</em>
+</p>
 
 **debug-dojo** is a Python package providing utilities for enhanced debugging and inspection in the terminal. It leverages [`rich`](https://github.com/Textualize/rich) for beautiful output and offers helpers for side-by-side object comparison, improved tracebacks from `rich`, and easy integration with PuDB. All tools can be installed at once or individually, allowing for flexible debugging setups.
 
 ## Features
 
+- **Convenient CLI** Quickly run your code with debugging tools enabled.
 - **Simple API:** Install all tools or only what you need.
 - **PuDB integration:** Quickly enable the PuDB TUI debugger.
 - **Rich tracebacks:** Get readable, colorized tracebacks for easier debugging.
@@ -11,11 +18,19 @@
 
 ## Installation
 
-```sh
+```console
 pip install debug-dojo
 ```
 
 ## Usage
+
+### CLI
+
+Run your Python script with debugging tools enabled using the `debug-dojo` command:
+
+```console
+dojo my_script.py
+```
 
 ### Install all debugging tools
 
@@ -24,6 +39,7 @@ In the `PuDB` style, you can install all debugging tools and enter the debugging
 ```python
 import debug_dojo.all; b()
 
+p(object_1)  # Set a breakpoint
 i(object_1)  # Inspect an object
 c(object_1, object_2)  # Compare two objects side-by-side
 ```
@@ -31,7 +47,8 @@ c(object_1, object_2)  # Compare two objects side-by-side
 Where:
 
 - `b()` is a builtin-injected function that sets a breakpoint using PuDB's `set_trace()`.
-- `i(object_1)` to inspect an object.
+- `p(object_1)` is rich printing of an object.
+- `i(object_1)` to rich inspect an object.
 - `c(object_1, object_2)` to compare two objects side-by-side.
 
 ### Use individual tools
@@ -56,15 +73,9 @@ inspect_objects_side_by_side(a, b)
 
 ## Development
 
-### Run tests
-
-```sh
-pytest
-```
-
 ### Lint and type check
 
-```sh
+```console
 ruff check src/debug_dojo --fix
 basedpyright src/debug_dojo
 ```
