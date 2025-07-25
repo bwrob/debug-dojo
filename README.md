@@ -19,12 +19,6 @@
 - **Rich tracebacks:** Get readable, colorized tracebacks for easier debugging.
 - **Side-by-side object inspection:** Visually compare Python objects, their attributes, and methods in the terminal.
 
-## Installation
-
-```console
-pip install debug-dojo
-```
-
 ## Usage
 
 ### CLI
@@ -73,6 +67,27 @@ a = {"foo": 1, "bar": 2}
 b = [1, 2, 3]
 inspect_objects_side_by_side(a, b)
 ```
+
+
+## Installation
+
+The package is available on PyPI and can be installed using standard Python package management tools.
+
+```console
+pip install debug-dojo
+```
+
+You can also use `poetry` or `uv` to add it to your project:
+
+```console
+poetry add debug-dojo
+```
+
+```console
+uv add debug-dojo
+```
+
+Note that dojo most likely will not work when installed via `pipx` or `uvx`, as it relies on the current Python environment dependencies.
 
 ## Development
 
