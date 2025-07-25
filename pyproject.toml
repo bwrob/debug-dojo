@@ -5,7 +5,11 @@
         { name = "bwrob", email = "bartosz.marcin.wroblewski@gmail.com" },
     ]
     requires-python = ">=3.10"
-    dependencies = ["pudb>=2020.1", "rich>=11.0.0"]
+    dependencies = [
+        "pudb>=2020.1",
+        "rich>=11.0.0",
+        "typer>=0.15.0",
+    ]
     license = 'MIT'
     license-files = ['LICENSE']
     keywords = [
@@ -28,7 +32,8 @@
         "Topic :: Software Development :: Debuggers",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ]
-    dynamic = ['readme', 'version']
+    version = "0.3.0"
+    dynamic = ['readme']
 
     [project.urls]
         Homepage      = "https://github.com/bwrob/debug-dojo"
@@ -39,7 +44,7 @@
     [project.scripts]
         # This defines your command-line script!
         # It points to the 'main' function in your 'cli' module.
-        "dojo" = "debug_dojo.cli:main"
+        "dojo" = "debug_dojo._cli:main"
 
 [dependency-groups]
     dev = ["basedpyright>=1.31.0", "ruff>=0.12.4"]
