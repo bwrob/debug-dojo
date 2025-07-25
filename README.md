@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-    <em>debug dojo, a place for zen debug</em>
+    <em>debug dojo, a place for zen debugging</em>
 </p>
 
 **debug-dojo** is a Python package providing utilities for enhanced debugging and inspection in the terminal. It leverages [`rich`](https://github.com/Textualize/rich) for beautiful output and offers helpers for side-by-side object comparison, improved tracebacks from `rich`, and easy integration with PuDB. All tools can be installed at once or individually, allowing for flexible debugging setups.
@@ -39,7 +39,7 @@ In the `PuDB` style, you can install all debugging tools and enter the debugging
 ```python
 import debug_dojo.all; b()
 
-p(object_1)  # Rich print an object
+p(object_1)  # Pretty print an object with Rich
 i(object_1)  # Inspect an object
 c(object_1, object_2)  # Compare two objects side-by-side
 ```
@@ -47,8 +47,8 @@ c(object_1, object_2)  # Compare two objects side-by-side
 Where:
 
 - `b()` is a builtin-injected function that sets a breakpoint using PuDB's `set_trace()`.
-- `p(object_1)` is rich printing of an object.
-- `i(object_1)` to rich inspect an object.
+- `p(object_1)` is pretty printing of an object using Rich.
+- `i(object_1)` to inspect an object using Rich.
 - `c(object_1, object_2)` to compare two objects side-by-side.
 
 ### Use individual tools
