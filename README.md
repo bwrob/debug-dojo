@@ -39,7 +39,7 @@ In the `PuDB` style, you can install all debugging tools and enter the debugging
 ```python
 import debug_dojo.all; b()
 
-p(object_1)  # Set a breakpoint
+p(object_1)  # Rich print an object
 i(object_1)  # Inspect an object
 c(object_1, object_2)  # Compare two objects side-by-side
 ```
