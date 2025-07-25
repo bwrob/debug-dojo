@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/bwrob/debug-dojo/blob/main/logo/logo_black.png?raw=true" alt="debug dojo"/>
+  <img src="https://github.com/bwrob/debug-dojo/blob/main/logo/logo_white.png?raw=true" alt="debug dojo" style="width:50%; max-width:400px;"/>
 </p>
 
 <p align="center">
