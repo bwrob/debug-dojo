@@ -1,4 +1,4 @@
-debugger = "pdb"
+debugger = "ipdb"
 
 [features]
     rich_inspect = true
