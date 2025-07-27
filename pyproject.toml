@@ -52,8 +52,9 @@
     dev = [
         "basedpyright>=1.31.0",
         "jupyter>=1.1.1",
+        "poethepoet>=0.36.0",
         "ruff>=0.12.4",
-    ]
+]
 
 [build-system]
     requires = [
@@ -83,3 +84,10 @@
     pythonVersion    = "3.10"
     strict           = ["src/debug_dojo/*"]
     ignore           = ["examples"]
+
+[tool.poe.tasks]
+    # Define your tasks here
+    lint = "ruff check --fix src"
+    format = "ruff format src"
+    type-check = "basedpyright"
+    code-quality = ["format", "lint", "type-check"]
