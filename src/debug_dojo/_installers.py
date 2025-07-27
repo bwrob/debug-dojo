@@ -36,7 +36,7 @@ def _use_pudb() -> None:
 
 
 def _use_ipdb() -> None:
-    """Check if IPDB is available and set it as the default debugger."""
+    """Set IPDB as the default debugger."""
     import ipdb  # pyright: ignore[reportMissingTypeStubs]
 
     os.environ[BREAKPOINT_ENV_VAR] = "ipdb.set_trace"
