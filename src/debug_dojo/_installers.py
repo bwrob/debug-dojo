@@ -15,7 +15,20 @@ from ._config import DebugDojoConfig, DebuggerType, Features
 
 BREAKPOINT_ENV_VAR = "PYTHONBREAKPOINT"
 PUDB_SET_TRACE = "pudb.set_trace"
-IPDB_SET_TRACE = "ipdb.set_trace"
+PDB_SET_TRACE_ALT = "pdb.set_trace"
+
+
+def _use_pdb() -> None:
+    """Check if PuDB is available and set it as the default debugger."""
+    import pdb
+
+    # Set the environment variable. This will primarily affect child processes or later
+    # Python startup if the script is re-run.
+    os.environ[BREAKPOINT_ENV_VAR] = PDB_SET_TRACE_ALT
+
+    # Crucially, to make `breakpoint()` work *immediately* in the current process,
+    # we need to explicitly set `sys.breakpointhook`.
+    sys.breakpointhook = pdb.set_trace
 
 
 def _use_pudb() -> None:
@@ -90,9 +103,10 @@ def _set_debugger(debugger: DebuggerType) -> None:
     """Set the debugger based on the configuration."""
     if debugger is DebuggerType.PDB:
         # PDB is the default, no special setup needed
-        return
+        return _use_pdb()
     if debugger is DebuggerType.PUDB:
-        _use_pudb()
+        return _use_pudb()
+    return None
 
 
 def install_by_config(config: DebugDojoConfig) -> None:
