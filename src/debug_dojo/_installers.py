@@ -19,7 +19,7 @@ PDB_SET_TRACE_ALT = "pdb.set_trace"
 
 
 def _use_pdb() -> None:
-    """Check if PuDB is available and set it as the default debugger."""
+    """Set PDB as the default debugger."""
     import pdb
 
     # Set the environment variable. This will primarily affect child processes or later
@@ -48,7 +48,6 @@ def _rich_traceback() -> None:
     """Check if Rich Traceback is available and set it as the default."""
     from rich import traceback
 
-    # Install rich traceback to enhance the debugging experience
     _ = traceback.install(show_locals=True)
 
 
@@ -62,19 +61,16 @@ def _inspect() -> None:
             kwargs = {"methods": True, "private": True}
         return inspect(obj, **kwargs)  # pyright: ignore[reportArgumentType]
 
-    # Inject the custom inspect function into builtins
     builtins.i = inspect_with_defaults  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def _compare() -> None:
     """Print the object using a custom inspect function."""
-    # Inject the custom side-by-side comparison function into builtins
     builtins.c = inspect_objects_side_by_side  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def _breakpoint() -> None:
     """Install the breakpoint function."""
-    # Set the breakpoint function to use PuDB's set_trace
     builtins.b = breakpoint  # pyright: ignore[reportAttributeAccessIssue]
 
 
@@ -99,14 +95,12 @@ def _install_features(features: Features) -> None:
         _breakpoint()
 
 
-def _set_debugger(debugger: DebuggerType) -> None:
+def _set_debugger(debugger: DebuggerType) -> None:  # noqa: RET503
     """Set the debugger based on the configuration."""
-    if debugger is DebuggerType.PDB:
-        # PDB is the default, no special setup needed
+    if debugger == DebuggerType.PDB:
         return _use_pdb()
-    if debugger is DebuggerType.PUDB:
+    if debugger == DebuggerType.PUDB:
         return _use_pudb()
-    return None
 
 
 def install_by_config(config: DebugDojoConfig) -> None:

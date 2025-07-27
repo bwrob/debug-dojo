@@ -1,6 +1,6 @@
 ## v0.3.0 (2025-07-20)
 
-*release tag*: [v0.2.0]
+*release tag*: [v0.3.0]
 
 ### What's Changed
 
