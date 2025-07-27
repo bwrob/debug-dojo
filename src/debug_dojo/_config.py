@@ -35,7 +35,7 @@ def resolve_config_path(config_path: Path | None) -> Path | None:
     """Resolve the configuration path, returning a default if none is provided."""
     if config_path:
         if not config_path.exists():
-            msg = f"Configuration file not found: {config_path}"
+            msg = f"Configuration file not found:\n{config_path.resolve()}"
             raise FileNotFoundError(msg)
         return config_path
 
@@ -46,28 +46,40 @@ def resolve_config_path(config_path: Path | None) -> Path | None:
     return None
 
 
+def load_raw_config(config_path: Path) -> dict[str, Any]:
+    """Load the Debug Dojo configuration from a file.
+
+    Currently supports 'dojo.toml' or 'pyproject.toml'.
+    If no path is provided, it checks the current directory for these files.
+    """
+    with config_path.open("rb") as f:
+        config_data = tomlkit.load(f).unwrap()
+
+    # If config is in [tool.debug_dojo] (pyproject.toml), extract it.
+    if config_path.name == "dojo.toml":
+        return config_data
+
+    if config_path.name == "pyproject.toml":
+        try:
+            dojo_config = cast(dict[str, Any], config_data["tool"]["debug_dojo"])
+        except KeyError:
+            return {}
+        else:
+            return dojo_config
+
+    # If the file is not recognized, raise an error.
+    msg = (
+        f"Unsupported configuration file: \n{config_path.resolve()}\n"
+        "Expected 'dojo.toml' or 'pyproject.toml'."
+    )
+    raise ValueError(msg)
+
+
 def load_config(config_path: Path | None = None) -> DebugDojoConfig:
-    """Load the Debug Dojo configuration from a file."""
+    """Load the Debug Dojo configuration and return a DebugDojoConfig instance."""
     resolved_path = resolve_config_path(config_path)
     if not resolved_path:
         return DebugDojoConfig()
 
-    # Load the configuration from the file
-    with resolved_path.open("rb") as f:
-        config_data = tomlkit.load(f).unwrap()
-
-    # Config is part of pyproject.toml, so we need to extract it
-    if "tool" in config_data and "debug_dojo" in config_data["tool"]:
-        config_data = cast(dict[str, Any], config_data["tool"]["debug_dojo"])
-    else:
-        msg = (
-            f"Configuration for 'debug_dojo' not found in {resolved_path}. "
-            "Ensure it is defined under [tool.debug_dojo] in the TOML file."
-        )
-        raise ValueError(msg)
-
-    try:
-        return DebugDojoConfig.model_validate(config_data)
-    except Exception as e:
-        msg = f"Error validating configuration: {e}"
-        raise ValueError(msg) from e
+    raw_config = load_raw_config(resolved_path)
+    return DebugDojoConfig.model_validate(raw_config)

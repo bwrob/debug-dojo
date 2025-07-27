@@ -1,0 +1,7 @@
+debugger = "ipdb"
+
+[install_tools]
+    install_rich_inspect = true
+    install_rich_print   = true
+    install_compare      = false
+    install_breakpoint   = true
