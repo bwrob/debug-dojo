@@ -9,13 +9,13 @@
 [![PyPi Version](https://img.shields.io/pypi/v/debug-dojo.svg?style=flat-square)](https://pypi.org/project/debug-dojo)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/debug-dojo.svg?style=flat-square)](https://pypi.org/pypi/debug-dojo/)
 
-**debug-dojo** is a Python package providing utilities for enhanced debugging and inspection in the terminal. It leverages [`rich`](https://github.com/Textualize/rich) for beautiful output and offers helpers for side-by-side object comparison, improved tracebacks from `rich`, and easy integration with PuDB. All tools can be installed at once or individually, allowing for flexible debugging setups.
+**debug-dojo** is a Python package providing utilities for enhanced debugging and inspection in the terminal. It leverages [`rich`](https://github.com/Textualize/rich) for beautiful output and offers helpers for side-by-side object comparison, improved tracebacks from `rich`, and easy integration with different debuggers. All tools can be installed at once or individually, allowing for flexible debugging setups.
 
 ## Features
 
 - **Convenient CLI** Quickly run your code with debugging tools enabled.
 - **Simple API:** Install all tools or only what you need.
-- **PuDB integration:** Quickly enable the PuDB TUI debugger.
+- **Debugger integration:** Quickly enable Debugpy, PuDB, PDB, or IPDB as your default debugger.
 - **Rich tracebacks:** Get readable, colorized tracebacks for easier debugging.
 - **Side-by-side object inspection:** Visually compare Python objects, their attributes, and methods in the terminal.
 
@@ -29,7 +29,7 @@ Run your Python script with debugging tools enabled using the `debug-dojo` comma
 dojo my_script.py
 ```
 
-You can optionally set coniguration file and verbose mode:
+You can optionally set configuration file and verbose mode:
 
 ```console
 dojo --config dojo.toml --verbose my_script.py
@@ -64,7 +64,7 @@ You can configure the debugging tools using a `dojo.toml` or `pyproject.toml` fi
 **Example `dojo.toml`:**
 
 ```toml
-debugger = "pudb"
+debugger = "ipdb"
 
 [features]
   rich_inspect = true

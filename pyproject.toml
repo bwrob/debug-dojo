@@ -6,12 +6,14 @@
     ]
     requires-python = ">=3.10"
     dependencies = [
+        "debugpy>=1.8.0",
+        "ipdb>=0.13.0",
         "pudb>=2020.1",
         "pydantic>=2.11.7",
-        "rich>=11.0.0",
+        "rich>=12.0.0",
         "tomlkit>=0.13.3",
         "typer>=0.15.0",
-    ]
+]
     license = 'MIT'
     license-files = ['LICENSE']
     keywords = [

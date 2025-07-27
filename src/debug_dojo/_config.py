@@ -14,6 +14,8 @@ class DebuggerType(Enum):
 
     PDB = "pdb"
     PUDB = "pudb"
+    IPDB = "ipdb"
+    DEBUGPY = "debugpy"
 
 
 class Features(BaseModel):
