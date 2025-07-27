@@ -29,12 +29,21 @@ Run your Python script with debugging tools enabled using the `debug-dojo` comma
 dojo my_script.py
 ```
 
-### Install all debugging tools
+You can optionally set coniguration file and verbose mode:
+
+```console
+dojo --config dojo.toml --verbose my_script.py
+```
+
+### From the code
 
 In the `PuDB` style, you can install all debugging tools and enter the debugging mode with a single command:
 
 ```python
-import debug_dojo.all; b()
+import debug_dojo.install; b()
+
+object_1 = {"foo": 1, "bar": 2}
+object_2 = [1, 2, 3]
 
 p(object_1)  # Pretty print an object with Rich
 i(object_1)  # Inspect an object
@@ -48,26 +57,20 @@ Where:
 - `i(object_1)` to inspect an object using Rich.
 - `c(object_1, object_2)` to compare two objects side-by-side.
 
-### Use individual tools
+## Configuration
 
-```python
-from debug_dojo import install_inspect, use_pudb, use_rich_traceback
+You can configure the debugging tools using a `dojo.toml` or `pyproject.toml` file. The configuration allows you to specify which debugger to use, enable or disable features, and set other options.
 
-install_inspect()         # Enable object inspection helpers
-use_pudb()                # Set up PuDB as the debugger
-use_rich_traceback()      # Enable Rich tracebacks
+**Example `dojo.toml`:**
+
+```toml
+debugger = "pudb"
+
+[features]
+  rich_inspect = true
+  rich_print = true
+  comparer = false
 ```
-
-### Compare objects side-by-side
-
-```python
-from debug_dojo.compareres import inspect_objects_side_by_side
-
-a = {"foo": 1, "bar": 2}
-b = [1, 2, 3]
-inspect_objects_side_by_side(a, b)
-```
-
 
 ## Installation
 

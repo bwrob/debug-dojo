@@ -4,6 +4,8 @@ This module provides functions to display attributes and methods of two objects
 in a visually appealing, side-by-side format in the terminal.
 """
 
+from __future__ import annotations
+
 import contextlib
 
 from rich.columns import Columns
@@ -48,7 +50,7 @@ def _get_object_methods(obj: object) -> list[str]:
     for method_name in sorted(dir(obj)):
         # Safely get attribute, returning None if it doesn't exist
         attr = getattr(obj, method_name, None)
-        # Exclude private/protected methods (starting with '_') and non-callable attributes
+        # Exclude private/protected methods (starting with '_') and non-callables.
         if not method_name.startswith("_") and callable(attr):
             methods.append(method_name)
     return methods

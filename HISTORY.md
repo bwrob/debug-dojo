@@ -1,3 +1,17 @@
+## v0.3.0 (2025-07-20)
+
+*release tag*: [v0.2.0]
+
+### What's Changed
+
+- New logo for the project.
+- Typer used for CLI implementation.
+- Dojo is configured via `dojo.toml` or `pyproject.toml`.
+
+#### Fixes
+
+- Fixed documentation and history.
+
 ## v0.2.0 (2025-07-20)
 
 *release tag*: [v0.2.0]
@@ -21,5 +35,3 @@
 
 - Initial module to install debugging tools.
 - Debug mode utilities for PuDB, rich tracebacks, and object inspection.
-
-#### Fixes

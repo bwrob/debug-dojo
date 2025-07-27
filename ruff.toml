@@ -3,18 +3,17 @@ target-version = "py310"
 
 
 [lint]
-    select = ["ALL"]
-    ignore = [
-        "COM",
-        "D203",
-        "D211",
-        "D213",
-        "FA",
-        "ISC",
-        "T",
-        "TC",
-    ]
+    select  = ["ALL"]
+    ignore  = ["COM", "D203", "D211", "D213"]
     exclude = ["examples"]
+
+    [lint.per-file-ignores]
+        "src/debug_dojo/_installers.py" = [
+            "PLC0415",
+            "T100",
+        ]
+        "examples/test_target.py" = ["F821"]
+        "examples/*" = ["INP001"]
 
 [format]
     docstring-code-format = true

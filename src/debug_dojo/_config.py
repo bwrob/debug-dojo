@@ -1,34 +1,47 @@
+from __future__ import annotations
+
 from enum import Enum
 from pathlib import Path
 from typing import Any, cast
 
 import tomlkit
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
+from rich import print as rich_print
 
 
 class DebuggerType(Enum):
     """Enum for different types of debuggers."""
 
-    IPDB = "ipdb"
     PDB = "pdb"
     PUDB = "pudb"
 
 
-class InstallTools(BaseModel):
-    """Configuration for installation tools."""
+class Features(BaseModel):
+    """Configuration for installing debug features."""
 
-    install_rich_inspect: bool = True
-    install_rich_print: bool = True
-    install_compare: bool = True
-    install_breakpoint: bool = True
+    model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
+
+    rich_inspect: bool = True
+    """Install rich inspect as 'i' for enhanced object inspection."""
+    rich_print: bool = True
+    """Install rich print as 'p' for enhanced printing."""
+    rich_traceback: bool = True
+    """Install rich traceback for better error reporting."""
+    comparer: bool = True
+    """Install comparer as 'c' for side-by-side object comparison."""
+    breakpoint: bool = True
+    """Install breakpoint as 'b' for setting breakpoints in code."""
 
 
 class DebugDojoConfig(BaseModel):
     """Configuration for Debug Dojo."""
 
-    # Example field, you can add more fields as needed
-    debugger: DebuggerType = DebuggerType.IPDB
-    install_tools: InstallTools = InstallTools()
+    model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
+
+    debugger: DebuggerType = DebuggerType.PUDB
+    """The type of debugger to use."""
+    features: Features = Features()
+    """Features to install for debugging."""
 
 
 def resolve_config_path(config_path: Path | None) -> Path | None:
@@ -46,7 +59,9 @@ def resolve_config_path(config_path: Path | None) -> Path | None:
     return None
 
 
-def load_raw_config(config_path: Path) -> dict[str, Any]:
+def load_raw_config(
+    config_path: Path,
+) -> dict[str, Any]:  # pyright: ignore[reportExplicitAny]
     """Load the Debug Dojo configuration from a file.
 
     Currently supports 'dojo.toml' or 'pyproject.toml'.
@@ -61,7 +76,10 @@ def load_raw_config(config_path: Path) -> dict[str, Any]:
 
     if config_path.name == "pyproject.toml":
         try:
-            dojo_config = cast(dict[str, Any], config_data["tool"]["debug_dojo"])
+            dojo_config = cast(
+                "dict[str, Any]",  # pyright: ignore[reportExplicitAny]
+                config_data["tool"]["debug_dojo"],
+            )
         except KeyError:
             return {}
         else:
@@ -75,9 +93,21 @@ def load_raw_config(config_path: Path) -> dict[str, Any]:
     raise ValueError(msg)
 
 
-def load_config(config_path: Path | None = None) -> DebugDojoConfig:
+def load_config(
+    config_path: Path | None = None,
+    *,
+    verbose: bool = False,
+) -> DebugDojoConfig:
     """Load the Debug Dojo configuration and return a DebugDojoConfig instance."""
     resolved_path = resolve_config_path(config_path)
+
+    if verbose:
+        if resolved_path:
+            msg = f"Using configuration file: {resolved_path.resolve()}."
+        else:
+            msg = "No configuration file found, using default settings."
+        rich_print(f"[blue]{msg}[/blue]")
+
     if not resolved_path:
         return DebugDojoConfig()
 
