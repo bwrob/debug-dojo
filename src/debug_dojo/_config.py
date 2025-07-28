@@ -1,11 +1,18 @@
+"""Debug Dojo configuration module.
+
+It includes configurations for different debuggers, exception handling,
+and features that can be enabled or disabled.
+"""
+
 from __future__ import annotations
 
+import sys
 from enum import Enum
 from pathlib import Path
 from typing import Any, cast
 
 import tomlkit
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, ValidationError
 from rich import print as rich_print
 
 
@@ -18,20 +25,64 @@ class DebuggerType(Enum):
     DEBUGPY = "debugpy"
 
 
-class Features(BaseModel):
+class BaseConfig(BaseModel):
+    """Base configuration class with extra fields forbidden."""
+
+    model_config = ConfigDict(extra="forbid", validate_assignment=True)
+
+
+class DebugpyConfig(BaseConfig):
+    """Configuration for debugpy debugger."""
+
+    port: int = 1992
+    """Port for debugpy debugger."""
+    host: str = "localhost"
+    """Host for debugpy debugger."""
+    wait_for_client: bool = True
+    """Whether to wait for the client to connect before starting debugging."""
+    log_to_file: bool = False
+    """Whether to log debugpy output to a file."""
+
+
+class IpdbConfig(BaseConfig):
+    """Configuration for ipdb debugger."""
+
+    context_lines: int = 20
+    """Number of context lines to show in ipdb."""
+
+
+class DebuggersConfig(BaseConfig):
+    """Configuration for debuggers."""
+
+    default: DebuggerType = DebuggerType.IPDB
+    """Default debugger to use."""
+    debugpy: DebugpyConfig = DebugpyConfig()
+    """Configuration for debugpy debugger."""
+    ipdb: IpdbConfig = IpdbConfig()
+    """Configuration for ipdb debugger."""
+
+
+class ExceptionsConfig(BaseConfig):
+    """Configuration for exceptions handling."""
+
+    rich_traceback: bool = True
+    """Enable rich traceback for better error reporting."""
+    locals_in_traceback: bool = False
+    """Include local variables in traceback."""
+    post_mortem: bool = True
+    """Enable post-mortem debugging after an exception."""
+
+
+class FeaturesConfig(BaseConfig):
     """Configuration for installing debug features."""
 
-    model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
-
-    rich_inspect: bool = True
+    rich_inspect: str = "i"
     """Install rich inspect as 'i' for enhanced object inspection."""
-    rich_print: bool = True
+    rich_print: str = "p"
     """Install rich print as 'p' for enhanced printing."""
-    rich_traceback: bool = True
-    """Install rich traceback for better error reporting."""
-    comparer: bool = True
+    comparer: str = "c"
     """Install comparer as 'c' for side-by-side object comparison."""
-    breakpoint: bool = True
+    breakpoint: str = "b"
     """Install breakpoint as 'b' for setting breakpoints in code."""
 
 
@@ -40,10 +91,11 @@ class DebugDojoConfig(BaseModel):
 
     model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    debugger: DebuggerType = DebuggerType.PUDB
-    """The type of debugger to use."""
-    features: Features = Features()
-    """Features to install for debugging."""
+    exceptions: ExceptionsConfig = ExceptionsConfig()
+    debuggers: DebuggersConfig = DebuggersConfig()
+    """Default debugger and configs."""
+    features: FeaturesConfig = FeaturesConfig()
+    """Features mnemonics ."""
 
 
 def resolve_config_path(config_path: Path | None) -> Path | None:
@@ -99,6 +151,7 @@ def load_config(
     config_path: Path | None = None,
     *,
     verbose: bool = False,
+    debugger: DebuggerType | None = None,
 ) -> DebugDojoConfig:
     """Load the Debug Dojo configuration and return a DebugDojoConfig instance."""
     resolved_path = resolve_config_path(config_path)
@@ -114,4 +167,20 @@ def load_config(
         return DebugDojoConfig()
 
     raw_config = load_raw_config(resolved_path)
-    return DebugDojoConfig.model_validate(raw_config)
+
+    try:
+        config = DebugDojoConfig.model_validate(raw_config)
+    except ValidationError as e:
+        msg = (
+            f"[red]Configuration validation error:\n{e}\n\n"
+            f"Please check your configuration file {resolved_path.resolve()}.[/red]"
+        )
+        msg = "\n".join(
+            [line for line in msg.splitlines() if "For further information" not in line]
+        )
+        rich_print(msg)
+        sys.exit(1)
+
+    if debugger:
+        config.debuggers.default = debugger
+    return config

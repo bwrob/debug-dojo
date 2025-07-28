@@ -1,7 +1,16 @@
-debugger = "ipdb"
+[debuggers]
+    debugpy = { port = 1992 }
+    default = "ipdb"
+    ipdb    = { context_lines = 20 }
+
+[exceptions]
+    locals_in_traceback = false
+    post_mortem         = true
+    rich_traceback      = true
 
 [features]
-    rich_inspect = true
-    rich_print   = true
-    comparer     = false
-    breakpoint   = true
+    # Empty string means disable the feature
+    breakpoint   = "b"
+    comparer     = "c"
+    rich_inspect = "i"
+    rich_print   = "p"

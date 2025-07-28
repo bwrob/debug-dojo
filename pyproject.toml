@@ -13,7 +13,7 @@
         "rich>=12.0.0",
         "tomlkit>=0.13.3",
         "typer>=0.15.0",
-]
+    ]
     license = 'MIT'
     license-files = ['LICENSE']
     keywords = [
@@ -36,7 +36,7 @@
         "Topic :: Software Development :: Debuggers",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ]
-version = "0.3.2"
+    version = "0.3.2"
     dynamic = ['readme']
 
     [project.urls]
@@ -46,8 +46,6 @@ version = "0.3.2"
         Changelog     = "https://github.com/bwrob/debug-dojo/blob/main/HISTORY.md"
 
     [project.scripts]
-        # This defines your command-line script!
-        # It points to the 'main' function in your 'cli' module.
         "dojo" = "debug_dojo._cli:main"
 
 [dependency-groups]
@@ -56,7 +54,7 @@ version = "0.3.2"
         "jupyter>=1.1.1",
         "poethepoet>=0.36.0",
         "ruff>=0.12.4",
-]
+    ]
 
 [build-system]
     requires = [
@@ -86,22 +84,19 @@ version = "0.3.2"
     ]
 
 [tool.basedpyright]
-    typeCheckingMode = "all"
+    typeCheckingMode = "basic"
     pythonVersion    = "3.10"
     strict           = ["src/debug_dojo/*"]
     ignore           = ["examples"]
 
 [tool.poe.tasks]
-    # Define your tasks here
     lint = "ruff check --fix src"
     format = "ruff format src"
-    type-check = "basedpyright"
+    type-check = "basedpyright --config pyproject.toml src/debug_dojo"
     code-quality = ["format", "lint", "type-check"]
     publish = [
-        "format",
-        "lint",
-        "type-check",
-        {cmd="rm -rf dist"},
-        {cmd="uv build"},
-        {cmd="uv publish"},
+        "code-quality",
+        { cmd = "rm -rf dist" },
+        { cmd = "uv build" },
+        { cmd = "uv publish" },
     ]
