@@ -1,12 +1,13 @@
-## v0.3.0 (2025-07-20)
+## v0.3.0 (2025-07-28)
 
-*release tag*: [v0.3.0]
+*release tag*: [v0.3.2]
 
 ### What's Changed
 
 - New logo for the project.
 - Typer used for CLI implementation.
 - Dojo is configured via `dojo.toml` or `pyproject.toml`.
+- Support for `debugpy` and `ipdb` for debugging.
 
 #### Fixes
 

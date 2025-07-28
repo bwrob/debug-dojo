@@ -36,7 +36,7 @@
         "Topic :: Software Development :: Debuggers",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ]
-    version = "0.3.0"
+version = "0.3.2"
     dynamic = ['readme']
 
     [project.urls]
@@ -65,10 +65,6 @@
     ]
     build-backend = "hatchling.build"
 
-
-[tool.hatch.version]
-    path = "src/debug_dojo/version.py"
-
 [tool.hatch.metadata]
     allow-direct-references = true
 
@@ -80,6 +76,14 @@
             { text = "\n\n## Changelog\n\n" },
             { path = 'HISTORY.md' },
         ]
+
+
+[tool.hatch.build.targets.sdist]
+    include = [
+        "/README.md",
+        "/HISTORY.md",
+        "/src/debug_dojo",
+    ]
 
 [tool.basedpyright]
     typeCheckingMode = "all"
@@ -93,3 +97,11 @@
     format = "ruff format src"
     type-check = "basedpyright"
     code-quality = ["format", "lint", "type-check"]
+    publish = [
+        "format",
+        "lint",
+        "type-check",
+        {cmd="rm -rf dist"},
+        {cmd="uv build"},
+        {cmd="uv publish"},
+    ]
