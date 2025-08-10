@@ -18,6 +18,7 @@ from ._config_models import (
     DebugDojoConfig,
     DebuggersConfig,
     DebuggerType,
+    ExceptionsConfig,
     FeaturesConfig,
 )
 
@@ -74,11 +75,11 @@ def _use_debugpy() -> None:
     debugpy.wait_for_client()
 
 
-def _rich_traceback() -> None:
+def _rich_traceback(*, locals_in_traceback: bool) -> None:
     """Check if Rich Traceback is available and set it as the default."""
     from rich import traceback
 
-    _ = traceback.install(show_locals=True)
+    _ = traceback.install(show_locals=locals_in_traceback)
 
 
 def _inspect() -> None:
@@ -139,7 +140,14 @@ def _set_debugger(debugger_config: DebuggersConfig) -> None:
     sys.ps1 = debugger_config.prompt_name
 
 
+def _set_exceptions(exceptions: ExceptionsConfig) -> None:
+    """Set the exception handling based on the configuration."""
+    if exceptions.rich_traceback:
+        _rich_traceback(locals_in_traceback=exceptions.locals_in_traceback)
+
+
 def install_by_config(config: DebugDojoConfig) -> None:
     """Install debugging tools."""
     _set_debugger(config.debuggers)
+    _set_exceptions(config.exceptions)
     _install_features(config.features)

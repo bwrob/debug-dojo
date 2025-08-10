@@ -13,7 +13,7 @@
         "rich>=12.0.0",
         "tomlkit>=0.13.3",
         "typer>=0.15.0",
-]
+    ]
     license = 'MIT'
     license-files = ['LICENSE']
     keywords = [
@@ -36,7 +36,7 @@
         "Topic :: Software Development :: Debuggers",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ]
-    version = "0.3.2"
+    version = "0.4.0"
     dynamic = ['readme']
 
     [project.urls]
@@ -92,7 +92,7 @@
 [tool.poe.tasks]
     lint = "ruff check --fix src"
     format = "ruff format src"
-    type-check = "basedpyright --config pyproject.toml src/debug_dojo"
+    type-check = "basedpyright --project pyproject.toml src/debug_dojo"
     code-quality = ["format", "lint", "type-check"]
     publish = [
         "code-quality",

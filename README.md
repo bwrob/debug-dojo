@@ -16,7 +16,7 @@ It leverages [`rich`](https://github.com/Textualize/rich) for beautiful output a
 
 - **Convenient CLI** Quickly run your code with debugging tools enabled.
 - **Simple API:** Install all tools or only what you need.
-- **Debugger integration:** Quickly enable Debugpy, PuDB, PDB, or IPDB as your default debugger.
+- **Debugger integration:** Quickly enable Debugpy, PuDB, PDB, or IPDB as your default pre-configured debugger.
 - **Rich tracebacks:** Get readable, colorized tracebacks for easier debugging.
 - **Side-by-side object inspection:** Visually compare Python objects, their attributes, and methods in the terminal.
 - **Configuration:** Easily configure the debugging tools using `dojo.toml` or `pyproject.toml`.
@@ -31,10 +31,10 @@ Run your Python script with debugging tools enabled using the `debug-dojo` comma
 dojo my_script.py
 ```
 
-You can optionally set configuration file and verbose mode:
+You can optionally set configuration, verbose mode, and specify the debugger type. Both script files and modules are supported:
 
 ```console
-dojo --config dojo.toml --verbose my_script.py
+dojo --debugger ipdb --config dojo.toml --verbose --module my_module
 ```
 
 ### From the code
@@ -42,19 +42,18 @@ dojo --config dojo.toml --verbose my_script.py
 In the `PuDB` style, you can install all debugging tools and enter the debugging mode with a single command:
 
 ```python
-import debug_dojo.install; b()
-
 object_1 = {"foo": 1, "bar": 2}
 object_2 = [1, 2, 3]
 
+import debug_dojo.install; b()
 p(object_1)  # Pretty print an object with Rich
-i(object_1)  # Inspect an object
-c(object_1, object_2)  # Compare two objects side-by-side
 ```
 
-Where:
+### Features in debugging mode
 
-- `b()` is a builtin-injected function that sets a breakpoint using PuDB's `set_trace()`.
+The following functions are available in the debugging mode, injected into builtins:
+
+- `b()` is a hook that sets a breakpoint using the configured debugger.
 - `p(object_1)` is pretty printing of an object using Rich.
 - `i(object_1)` to inspect an object using Rich.
 - `c(object_1, object_2)` to compare two objects side-by-side.
@@ -66,12 +65,23 @@ You can configure the debugging tools using a `dojo.toml` or `pyproject.toml` fi
 **Example `dojo.toml`:**
 
 ```toml
-debugger = "ipdb"
+[debuggers]
+    default = "ipdb"
+
+    debugpy = { port = 1992 }
+    ipdb    = { context_lines = 20 }
+
+[exceptions]
+    locals_in_traceback = false
+    post_mortem         = true
+    rich_traceback      = true
 
 [features]
-  rich_inspect = true
-  rich_print = true
-  comparer = false
+    breakpoint   = "b"
+    # Empty string means disable the feature
+    comparer     = ""
+    rich_inspect = "i"
+    rich_print   = "p"
 ```
 
 ## Installation
@@ -101,4 +111,10 @@ Note that dojo most likely will not work when installed via `pipx` or `uvx`, as 
 ```console
 ruff check src/debug_dojo --fix
 basedpyright src/debug_dojo
+
+poe code-quality
 ```
+
+### Tests
+
+TBA
