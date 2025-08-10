@@ -14,7 +14,12 @@ import sys
 from rich import print as rich_print
 
 from ._compareres import inspect_objects_side_by_side
-from ._config import DebugDojoConfig, DebuggerType, Features
+from ._config_models import (
+    DebugDojoConfig,
+    DebuggersConfig,
+    DebuggerType,
+    FeaturesConfig,
+)
 
 BREAKPOINT_ENV_VAR = "PYTHONBREAKPOINT"
 
@@ -106,33 +111,35 @@ def _rich_print() -> None:
     builtins.p = rich_print  # pyright: ignore[reportAttributeAccessIssue]
 
 
-def _install_features(features: Features) -> None:
+def _install_features(features: FeaturesConfig) -> None:
     """Install the specified debugging features."""
     if features.rich_inspect:
         _inspect()
     if features.rich_print:
         _rich_print()
-    if features.rich_traceback:
-        _rich_traceback()
     if features.comparer:
         _compare()
     if features.breakpoint:
         _breakpoint()
 
 
-def _set_debugger(debugger: DebuggerType) -> None:  # noqa: RET503
+def _set_debugger(debugger_config: DebuggersConfig) -> None:
     """Set the debugger based on the configuration."""
+    debugger = debugger_config.default
+
     if debugger == DebuggerType.PDB:
-        return _use_pdb()
+        _use_pdb()
     if debugger == DebuggerType.PUDB:
-        return _use_pudb()
+        _use_pudb()
     if debugger == DebuggerType.IPDB:
-        return _use_ipdb()
+        _use_ipdb()
     if debugger == DebuggerType.DEBUGPY:
-        return _use_debugpy()
+        _use_debugpy()
+
+    sys.ps1 = debugger_config.prompt_name
 
 
 def install_by_config(config: DebugDojoConfig) -> None:
     """Install debugging tools."""
-    _set_debugger(config.debugger)
+    _set_debugger(config.debuggers)
     _install_features(config.features)

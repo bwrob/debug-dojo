@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 import runpy
 import sys
 from bdb import BdbQuit
@@ -22,10 +21,11 @@ cli = typer.Typer(
 )
 
 
-def execute_with_debug(
+def execute_with_debug(  # noqa: C901
     target_name: str,
     target_args: list[str],
     *,
+    target_is_module: bool,
     verbose: bool,
     config: DebugDojoConfig,
 ) -> None:
@@ -38,19 +38,27 @@ def execute_with_debug(
 
     install_by_config(config)
 
-    if (
-        Path(target_name).exists()
-        or target_name.endswith(".py")
-        or os.sep in target_name
-    ):
+    if target_is_module:
+        runner = runpy.run_module
+    else:
         if not Path(target_name).exists():
             sys.exit(1)
         runner = runpy.run_path
-    else:
-        runner = runpy.run_module
 
     try:
         _ = runner(target_name, run_name="__main__")
+    except ImportError as e:
+        rich_print(f"[red]Error importing {target_name}:[/red]\n{e}")
+        sys.exit(1)
+    except BdbQuit:
+        rich_print("[red]Debugging session terminated by user.[/red]")
+        sys.exit(0)
+    except KeyboardInterrupt:
+        rich_print("[red]Execution interrupted by user.[/red]")
+        sys.exit(0)
+    except SystemExit as e:
+        if e.code:
+            rich_print(f"[red]Script exited with code {e.code}.[/red]")
     except Exception as e:  # noqa: BLE001
         rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
         if config.exceptions.post_mortem:
@@ -72,7 +80,7 @@ def display_config(config: DebugDojoConfig) -> None:
     no_args_is_help=True,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
 )
-def run_debug(
+def run_debug(  # noqa: PLR0913
     ctx: typer.Context,
     target_name: Annotated[
         str | None, typer.Argument(help="The target script or module to debug.")
@@ -89,6 +97,10 @@ def run_debug(
         bool,
         typer.Option("--verbose", "-v", is_flag=True, help="Enable verbose output"),
     ] = False,
+    module: Annotated[
+        bool,
+        typer.Option("--module", "-m", is_flag=True, help="Run as a module"),
+    ] = False,
 ) -> None:
     """Run the command-line interface."""
     config = load_config(config_path, verbose=verbose, debugger=debugger)
@@ -97,16 +109,13 @@ def run_debug(
         display_config(config)
 
     if target_name:
-        try:
-            execute_with_debug(
-                target_name,
-                ctx.args,
-                verbose=verbose,
-                config=config,
-            )
-        except BdbQuit:
-            rich_print("[red]Debugging session terminated by user.[/red]")
-            sys.exit(0)
+        execute_with_debug(
+            target_name=target_name,
+            target_is_module=module,
+            target_args=ctx.args,
+            verbose=verbose,
+            config=config,
+        )
 
 
 def main() -> None:
