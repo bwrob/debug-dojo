@@ -14,7 +14,13 @@ import sys
 from rich import print as rich_print
 
 from ._compareres import inspect_objects_side_by_side
-from ._config import DebugDojoConfig, DebuggerType, Features
+from ._config_models import (
+    DebugDojoConfig,
+    DebuggersConfig,
+    DebuggerType,
+    ExceptionsConfig,
+    FeaturesConfig,
+)
 
 BREAKPOINT_ENV_VAR = "PYTHONBREAKPOINT"
 
@@ -69,11 +75,11 @@ def _use_debugpy() -> None:
     debugpy.wait_for_client()
 
 
-def _rich_traceback() -> None:
+def _rich_traceback(*, locals_in_traceback: bool) -> None:
     """Check if Rich Traceback is available and set it as the default."""
     from rich import traceback
 
-    _ = traceback.install(show_locals=True)
+    _ = traceback.install(show_locals=locals_in_traceback)
 
 
 def _inspect() -> None:
@@ -106,33 +112,42 @@ def _rich_print() -> None:
     builtins.p = rich_print  # pyright: ignore[reportAttributeAccessIssue]
 
 
-def _install_features(features: Features) -> None:
+def _install_features(features: FeaturesConfig) -> None:
     """Install the specified debugging features."""
     if features.rich_inspect:
         _inspect()
     if features.rich_print:
         _rich_print()
-    if features.rich_traceback:
-        _rich_traceback()
     if features.comparer:
         _compare()
     if features.breakpoint:
         _breakpoint()
 
 
-def _set_debugger(debugger: DebuggerType) -> None:  # noqa: RET503
+def _set_debugger(debugger_config: DebuggersConfig) -> None:
     """Set the debugger based on the configuration."""
+    debugger = debugger_config.default
+
     if debugger == DebuggerType.PDB:
-        return _use_pdb()
+        _use_pdb()
     if debugger == DebuggerType.PUDB:
-        return _use_pudb()
+        _use_pudb()
     if debugger == DebuggerType.IPDB:
-        return _use_ipdb()
+        _use_ipdb()
     if debugger == DebuggerType.DEBUGPY:
-        return _use_debugpy()
+        _use_debugpy()
+
+    sys.ps1 = debugger_config.prompt_name
+
+
+def _set_exceptions(exceptions: ExceptionsConfig) -> None:
+    """Set the exception handling based on the configuration."""
+    if exceptions.rich_traceback:
+        _rich_traceback(locals_in_traceback=exceptions.locals_in_traceback)
 
 
 def install_by_config(config: DebugDojoConfig) -> None:
     """Install debugging tools."""
-    _set_debugger(config.debugger)
+    _set_debugger(config.debuggers)
+    _set_exceptions(config.exceptions)
     _install_features(config.features)
