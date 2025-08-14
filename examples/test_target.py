@@ -18,7 +18,9 @@ def main() -> None:
     b()
 
     i(example_dict)
-    raise ValueError("This is a test exception.")
+
+    msg = "This is a test message."
+    raise ValueError(msg)
 
 
 if __name__ == "__main__":

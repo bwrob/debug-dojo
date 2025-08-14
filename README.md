@@ -9,7 +9,7 @@
 [![PyPi Version](https://img.shields.io/pypi/v/debug-dojo.svg?style=flat-square)](https://pypi.org/project/debug-dojo)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/debug-dojo.svg?style=flat-square)](https://pypi.org/pypi/debug-dojo/)
 
-**debug-dojo** is a Python package providing utilities for enhanced debugging and inspection in the terminal. 
+**debug-dojo** is a Python package providing utilities for enhanced debugging and inspection in the terminal.
 It leverages [`rich`](https://github.com/Textualize/rich) for beautiful output and offers helpers for side-by-side object comparison, improved tracebacks from `rich`, and easy integration with different debuggers -- `debugpy`, `pudb`, `pdb`, and `ipdb`.
 
 ## Features
