@@ -1,0 +1,48 @@
+name: Python package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    name: Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        # test against lowest supported Python version and latest
+        python-version: ["3.10", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: 🛠️ Install uv and set the python version to ${{ matrix.python-version }}
+      uses: astral-sh/setup-uv@v6
+      with:
+       python-version: ${{ matrix.python-version }}
+
+    - name: 🛠️ Install the project dependencies
+      id: uv-sync
+      run: uv sync --locked --all-extras --dev
+
+    # Use poe to sync local checks with CI
+    - name: 🐍 Run ruff linter check
+      if: always()
+      run: uv run poe lint --output-format=github
+
+    - name: 🐍 Run ruff formatter check
+      if: always()
+      run: uv run poe format
+
+    - name: 🐍 Run basedpyright type checker
+      if: always()
+      run: uv run poe type-check
+
+    - name: 🐍 Run pytest
+      if: always()
+      run: uv run pytest --verbose --doctest-modules

@@ -1,10 +1,10 @@
 [project]
     name = "debug-dojo"
-    description = "Debbugging dojo for Python developers"
+    description = "🏣 Debugging dojo for Python developers"
     authors = [
         { name = "bwrob", email = "bartosz.marcin.wroblewski@gmail.com" },
     ]
-    requires-python = ">=3.10"
+    requires-python = ">=3.10,<3.14"
     dependencies = [
         "debugpy>=1.8.0",
         "ipdb>=0.13.0",
@@ -50,10 +50,11 @@
 
 [dependency-groups]
     dev = [
-        "basedpyright>=1.31.0",
+        "basedpyright>=1.31.2",
         "jupyter>=1.1.1",
-        "poethepoet>=0.36.0",
-        "ruff>=0.12.4",
+        "poethepoet>=0.37.0",
+        "pytest>=8.4.1",
+        "ruff>=0.12.9",
     ]
 
 [build-system]
@@ -62,6 +63,9 @@
         "hatchling",
     ]
     build-backend = "hatchling.build"
+
+[tool.uv]
+    required-version = ">=0.8.0"
 
 [tool.hatch.metadata]
     allow-direct-references = true
@@ -88,15 +92,3 @@
     pythonVersion    = "3.10"
     strict           = ["src/debug_dojo/*"]
     ignore           = ["examples"]
-
-[tool.poe.tasks]
-    lint = "ruff check --fix src"
-    format = "ruff format src"
-    type-check = "basedpyright --project pyproject.toml src/debug_dojo"
-    code-quality = ["format", "lint", "type-check"]
-    publish = [
-        "code-quality",
-        { cmd = "rm -rf dist" },
-        { cmd = "uv build" },
-        { cmd = "uv publish" },
-    ]
