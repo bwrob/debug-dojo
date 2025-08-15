@@ -91,10 +91,13 @@
     ignore           = ["examples"]
 
 [tool.poe.tasks]
-    ruff-lint = "uv run ruff check --config=ruff.toml"
-    lint = "ruff check --fix src"
-    format = "ruff format src"
-    type-check = "basedpyright --project pyproject.toml src/debug_dojo"
+    lint   = "uv run ruff check --config=ruff.toml"
+    fix    = "ruff check --fix --unsafe-fixes"
+    format = "ruff format --config=ruff.toml --check"
+
+    type-check = "basedpyright"
+    test       = "pytest --verbose --doctest-modules"
+
     code-quality = ["format", "lint", "type-check"]
     publish = [
         "code-quality",

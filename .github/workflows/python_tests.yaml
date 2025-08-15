@@ -29,17 +29,18 @@ jobs:
       id: uv-sync
       run: uv sync --locked --all-extras --dev
 
+    # Use poe to sync local checks with CI
     - name: Run Ruff check
       if: always()
-      run: poe ruff-lint --output-format=github
+      run: uv run poe lint --output-format=github
 
     - name: Run Ruff format
       if: always()
-      run: uv run ruff format --verbose --config=ruff.toml --check .
+      run: uv run poe format
 
     - name: Run basedpyright
       if: always()
-      run: uv run basedpyright --verbose
+      run: uv run poe type-check
 
     - name: Run pytest
       if: always()
