@@ -4,20 +4,20 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="description" content="None">
         
         
-        <link rel="shortcut icon" href="img/favicon.ico">
-        <title>debug dojo</title>
-        <link href="css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/fontawesome.min.css" rel="stylesheet">
-        <link href="css/brands.min.css" rel="stylesheet">
-        <link href="css/solid.min.css" rel="stylesheet">
-        <link href="css/v4-font-face.min.css" rel="stylesheet">
-        <link href="css/base.css" rel="stylesheet">
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>License - debug dojo</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
         <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" disabled>
         <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" >
-        <link href="assets/_mkdocstrings.css" rel="stylesheet">
+        <link href="../assets/_mkdocstrings.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/python.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/languages/toml.min.js"></script>
@@ -27,10 +27,10 @@
         <script>hljs.highlightAll();</script> 
     </head>
 
-    <body class="homepage">
+    <body>
         <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
             <div class="container">
-                <a class="navbar-brand" href=".">debug dojo</a>
+                <a class="navbar-brand" href="..">debug dojo</a>
                 <!-- Expander button -->
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -41,19 +41,19 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href="." class="nav-link active" aria-current="page">Debug Dojo</a>
+                                <a href=".." class="nav-link">Debug Dojo</a>
                             </li>
                             <li class="nav-item">
-                                <a href="cli-reference/" class="nav-link">CLI Reference</a>
+                                <a href="../cli-reference/" class="nav-link">CLI Reference</a>
                             </li>
                             <li class="nav-item">
-                                <a href="api-reference/" class="nav-link">Api Reference</a>
+                                <a href="../api-reference/" class="nav-link">Api Reference</a>
                             </li>
                             <li class="nav-item">
-                                <a href="changelog/" class="nav-link">Changelog</a>
+                                <a href="../changelog/" class="nav-link">Changelog</a>
                             </li>
                             <li class="nav-item">
-                                <a href="license/" class="nav-link">License</a>
+                                <a href="./" class="nav-link active" aria-current="page">License</a>
                             </li>
                         </ul>
 
@@ -64,12 +64,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" class="nav-link disabled">
+                                <a rel="prev" href="../changelog/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="cli-reference/" class="nav-link">
+                                <a rel="next" class="nav-link disabled">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -106,7 +106,7 @@
                 </div>
             </div>
         </div>
-        <script src="js/darkmode.js"></script>
+        <script src="../js/darkmode.js"></script>
 
         <div class="container">
             <div class="row">
@@ -121,28 +121,8 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#debug-dojo" class="nav-link">Debug Dojo</a>
+            <li class="nav-item" data-bs-level="1"><a href="#the-mit-license-mit" class="nav-link">The MIT License (MIT)</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#features" class="nav-link">Features</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#usage" class="nav-link">Usage</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#configuration" class="nav-link">Configuration</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#installation" class="nav-link">Installation</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#development-and-contributing" class="nav-link">Development and contributing</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
               </ul>
             </li>
         </ul>
@@ -150,99 +130,23 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="debug-dojo">Debug Dojo</h1>
-<p align="center">
-  <img src="https://github.com/bwrob/debug-dojo/blob/main/logo/logo_python.png?raw=true" alt="debug dojo" style="width:50%; max-width:300px;"/>
-</p>
-
-<p align="center">
-    <em>debug dojo, a place for zen debugging</em>
-</p>
-
-<p><a href="https://pypi.org/project/debug-dojo"><img alt="PyPi Version" src="https://img.shields.io/pypi/v/debug-dojo.svg?style=flat-square" /></a>
-<a href="https://pypi.org/pypi/debug-dojo/"><img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/debug-dojo.svg?style=flat-square" /></a></p>
-<p><strong>debug-dojo</strong> is a Python package providing utilities for enhanced debugging and inspection in the terminal.
-It leverages <a href="https://github.com/Textualize/rich"><code>rich</code></a> for beautiful output and offers helpers for side-by-side object comparison, improved tracebacks from <code>rich</code>, and easy integration with different debuggers -- <code>debugpy</code>, <code>pudb</code>, <code>pdb</code>, and <code>ipdb</code>.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li><strong>Convenient CLI</strong> Quickly run your code with debugging tools enabled.</li>
-<li><strong>Simple API:</strong> Install all tools or only what you need.</li>
-<li><strong>Debugger integration:</strong> Quickly enable Debugpy, PuDB, PDB, or IPDB as your default pre-configured debugger.</li>
-<li><strong>Rich tracebacks:</strong> Get readable, colorized tracebacks for easier debugging.</li>
-<li><strong>Side-by-side object inspection:</strong> Visually compare Python objects, their attributes, and methods in the terminal.</li>
-<li><strong>Configuration:</strong> Easily configure the debugging tools using <code>dojo.toml</code> or <code>pyproject.toml</code>.</li>
-</ul>
-<h2 id="usage">Usage</h2>
-<h3 id="cli">CLI</h3>
-<p>Run your Python script with debugging tools enabled using the <code>debug-dojo</code> command:</p>
-<pre><code class="language-console">dojo my_script.py
-</code></pre>
-<p>You can optionally set configuration, verbose mode, and specify the debugger type. Both script files and modules are supported:</p>
-<pre><code class="language-console">dojo --debugger ipdb --config dojo.toml --verbose --module my_module
-</code></pre>
-<h3 id="from-the-code">From the code</h3>
-<p>In the <code>PuDB</code> style, you can install all debugging tools and enter the debugging mode with a single command:</p>
-<pre><code class="language-python">object_1 = {&quot;foo&quot;: 1, &quot;bar&quot;: 2}
-object_2 = [1, 2, 3]
-
-import debug_dojo.install; b()
-p(object_1)  # Pretty print an object with Rich
-</code></pre>
-<h3 id="features-in-debugging-mode">Features in debugging mode</h3>
-<p>The following functions are available in the debugging mode, injected into builtins:</p>
-<ul>
-<li><code>b()</code> is a hook that sets a breakpoint using the configured debugger.</li>
-<li><code>p(object_1)</code> is pretty printing of an object using Rich.</li>
-<li><code>i(object_1)</code> to inspect an object using Rich.</li>
-<li><code>c(object_1, object_2)</code> to compare two objects side-by-side.</li>
-</ul>
-<h2 id="configuration">Configuration</h2>
-<p>You can configure the debugging tools using a <code>dojo.toml</code> or <code>pyproject.toml</code> file. The configuration allows you to specify which debugger to use, enable or disable features, and set other options.</p>
-<p><strong>Example <code>dojo.toml</code>:</strong></p>
-<pre><code class="language-toml">[debuggers]
-    default = &quot;ipdb&quot;
-
-    debugpy = { port = 1992 }
-    ipdb    = { context_lines = 20 }
-
-[exceptions]
-    locals_in_traceback = false
-    post_mortem         = true
-    rich_traceback      = true
-
-[features]
-    breakpoint   = &quot;b&quot;
-    # Empty string means disable the feature
-    comparer     = &quot;&quot;
-    rich_inspect = &quot;i&quot;
-    rich_print   = &quot;p&quot;
-</code></pre>
-<h2 id="installation">Installation</h2>
-<p>The package is available on PyPI and can be installed using standard Python package management tools.</p>
-<pre><code class="language-console">pip install debug-dojo
-</code></pre>
-<p>You can also use <code>poetry</code> or <code>uv</code> to add it to your project:</p>
-<pre><code class="language-console">poetry add debug-dojo
-</code></pre>
-<pre><code class="language-console">uv add debug-dojo
-</code></pre>
-<p>Note that dojo most likely will not work when installed via <code>pipx</code> or <code>uvx</code>, as it relies on the current Python environment dependencies.</p>
-<h2 id="development-and-contributing">Development and contributing</h2>
-<p>Project uses <code>poe</code> for defining developer tasks.</p>
-<h3 id="lint-and-type-check">Lint and type check</h3>
-<p>We're using <code>ruff</code> as formatter and linter and <code>basedpyright</code> for static type checking.
-You can run all three with simple command:</p>
-<pre><code class="language-console">poe code-quality
-</code></pre>
-<h3 id="tests">Tests</h3>
-<p><code>Pytest</code> is used for testing. Currently only few example doc tests are set up.</p>
-<pre><code class="language-console">poe test
-</code></pre>
-<h3 id="contributing">Contributing</h3>
-<p>You're welcome to contribute both new features and fixes. The above quality checks need to pass for a contribution to be accepted to <code>debug-dojo</code>. This is tested with Pull Requests job hook.</p>
-<p>It is recommended to set up a pre-commit hook based on the included config.</p>
-<pre><code class="language-console">pre-commit install
-</code></pre></div>
+<h1 id="the-mit-license-mit">The MIT License (MIT)</h1>
+<p>Copyright (c) 2025 to bwrob.</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p></div>
             </div>
         </div>
 
@@ -250,13 +154,13 @@ You can run all three with simple command:</p>
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="js/bootstrap.bundle.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
-            var base_url = ".",
+            var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="js/base.js"></script>
-        <script src="search/main.js"></script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -321,8 +225,3 @@ You can run all three with simple command:</p>
 
     </body>
 </html>
-
-<!--
-MkDocs version : 1.6.1
-Build Date UTC : 2025-08-15 21:03:56.038120+00:00
--->
