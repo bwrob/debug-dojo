@@ -206,3 +206,4 @@ __marimo__/
 .idea/
 .vscode/
 .DS_Store
+junit/test-results.xml
