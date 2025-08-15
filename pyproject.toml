@@ -1,10 +1,10 @@
 [project]
     name = "debug-dojo"
-    description = "Debbugging dojo for Python developers"
+    description = "🏣 Debugging dojo for Python developers"
     authors = [
         { name = "bwrob", email = "bartosz.marcin.wroblewski@gmail.com" },
     ]
-    requires-python = ">=3.10"
+    requires-python = ">=3.10,<3.14"
     dependencies = [
         "debugpy>=1.8.0",
         "ipdb>=0.13.0",
