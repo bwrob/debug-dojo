@@ -1,6 +1,8 @@
+# Changelog
+
 ## v0.4.0 (2025-08-10)
 
-*release tag*: [v0.4.0]
+*release tag*: [v0.4.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.4.0)
 
 - New configuration model `DebugDojoConfig` for better structure.
 - Added support for `debugger` configuration in `dojo.toml`.
@@ -11,7 +13,7 @@
 
 ## v0.3.2 (2025-07-28)
 
-*release tag*: [v0.3.2]
+*release tag*: [v0.3.2](https://github.com/bwrob/debug-dojo/releases/tag/v0.3.2)
 
 - New logo for the project.
 - Typer used for CLI implementation.
@@ -21,7 +23,7 @@
 
 ## v0.2.0 (2025-07-20)
 
-*release tag*: [v0.2.0]
+*release tag*: [v0.2.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.2.0)
 
 - Added `dojo` command for easy debugging setup.
 - Added `p()` function for rich printing.
@@ -31,7 +33,7 @@
 
 ## v0.1.0 (2025-07-19)
 
-*release tag*: [v0.1.0]
+*release tag*: [v0.1.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.1.0)
 
 - Initial module to install debugging tools.
 - Debug mode utilities for PuDB, rich tracebacks, and object inspection.

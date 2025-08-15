@@ -1,0 +1,40 @@
+---
+markdown_extensions:
+  - smarty
+  - toc:
+      permalink: true
+  - sane_lists
+nav:
+  - CLI: cli-reference.md
+  - API: api-reference.md
+  - Configuration: configuration.md
+  - Development: development.md
+  - Changelog: changelog.md
+  - License: license.md
+  - Author: ../
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_symbol_type_toc: true
+  - mkdocs-typer2
+repo_name: debug dojo
+repo_url: https://github.com/bwrob/debug-dojo
+site_author: bwrob
+site_description: debug dojo, a place for zen debugging
+site_name: debug dojo
+site_url: https://bwrob.github.io/debug-dojo/
+theme:
+  color_mode: dark
+  hljs_languages:
+    - python
+    - toml
+    - bash
+    - console
+    - yaml
+  locale: en
+  name: mkdocs
+  user_color_mode_toggle: true
