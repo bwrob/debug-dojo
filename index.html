@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="debug dojo, a place for zen debugging">
         <meta name="author" content="bwrob">
-        
+        <link rel="canonical" href="https://bwrob.github.io/debug-dojo/">
         <link rel="shortcut icon" href="img/favicon.ico">
         <title>debug dojo</title>
         <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -41,13 +41,13 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href=".././" class="nav-link">Home</a>
+                                <a href="cli-reference/" class="nav-link">CLI</a>
                             </li>
                             <li class="nav-item">
-                                <a href="cli-reference/" class="nav-link">CLI Reference</a>
+                                <a href="api-reference/" class="nav-link">API</a>
                             </li>
                             <li class="nav-item">
-                                <a href="api-reference/" class="nav-link">API Reference</a>
+                                <a href="configuration/" class="nav-link">Configuration</a>
                             </li>
                             <li class="nav-item">
                                 <a href="development/" class="nav-link">Development</a>
@@ -58,6 +58,9 @@
                             <li class="nav-item">
                                 <a href="license/" class="nav-link">License</a>
                             </li>
+                            <li class="nav-item">
+                                <a href=".././" class="nav-link">Author</a>
+                            </li>
                         </ul>
 
                     <ul class="nav navbar-nav ms-md-auto">
@@ -66,6 +69,10 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/bwrob/debug-dojo/edit/master/docs/index.md" class="nav-link">Edit on debug dojo
+                                    </a>
+                            </li>
                             <li class="nav-item dropdown">
                               <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
                                 <i class="fa-solid fa-circle-half-stroke fa-fw"></i>
@@ -124,15 +131,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#configuration" class="nav-link">Configuration</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
             <li class="nav-item" data-bs-level="2"><a href="#installation" class="nav-link">Installation</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#development-and-contributing" class="nav-link">Development and contributing</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -143,7 +142,7 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="debug-dojo">Debug Dojo</h1>
+<h1 id="debug-dojo">Debug Dojo<a class="headerlink" href="#debug-dojo" title="Permanent link">&para;</a></h1>
 <p align="center">
 <img src="https://github.com/bwrob/debug-dojo/blob/main/logo/logo_python.png?raw=true" alt="debug dojo" style="width:50%; max-width:300px;"/>
 </p>
@@ -159,9 +158,9 @@ pyversions" src="https://img.shields.io/pypi/pyversions/debug-dojo.svg?style=fla
 debugging and inspection in the terminal. It leverages
 <a href="https://github.com/Textualize/rich"><code>rich</code></a> for beautiful output and
 offers helpers for side-by-side object comparison, improved tracebacks
-from <code>rich</code>, and easy integration with different debuggers -- <code>debugpy</code>,
+from <code>rich</code>, and easy integration with different debuggers &ndash; <code>debugpy</code>,
 <code>pudb</code>, <code>pdb</code>, and <code>ipdb</code>.</p>
-<h2 id="features">Features</h2>
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Convenient CLI</strong> Quickly run your code with debugging tools
     enabled.</li>
@@ -175,8 +174,8 @@ from <code>rich</code>, and easy integration with different debuggers -- <code>d
 <li><strong>Configuration:</strong> Easily configure the debugging tools using
     <code>dojo.toml</code> or <code>pyproject.toml</code>.</li>
 </ul>
-<h2 id="usage">Usage</h2>
-<h3 id="cli">CLI</h3>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<h3 id="cli">CLI<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h3>
 <p>Run your Python script with debugging tools enabled using the
 <code>debug-dojo</code> command:</p>
 <pre><code class="language-console">dojo my_script.py
@@ -185,7 +184,7 @@ from <code>rich</code>, and easy integration with different debuggers -- <code>d
 debugger type. Both script files and modules are supported:</p>
 <pre><code class="language-console">dojo --debugger ipdb --config dojo.toml --verbose --module my_module
 </code></pre>
-<h3 id="from-the-code">From the code</h3>
+<h3 id="from-the-code">From the code<a class="headerlink" href="#from-the-code" title="Permanent link">&para;</a></h3>
 <p>In the <code>PuDB</code> style, you can install all debugging tools and enter the
 debugging mode with a single command:</p>
 <pre><code class="language-python">object_1 = {&quot;foo&quot;: 1, &quot;bar&quot;: 2}
@@ -194,40 +193,16 @@ object_2 = [1, 2, 3]
 import debug_dojo.install; b()
 p(object_1)  # Pretty print an object with Rich
 </code></pre>
-<h3 id="features-in-debugging-mode">Features in debugging mode</h3>
+<h3 id="features-in-debugging-mode">Features in debugging mode<a class="headerlink" href="#features-in-debugging-mode" title="Permanent link">&para;</a></h3>
 <p>The following functions are available in the debugging mode, injected
 into builtins:</p>
 <ul>
-<li><code>b()</code> is a hook that sets a breakpoint using the configured
-    debugger.</li>
+<li><code>b()</code> is a hook that sets a breakpoint using the configured debugger.</li>
 <li><code>p(object_1)</code> is pretty printing of an object using Rich.</li>
 <li><code>i(object_1)</code> to inspect an object using Rich.</li>
 <li><code>c(object_1, object_2)</code> to compare two objects side-by-side.</li>
 </ul>
-<h2 id="configuration">Configuration</h2>
-<p>You can configure the debugging tools using a <code>dojo.toml</code> or
-<code>pyproject.toml</code> file. The configuration allows you to specify which
-debugger to use, enable or disable features, and set other options.</p>
-<p><strong>Example <code>dojo.toml</code>:</strong></p>
-<pre><code class="language-toml">[debuggers]
-    default = &quot;ipdb&quot;
-
-    debugpy = { port = 1992 }
-    ipdb    = { context_lines = 20 }
-
-[exceptions]
-    locals_in_traceback = false
-    post_mortem         = true
-    rich_traceback      = true
-
-[features]
-    breakpoint   = &quot;b&quot;
-    # Empty string means disable the feature
-    comparer     = &quot;&quot;
-    rich_inspect = &quot;i&quot;
-    rich_print   = &quot;p&quot;
-</code></pre>
-<h2 id="installation">Installation</h2>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>The package is available on PyPI and can be installed using standard
 Python package management tools.</p>
 <pre><code class="language-console">pip install debug-dojo
@@ -238,27 +213,7 @@ Python package management tools.</p>
 <pre><code class="language-console">uv add debug-dojo
 </code></pre>
 <p>Note that dojo most likely will not work when installed via <code>pipx</code> or
-<code>uvx</code>, as it relies on the current Python environment dependencies.</p>
-<h2 id="development-and-contributing">Development and contributing</h2>
-<p>Project uses <code>poe</code> for defining developer tasks.</p>
-<h3 id="lint-and-type-check">Lint and type check</h3>
-<p>We're using <code>ruff</code> as formatter and linter and <code>basedpyright</code> for static
-type checking. You can run all three with simple command:</p>
-<pre><code class="language-console">poe code-quality
-</code></pre>
-<h3 id="tests">Tests</h3>
-<p><code>Pytest</code> is used for testing. Currently only few example doc tests are
-set up.</p>
-<pre><code class="language-console">poe test
-</code></pre>
-<h3 id="contributing">Contributing</h3>
-<p>You're welcome to contribute both new features and fixes. The above
-quality checks need to pass for a contribution to be accepted to
-<code>debug-dojo</code>. This is tested with Pull Requests job hook.</p>
-<p>It is recommended to set up a pre-commit hook based on the included
-config.</p>
-<pre><code class="language-console">pre-commit install
-</code></pre></div>
+<code>uvx</code>, as it relies on the current Python environment dependencies.</p></div>
             </div>
         </div>
 
@@ -340,5 +295,5 @@ config.</p>
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2025-08-15 21:26:39.080703+00:00
+Build Date UTC : 2025-08-15 22:21:38.398942+00:00
 -->

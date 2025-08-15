@@ -6,9 +6,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         
         <meta name="author" content="bwrob">
-        
+        <link rel="canonical" href="https://bwrob.github.io/debug-dojo/api-reference/">
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>API Reference - debug dojo</title>
+        <title>API - debug dojo</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -41,13 +41,13 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li class="nav-item">
-                                <a href="../../" class="nav-link">Home</a>
+                                <a href="../cli-reference/" class="nav-link">CLI</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../cli-reference/" class="nav-link">CLI Reference</a>
+                                <a href="./" class="nav-link active" aria-current="page">API</a>
                             </li>
                             <li class="nav-item">
-                                <a href="./" class="nav-link active" aria-current="page">API Reference</a>
+                                <a href="../configuration/" class="nav-link">Configuration</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../development/" class="nav-link">Development</a>
@@ -57,6 +57,9 @@
                             </li>
                             <li class="nav-item">
                                 <a href="../license/" class="nav-link">License</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../../" class="nav-link">Author</a>
                             </li>
                         </ul>
 
@@ -72,9 +75,13 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../development/" class="nav-link">
+                                <a rel="next" href="../configuration/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/bwrob/debug-dojo/edit/master/docs/api-reference.md" class="nav-link">Edit on debug dojo
+                                    </a>
                             </li>
                             <li class="nav-item dropdown">
                               <button id="theme-menu" aria-expanded="false" data-bs-toggle="dropdown" data-bs-display="static" aria-label="Toggle theme" class="nav-link dropdown-toggle">
@@ -126,6 +133,110 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#api-reference" class="nav-link">API Reference</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;debug_dojo</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._installers" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;_installers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._installers.install_by_config" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;install_by_config</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._compareres" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;_compareres</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._compareres.inspect_objects_side_by_side" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;inspect_objects_side_by_side</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;_config</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config.__filter_pydantic_error_msg" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;__filter_pydantic_error_msg</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config.load_config" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_config</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config.load_raw_config" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;load_raw_config</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config.resolve_config_path" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;resolve_config_path</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;_config_models</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.BaseConfig" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;BaseConfig</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.DebugDojoConfigV1" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DebugDojoConfigV1</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.DebugDojoConfigV2" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DebugDojoConfigV2</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.DebuggerType" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DebuggerType</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.DebuggersConfig" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DebuggersConfig</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.DebugpyConfig" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;DebugpyConfig</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.ExceptionsConfig" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;ExceptionsConfig</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.Features" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;Features</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.FeaturesConfig" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;FeaturesConfig</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._config_models.IpdbConfig" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;IpdbConfig</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._cli" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;_cli</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._cli.display_config" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;display_config</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._cli.execute_with_debug" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;execute_with_debug</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._cli.main" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;main</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#debug_dojo._cli.run_debug" class="nav-link"><code class="doc-symbol doc-symbol-toc doc-symbol-function"></code>&nbsp;run_debug</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -133,7 +244,2246 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="api-reference">API Reference</h1></div>
+<h1 id="api-reference">API Reference<a class="headerlink" href="#api-reference" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="debug_dojo"></a>
+    <div class="doc doc-contents first">
+
+        <p>Debugging tools for Python.</p>
+<p>This module provides functions to set up debugging tools like PuDB and Rich Traceback.
+It checks for the availability of these tools and configures them accordingly.</p>
+<p>Importing this module will install the debugging tools based on the configuration.
+Example usage:</p>
+<pre><code class="language-python">import debug_dojo.install
+
+b()
+</code></pre>
+<p>This will install the debugging tools and put debug breakpoint at this line.</p>
+<p>Another way to use this module is to run the desired script or module with the
+<code>dojo</code> command-line interface.</p>
+<pre><code class="language-console">$ dojo --verbose --config dojo.toml target_script.py --arg_1_for_script value1
+</code></pre>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="debug_dojo._installers"></a>
+    <div class="doc doc-contents first">
+
+        <p>Debugging tools for Python.</p>
+<p>This module provides functions to set up debugging tools like PuDB and Rich Traceback.
+It checks for the availability of these tools and configures them accordingly.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._installers.install_by_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">install_by_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._installers.install_by_config" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install debugging tools.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_installers.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">install_by_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">DebugDojoConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install debugging tools.&quot;&quot;&quot;</span>
+    <span class="n">_set_debugger</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">debuggers</span><span class="p">)</span>
+    <span class="n">_set_exceptions</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">exceptions</span><span class="p">)</span>
+    <span class="n">_install_features</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">features</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="debug_dojo._compareres"></a>
+    <div class="doc doc-contents first">
+
+        <p>Utilities for side-by-side inspection and comparison of Python objects using Rich.</p>
+<p>This module provides functions to display attributes and methods of two objects
+in a visually appealing, side-by-side format in the terminal.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._compareres.inspect_objects_side_by_side" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">inspect_objects_side_by_side</span><span class="p">(</span><span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._compareres.inspect_objects_side_by_side" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Display two Python objects side-by-side in the terminal using Rich.</p>
+<p>Showing their attributes and methods in a simplified, aligned format.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_compareres.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">inspect_objects_side_by_side</span><span class="p">(</span>
+    <span class="n">obj1</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+    <span class="n">obj2</span><span class="p">:</span> <span class="nb">object</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display two Python objects side-by-side in the terminal using Rich.</span>
+
+<span class="sd">    Showing their attributes and methods in a simplified, aligned format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">main_console</span><span class="p">:</span> <span class="n">Console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+
+    <span class="n">lines1</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_simplified_object_info</span><span class="p">(</span><span class="n">obj1</span><span class="p">)</span>
+    <span class="n">lines2</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Text</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_simplified_object_info</span><span class="p">(</span><span class="n">obj2</span><span class="p">)</span>
+
+    <span class="c1"># Determine the maximum number of lines to ensure consistent height</span>
+    <span class="n">max_lines</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines1</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines2</span><span class="p">))</span>
+
+    <span class="c1"># Pad the shorter list of lines with empty Text objects to match the height</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_lines</span><span class="p">:</span>
+        <span class="n">lines1</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_lines</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines1</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_lines</span><span class="p">:</span>
+        <span class="n">lines2</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">Text</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_lines</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">lines2</span><span class="p">)))</span>
+
+    <span class="c1"># Join the padded lines into a single Text object for the Panel content</span>
+    <span class="n">padded_inspect_text1</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines1</span><span class="p">)</span>
+    <span class="n">padded_inspect_text2</span><span class="p">:</span> <span class="n">Text</span> <span class="o">=</span> <span class="n">Text</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines2</span><span class="p">)</span>
+
+    <span class="n">panel1</span><span class="p">:</span> <span class="n">Panel</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">padded_inspect_text1</span><span class="p">,</span> <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">panel2</span><span class="p">:</span> <span class="n">Panel</span> <span class="o">=</span> <span class="n">Panel</span><span class="p">(</span><span class="n">padded_inspect_text2</span><span class="p">,</span> <span class="n">border_style</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">main_console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="n">Columns</span><span class="p">([</span><span class="n">panel1</span><span class="p">,</span> <span class="n">panel2</span><span class="p">]))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="debug_dojo._config"></a>
+    <div class="doc doc-contents first">
+
+        <p>Debug Dojo configuration module.</p>
+<p>It includes configurations for different debuggers, exception handling,
+and features that can be enabled or disabled.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._config.__filter_pydantic_error_msg" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">__filter_pydantic_error_msg</span><span class="p">(</span><span class="n">error</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._config.__filter_pydantic_error_msg" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Filter out specific lines from a Pydantic validation error.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_config.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">__filter_pydantic_error_msg</span><span class="p">(</span><span class="n">error</span><span class="p">:</span> <span class="n">ValidationError</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter out specific lines from a Pydantic validation error.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="n">line</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">error</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;For further information visit&quot;</span><span class="p">)</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._config.load_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">debugger</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._config.load_config" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Load the Debug Dojo configuration and return a DebugDojoConfig instance.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_config.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span>  <span class="c1"># noqa: C901</span>
+    <span class="n">config_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">debugger</span><span class="p">:</span> <span class="n">DebuggerType</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DebugDojoConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the Debug Dojo configuration and return a DebugDojoConfig instance.&quot;&quot;&quot;</span>
+    <span class="n">resolved_path</span> <span class="o">=</span> <span class="n">resolve_config_path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">resolved_path</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Using configuration file: </span><span class="si">{</span><span class="n">resolved_path</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No configuration file found, using default settings.&quot;</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]</span><span class="si">{</span><span class="n">msg</span><span class="si">}</span><span class="s2">[/blue]&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">resolved_path</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">DebugDojoConfig</span><span class="p">()</span>
+
+    <span class="n">raw_config</span> <span class="o">=</span> <span class="n">load_raw_config</span><span class="p">(</span><span class="n">resolved_path</span><span class="p">)</span>
+
+    <span class="n">config</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="n">DebugDojoConfigV2</span><span class="p">,</span> <span class="n">DebugDojoConfigV1</span><span class="p">):</span>
+        <span class="n">model_name</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="vm">__name__</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">raw_config</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ValidationError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[yellow]Configuration validation error for </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">__filter_pydantic_error_msg</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Please check your configuration file </span><span class="si">{</span><span class="n">resolved_path</span><span class="si">}</span><span class="s2">.[/yellow]&quot;</span>
+                <span class="p">)</span>
+                <span class="n">rich_print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">verbose</span> <span class="ow">or</span> <span class="n">model_name</span> <span class="o">!=</span> <span class="n">DebugDojoConfig</span><span class="o">.</span><span class="vm">__name__</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[blue]Using configuration model: </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Current configuration model </span><span class="si">{</span><span class="n">DebugDojoConfig</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">. [/blue]&quot;</span>
+                <span class="p">)</span>
+                <span class="n">rich_print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[red]Unsupported configuration version in </span><span class="si">{</span><span class="n">resolved_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="s2">.</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">&quot;Please update your configuration file.[/red]&quot;</span>
+        <span class="p">)</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">while</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">DebugDojoConfig</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+    <span class="c1"># If a debugger is specified, update the config.</span>
+    <span class="k">if</span> <span class="n">debugger</span><span class="p">:</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">debuggers</span><span class="o">.</span><span class="n">default</span> <span class="o">=</span> <span class="n">debugger</span>
+
+    <span class="k">return</span> <span class="n">config</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._config.load_raw_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">load_raw_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._config.load_raw_config" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Load the Debug Dojo configuration from a file.</p>
+<p>Currently supports &lsquo;dojo.toml&rsquo; or &lsquo;pyproject.toml&rsquo;.
+If no path is provided, it checks the current directory for these files.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_config.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">load_raw_config</span><span class="p">(</span>
+    <span class="n">config_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>  <span class="c1"># pyright: ignore[reportExplicitAny]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load the Debug Dojo configuration from a file.</span>
+
+<span class="sd">    Currently supports &#39;dojo.toml&#39; or &#39;pyproject.toml&#39;.</span>
+<span class="sd">    If no path is provided, it checks the current directory for these files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">config_str</span> <span class="o">=</span> <span class="n">config_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">(</span><span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">config_data</span> <span class="o">=</span> <span class="n">parse</span><span class="p">(</span><span class="n">config_str</span><span class="p">)</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
+    <span class="k">except</span> <span class="n">TOMLKitError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Error parsing configuration file </span><span class="si">{</span><span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">e</span>
+
+    <span class="c1"># If config is in [tool.debug_dojo] (pyproject.toml), extract it.</span>
+    <span class="k">if</span> <span class="n">config_path</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;pyproject.toml&quot;</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dojo_config</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;dict[str, Any]&quot;</span><span class="p">,</span> <span class="n">config_data</span><span class="p">[</span><span class="s2">&quot;tool&quot;</span><span class="p">][</span><span class="s2">&quot;debug_dojo&quot;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dojo_config</span>
+
+    <span class="k">return</span> <span class="n">config_data</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._config.resolve_config_path" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">resolve_config_path</span><span class="p">(</span><span class="n">config_path</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._config.resolve_config_path" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Resolve the configuration path, returning a default if none is provided.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_config.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">resolve_config_path</span><span class="p">(</span><span class="n">config_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Resolve the configuration path, returning a default if none is provided.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">config_path</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">config_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Configuration file not found:</span><span class="se">\n</span><span class="si">{</span><span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">config_path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+
+    <span class="c1"># Default configuration path</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&quot;dojo.toml&quot;</span><span class="p">),</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;pyproject.toml&quot;</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">path</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="debug_dojo._config_models"></a>
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.BaseConfig" class="doc doc-heading">
+            <code>BaseConfig</code>
+
+
+<a href="#debug_dojo._config_models.BaseConfig" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Base configuration class with extra fields forbidden.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">BaseConfig</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base configuration class with extra fields forbidden.&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">,</span> <span class="n">validate_assignment</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.DebugDojoConfigV1" class="doc doc-heading">
+            <code>DebugDojoConfigV1</code>
+
+
+<a href="#debug_dojo._config_models.DebugDojoConfigV1" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Configuration for Debug Dojo.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DebugDojoConfigV1</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for Debug Dojo.&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnannotatedClassAttribute]</span>
+
+    <span class="n">debugger</span><span class="p">:</span> <span class="n">DebuggerType</span> <span class="o">=</span> <span class="n">DebuggerType</span><span class="o">.</span><span class="n">PUDB</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The type of debugger to use.&quot;&quot;&quot;</span>
+    <span class="n">features</span><span class="p">:</span> <span class="n">Features</span> <span class="o">=</span> <span class="n">Features</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Features to install for debugging.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DebugDojoConfigV2</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the configuration to the latest version.&quot;&quot;&quot;</span>
+        <span class="n">v2_exceptions</span> <span class="o">=</span> <span class="n">ExceptionsConfig</span><span class="p">(</span>
+            <span class="n">rich_traceback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">rich_traceback</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">v2_debuggers</span> <span class="o">=</span> <span class="n">DebuggersConfig</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">debugger</span><span class="p">)</span>
+        <span class="n">v2_features</span> <span class="o">=</span> <span class="n">FeaturesConfig</span><span class="p">(</span>
+            <span class="n">rich_inspect</span><span class="o">=</span><span class="s2">&quot;i&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">rich_inspect</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">rich_print</span><span class="o">=</span><span class="s2">&quot;p&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">rich_print</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">comparer</span><span class="o">=</span><span class="s2">&quot;c&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">comparer</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="nb">breakpoint</span><span class="o">=</span><span class="s2">&quot;b&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">breakpoint</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">DebugDojoConfigV2</span><span class="p">(</span>
+            <span class="n">exceptions</span><span class="o">=</span><span class="n">v2_exceptions</span><span class="p">,</span>
+            <span class="n">debuggers</span><span class="o">=</span><span class="n">v2_debuggers</span><span class="p">,</span>
+            <span class="n">features</span><span class="o">=</span><span class="n">v2_features</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugDojoConfigV1.debugger" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">debugger</span> <span class="o">=</span> <span class="n">DebuggerType</span><span class="o">.</span><span class="n">PUDB</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugDojoConfigV1.debugger" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>The type of debugger to use.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugDojoConfigV1.features" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">features</span> <span class="o">=</span> <span class="n">Features</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugDojoConfigV1.features" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Features to install for debugging.</p>
+
+    </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="debug_dojo._config_models.DebugDojoConfigV1.update" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">update</span><span class="p">()</span></code>
+
+<a href="#debug_dojo._config_models.DebugDojoConfigV1.update" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Update the configuration to the latest version.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DebugDojoConfigV2</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Update the configuration to the latest version.&quot;&quot;&quot;</span>
+    <span class="n">v2_exceptions</span> <span class="o">=</span> <span class="n">ExceptionsConfig</span><span class="p">(</span>
+        <span class="n">rich_traceback</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">rich_traceback</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">v2_debuggers</span> <span class="o">=</span> <span class="n">DebuggersConfig</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">debugger</span><span class="p">)</span>
+    <span class="n">v2_features</span> <span class="o">=</span> <span class="n">FeaturesConfig</span><span class="p">(</span>
+        <span class="n">rich_inspect</span><span class="o">=</span><span class="s2">&quot;i&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">rich_inspect</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">rich_print</span><span class="o">=</span><span class="s2">&quot;p&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">rich_print</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">comparer</span><span class="o">=</span><span class="s2">&quot;c&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">comparer</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="nb">breakpoint</span><span class="o">=</span><span class="s2">&quot;b&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="o">.</span><span class="n">breakpoint</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">DebugDojoConfigV2</span><span class="p">(</span>
+        <span class="n">exceptions</span><span class="o">=</span><span class="n">v2_exceptions</span><span class="p">,</span>
+        <span class="n">debuggers</span><span class="o">=</span><span class="n">v2_debuggers</span><span class="p">,</span>
+        <span class="n">features</span><span class="o">=</span><span class="n">v2_features</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.DebugDojoConfigV2" class="doc doc-heading">
+            <code>DebugDojoConfigV2</code>
+
+
+<a href="#debug_dojo._config_models.DebugDojoConfigV2" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Configuration for Debug Dojo.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DebugDojoConfigV2</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for Debug Dojo.&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnannotatedClassAttribute]</span>
+
+    <span class="n">exceptions</span><span class="p">:</span> <span class="n">ExceptionsConfig</span> <span class="o">=</span> <span class="n">ExceptionsConfig</span><span class="p">()</span>
+    <span class="n">debuggers</span><span class="p">:</span> <span class="n">DebuggersConfig</span> <span class="o">=</span> <span class="n">DebuggersConfig</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Default debugger and configs.&quot;&quot;&quot;</span>
+    <span class="n">features</span><span class="p">:</span> <span class="n">FeaturesConfig</span> <span class="o">=</span> <span class="n">FeaturesConfig</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Features mnemonics .&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugDojoConfigV2.debuggers" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">debuggers</span> <span class="o">=</span> <span class="n">DebuggersConfig</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugDojoConfigV2.debuggers" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Default debugger and configs.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugDojoConfigV2.features" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">features</span> <span class="o">=</span> <span class="n">FeaturesConfig</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugDojoConfigV2.features" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Features mnemonics .</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.DebuggerType" class="doc doc-heading">
+            <code>DebuggerType</code>
+
+
+<a href="#debug_dojo._config_models.DebuggerType" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="enum.Enum">Enum</span></code></p>
+
+
+        <p>Enum for different types of debuggers.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DebuggerType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum for different types of debuggers.&quot;&quot;&quot;</span>
+
+    <span class="n">PDB</span> <span class="o">=</span> <span class="s2">&quot;pdb&quot;</span>
+    <span class="n">PUDB</span> <span class="o">=</span> <span class="s2">&quot;pudb&quot;</span>
+    <span class="n">IPDB</span> <span class="o">=</span> <span class="s2">&quot;ipdb&quot;</span>
+    <span class="n">DEBUGPY</span> <span class="o">=</span> <span class="s2">&quot;debugpy&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.DebuggersConfig" class="doc doc-heading">
+            <code>DebuggersConfig</code>
+
+
+<a href="#debug_dojo._config_models.DebuggersConfig" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BaseConfig (debug_dojo._config_models.BaseConfig)" href="#debug_dojo._config_models.BaseConfig">BaseConfig</a></code></p>
+
+
+        <p>Configuration for debuggers.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DebuggersConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for debuggers.&quot;&quot;&quot;</span>
+
+    <span class="n">default</span><span class="p">:</span> <span class="n">DebuggerType</span> <span class="o">=</span> <span class="n">DebuggerType</span><span class="o">.</span><span class="n">IPDB</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Default debugger to use.&quot;&quot;&quot;</span>
+    <span class="n">prompt_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;debug-dojo&gt; &quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt name for the debugger, used in the REPL.&quot;&quot;&quot;</span>
+    <span class="n">debugpy</span><span class="p">:</span> <span class="n">DebugpyConfig</span> <span class="o">=</span> <span class="n">DebugpyConfig</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for debugpy debugger.&quot;&quot;&quot;</span>
+    <span class="n">ipdb</span><span class="p">:</span> <span class="n">IpdbConfig</span> <span class="o">=</span> <span class="n">IpdbConfig</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for ipdb debugger.&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebuggersConfig.debugpy" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">debugpy</span> <span class="o">=</span> <span class="n">DebugpyConfig</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebuggersConfig.debugpy" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Configuration for debugpy debugger.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebuggersConfig.default" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">default</span> <span class="o">=</span> <span class="n">DebuggerType</span><span class="o">.</span><span class="n">IPDB</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebuggersConfig.default" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Default debugger to use.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebuggersConfig.ipdb" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">ipdb</span> <span class="o">=</span> <span class="n">IpdbConfig</span><span class="p">()</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebuggersConfig.ipdb" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Configuration for ipdb debugger.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebuggersConfig.prompt_name" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">prompt_name</span> <span class="o">=</span> <span class="s1">&#39;debug-dojo&gt; &#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebuggersConfig.prompt_name" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Prompt name for the debugger, used in the REPL.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.DebugpyConfig" class="doc doc-heading">
+            <code>DebugpyConfig</code>
+
+
+<a href="#debug_dojo._config_models.DebugpyConfig" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BaseConfig (debug_dojo._config_models.BaseConfig)" href="#debug_dojo._config_models.BaseConfig">BaseConfig</a></code></p>
+
+
+        <p>Configuration for debugpy debugger.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">DebugpyConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for debugpy debugger.&quot;&quot;&quot;</span>
+
+    <span class="n">port</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1992</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Port for debugpy debugger.&quot;&quot;&quot;</span>
+    <span class="n">host</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;localhost&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Host for debugpy debugger.&quot;&quot;&quot;</span>
+    <span class="n">wait_for_client</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to wait for the client to connect before starting debugging.&quot;&quot;&quot;</span>
+    <span class="n">log_to_file</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Whether to log debugpy output to a file.&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugpyConfig.host" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">host</span> <span class="o">=</span> <span class="s1">&#39;localhost&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugpyConfig.host" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Host for debugpy debugger.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugpyConfig.log_to_file" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">log_to_file</span> <span class="o">=</span> <span class="kc">False</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugpyConfig.log_to_file" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Whether to log debugpy output to a file.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugpyConfig.port" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">port</span> <span class="o">=</span> <span class="mi">1992</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugpyConfig.port" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Port for debugpy debugger.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.DebugpyConfig.wait_for_client" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">wait_for_client</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.DebugpyConfig.wait_for_client" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Whether to wait for the client to connect before starting debugging.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.ExceptionsConfig" class="doc doc-heading">
+            <code>ExceptionsConfig</code>
+
+
+<a href="#debug_dojo._config_models.ExceptionsConfig" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BaseConfig (debug_dojo._config_models.BaseConfig)" href="#debug_dojo._config_models.BaseConfig">BaseConfig</a></code></p>
+
+
+        <p>Configuration for exceptions handling.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ExceptionsConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for exceptions handling.&quot;&quot;&quot;</span>
+
+    <span class="n">rich_traceback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable rich traceback for better error reporting.&quot;&quot;&quot;</span>
+    <span class="n">locals_in_traceback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Include local variables in traceback.&quot;&quot;&quot;</span>
+    <span class="n">post_mortem</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enable post-mortem debugging after an exception.&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.ExceptionsConfig.locals_in_traceback" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">locals_in_traceback</span> <span class="o">=</span> <span class="kc">False</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.ExceptionsConfig.locals_in_traceback" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Include local variables in traceback.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.ExceptionsConfig.post_mortem" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">post_mortem</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.ExceptionsConfig.post_mortem" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Enable post-mortem debugging after an exception.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.ExceptionsConfig.rich_traceback" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rich_traceback</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.ExceptionsConfig.rich_traceback" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Enable rich traceback for better error reporting.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.Features" class="doc doc-heading">
+            <code>Features</code>
+
+
+<a href="#debug_dojo._config_models.Features" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="pydantic.BaseModel">BaseModel</span></code></p>
+
+
+        <p>Configuration for installing debug features.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Features</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for installing debug features.&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;forbid&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnannotatedClassAttribute]</span>
+
+    <span class="n">rich_inspect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install rich inspect as &#39;i&#39; for enhanced object inspection.&quot;&quot;&quot;</span>
+    <span class="n">rich_print</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install rich print as &#39;p&#39; for enhanced printing.&quot;&quot;&quot;</span>
+    <span class="n">rich_traceback</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install rich traceback for better error reporting.&quot;&quot;&quot;</span>
+    <span class="n">comparer</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install comparer as &#39;c&#39; for side-by-side object comparison.&quot;&quot;&quot;</span>
+    <span class="nb">breakpoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install breakpoint as &#39;b&#39; for setting breakpoints in code.&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.Features.breakpoint" class="doc doc-heading">
+            <code class="highlight language-python"><span class="nb">breakpoint</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.Features.breakpoint" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install breakpoint as &lsquo;b&rsquo; for setting breakpoints in code.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.Features.comparer" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">comparer</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.Features.comparer" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install comparer as &lsquo;c&rsquo; for side-by-side object comparison.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.Features.rich_inspect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rich_inspect</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.Features.rich_inspect" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install rich inspect as &lsquo;i&rsquo; for enhanced object inspection.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.Features.rich_print" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rich_print</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.Features.rich_print" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install rich print as &lsquo;p&rsquo; for enhanced printing.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.Features.rich_traceback" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rich_traceback</span> <span class="o">=</span> <span class="kc">True</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.Features.rich_traceback" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install rich traceback for better error reporting.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.FeaturesConfig" class="doc doc-heading">
+            <code>FeaturesConfig</code>
+
+
+<a href="#debug_dojo._config_models.FeaturesConfig" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BaseConfig (debug_dojo._config_models.BaseConfig)" href="#debug_dojo._config_models.BaseConfig">BaseConfig</a></code></p>
+
+
+        <p>Configuration for installing debug features.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">FeaturesConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for installing debug features.&quot;&quot;&quot;</span>
+
+    <span class="n">rich_inspect</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;i&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install rich inspect as &#39;i&#39; for enhanced object inspection.&quot;&quot;&quot;</span>
+    <span class="n">rich_print</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;p&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install rich print as &#39;p&#39; for enhanced printing.&quot;&quot;&quot;</span>
+    <span class="n">comparer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install comparer as &#39;c&#39; for side-by-side object comparison.&quot;&quot;&quot;</span>
+    <span class="nb">breakpoint</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;b&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Install breakpoint as &#39;b&#39; for setting breakpoints in code.&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.FeaturesConfig.breakpoint" class="doc doc-heading">
+            <code class="highlight language-python"><span class="nb">breakpoint</span> <span class="o">=</span> <span class="s1">&#39;b&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.FeaturesConfig.breakpoint" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install breakpoint as &lsquo;b&rsquo; for setting breakpoints in code.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.FeaturesConfig.comparer" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">comparer</span> <span class="o">=</span> <span class="s1">&#39;c&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.FeaturesConfig.comparer" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install comparer as &lsquo;c&rsquo; for side-by-side object comparison.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.FeaturesConfig.rich_inspect" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rich_inspect</span> <span class="o">=</span> <span class="s1">&#39;i&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.FeaturesConfig.rich_inspect" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install rich inspect as &lsquo;i&rsquo; for enhanced object inspection.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.FeaturesConfig.rich_print" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">rich_print</span> <span class="o">=</span> <span class="s1">&#39;p&#39;</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.FeaturesConfig.rich_print" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Install rich print as &lsquo;p&rsquo; for enhanced printing.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="debug_dojo._config_models.IpdbConfig" class="doc doc-heading">
+            <code>IpdbConfig</code>
+
+
+<a href="#debug_dojo._config_models.IpdbConfig" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><a class="autorefs autorefs-internal" title="BaseConfig (debug_dojo._config_models.BaseConfig)" href="#debug_dojo._config_models.BaseConfig">BaseConfig</a></code></p>
+
+
+        <p>Configuration for ipdb debugger.</p>
+
+
+
+
+
+
+
+              <details class="quote">
+                <summary>Source code in <code>src/debug_dojo/_config_models.py</code></summary>
+                <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">IpdbConfig</span><span class="p">(</span><span class="n">BaseConfig</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for ipdb debugger.&quot;&quot;&quot;</span>
+
+    <span class="n">context_lines</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of context lines to show in ipdb.&quot;&quot;&quot;</span>
+</code></pre></div></td></tr></table></div>
+              </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="debug_dojo._config_models.IpdbConfig.context_lines" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">context_lines</span> <span class="o">=</span> <span class="mi">20</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#debug_dojo._config_models.IpdbConfig.context_lines" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Number of context lines to show in ipdb.</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<a id="debug_dojo._cli"></a>
+    <div class="doc doc-contents first">
+
+        <p>Command-line interface for running Python scripts or modules with debugging tools.</p>
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._cli.display_config" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">display_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._cli.display_config" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Display the configuration for the debug dojo.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_cli.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">display_config</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">DebugDojoConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Display the configuration for the debug dojo.&quot;&quot;&quot;</span>
+    <span class="n">rich_print</span><span class="p">(</span><span class="s2">&quot;[blue]Using debug-dojo configuration:[/blue]&quot;</span><span class="p">)</span>
+    <span class="n">rich_print</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">model_dump_json</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._cli.execute_with_debug" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">execute_with_debug</span><span class="p">(</span><span class="n">target_name</span><span class="p">,</span> <span class="n">target_args</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">target_is_module</span><span class="p">,</span> <span class="n">verbose</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._cli.execute_with_debug" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Execute a target script or module with installation of debugging tools.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_cli.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_with_debug</span><span class="p">(</span>  <span class="c1"># noqa: C901</span>
+    <span class="n">target_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">target_args</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">target_is_module</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="n">config</span><span class="p">:</span> <span class="n">DebugDojoConfig</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute a target script or module with installation of debugging tools.&quot;&quot;&quot;</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_name</span><span class="p">,</span> <span class="o">*</span><span class="n">target_args</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]Installing debugging tools for </span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s2">.[/blue]&quot;</span><span class="p">)</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[blue]Arguments for target: </span><span class="si">{</span><span class="n">target_args</span><span class="si">}</span><span class="s2">[/blue]&quot;</span><span class="p">)</span>
+
+    <span class="n">install_by_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">target_is_module</span><span class="p">:</span>
+        <span class="n">runner</span> <span class="o">=</span> <span class="n">runpy</span><span class="o">.</span><span class="n">run_module</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">Path</span><span class="p">(</span><span class="n">target_name</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">runner</span> <span class="o">=</span> <span class="n">runpy</span><span class="o">.</span><span class="n">run_path</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="n">runner</span><span class="p">(</span><span class="n">target_name</span><span class="p">,</span> <span class="n">run_name</span><span class="o">=</span><span class="s2">&quot;__main__&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Error importing </span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s2">:[/red]</span><span class="se">\n</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">BdbQuit</span><span class="p">:</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="s2">&quot;[red]Debugging session terminated by user.[/red]&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">KeyboardInterrupt</span><span class="p">:</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="s2">&quot;[red]Execution interrupted by user.[/red]&quot;</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">SystemExit</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="p">:</span>
+            <span class="n">rich_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Script exited with code </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">code</span><span class="si">}</span><span class="s2">.[/red]&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
+        <span class="n">rich_print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Error while running </span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s2">:[/red]</span><span class="se">\n</span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">post_mortem</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">pdb</span>  <span class="c1"># noqa: PLC0415, T100</span>
+
+            <span class="n">rich_print</span><span class="p">(</span><span class="s2">&quot;[blue]Entering post-mortem debugging session...[/blue]&quot;</span><span class="p">)</span>
+            <span class="n">pdb</span><span class="o">.</span><span class="n">post_mortem</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">__traceback__</span><span class="p">)</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._cli.main" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">main</span><span class="p">()</span></code>
+
+<a href="#debug_dojo._cli.main" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run the command-line interface.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_cli.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the command-line interface.&quot;&quot;&quot;</span>
+    <span class="n">cli</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h2 id="debug_dojo._cli.run_debug" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_debug</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">target_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">config_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">debugger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code>
+
+<a href="#debug_dojo._cli.run_debug" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run the command-line interface.</p>
+
+
+            <details class="quote">
+              <summary>Source code in <code>src/debug_dojo/_cli.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Run a Python script or module with debugging tools installed.&quot;</span><span class="p">,</span>
+    <span class="n">no_args_is_help</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">context_settings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;allow_extra_args&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;ignore_unknown_options&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+<span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_debug</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+    <span class="n">ctx</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span>
+    <span class="n">target_name</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">typer</span><span class="o">.</span><span class="n">Argument</span><span class="p">(</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;The target script or module to debug.&quot;</span><span class="p">)</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">config_path</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">Path</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--config&quot;</span><span class="p">,</span> <span class="s2">&quot;-c&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Show configuration&quot;</span><span class="p">)</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">debugger</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="n">DebuggerType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--debugger&quot;</span><span class="p">,</span> <span class="s2">&quot;-d&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Specify the debugger to use&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="s2">&quot;-v&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Enable verbose output&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">module</span><span class="p">:</span> <span class="n">Annotated</span><span class="p">[</span>
+        <span class="nb">bool</span><span class="p">,</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="s2">&quot;--module&quot;</span><span class="p">,</span> <span class="s2">&quot;-m&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Run as a module&quot;</span><span class="p">),</span>
+    <span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the command-line interface.&quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">load_config</span><span class="p">(</span><span class="n">config_path</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span> <span class="n">debugger</span><span class="o">=</span><span class="n">debugger</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="n">display_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">target_name</span><span class="p">:</span>
+        <span class="n">execute_with_debug</span><span class="p">(</span>
+            <span class="n">target_name</span><span class="o">=</span><span class="n">target_name</span><span class="p">,</span>
+            <span class="n">target_is_module</span><span class="o">=</span><span class="n">module</span><span class="p">,</span>
+            <span class="n">target_args</span><span class="o">=</span><span class="n">ctx</span><span class="o">.</span><span class="n">args</span><span class="p">,</span>
+            <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div></div>
             </div>
         </div>
 
