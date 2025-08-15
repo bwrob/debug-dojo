@@ -1,0 +1,38 @@
+name: Python package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    name: Build and Test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # test against lowest supported Python version and latest
+        python-version: ["3.10", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install uv and set the python version to ${{ matrix.python-version }}
+      uses: astral-sh/setup-uv@v6
+      with:
+       python-version: ${{ matrix.python-version }}
+
+    - name: Install the project
+      run: uv sync --locked --all-extras --dev
+
+    - name: Run Ruff check
+      run: ruff check --config=ruff.toml --output-format=github .
+
+    - name: Run Ruff format
+      run: ruff format --config=ruff.toml --check --output-format=github .
+
+    - name: Run basedpyright
+      run: basedpyright
