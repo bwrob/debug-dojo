@@ -92,22 +92,3 @@
     pythonVersion    = "3.10"
     strict           = ["src/debug_dojo/*"]
     ignore           = ["examples"]
-
-[tool.poe.tasks]
-    fix = { default_item_type = "cmd", sequence = [
-        "ruff check --fix --unsafe-fixes",
-        "ruff format --config=ruff.toml",
-    ] }
-    lint = "uv run ruff check --config=ruff.toml"
-    format = "ruff format --diff --config=ruff.toml"
-
-    type-check = "basedpyright"
-    test       = "pytest --verbose --doctest-modules"
-
-    code-quality = ["format", "lint", "type-check"]
-    publish = [
-        "code-quality",
-        { cmd = "rm -rf dist" },
-        { cmd = "uv build" },
-        { cmd = "uv publish" },
-    ]
