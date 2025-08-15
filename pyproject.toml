@@ -55,7 +55,7 @@
         "poethepoet>=0.36.0",
         "pytest>=8.4.1",
         "ruff>=0.12.4",
-]
+    ]
 
 [build-system]
     requires = [
@@ -91,6 +91,7 @@
     ignore           = ["examples"]
 
 [tool.poe.tasks]
+    ruff-lint = "uv run ruff check --config=ruff.toml"
     lint = "ruff check --fix src"
     format = "ruff format src"
     type-check = "basedpyright --project pyproject.toml src/debug_dojo"

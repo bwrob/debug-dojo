@@ -31,7 +31,7 @@ jobs:
 
     - name: Run Ruff check
       if: always()
-      run: uv run ruff check --verbose --config=ruff.toml --output-format=github .
+      run: poe ruff-lint --output-format=github
 
     - name: Run Ruff format
       if: always()
