@@ -32,7 +32,7 @@ jobs:
       run: uv run ruff check --config=ruff.toml --output-format=github .
 
     - name: Run Ruff format
-      run: uv run ruff format --config=ruff.toml --check --output-format=github .
+      run: uv run ruff format --config=ruff.toml --check .
 
     - name: Run basedpyright
       run: uv run basedpyright
