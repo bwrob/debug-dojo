@@ -26,13 +26,17 @@ jobs:
        python-version: ${{ matrix.python-version }}
 
     - name: Install the project
+      id: uv-sync
       run: uv sync --locked --all-extras --dev
 
     - name: Run Ruff check
+      if: steps.uv-sync.outcome == 'success'
       run: uv run ruff check --verbose --config=ruff.toml --output-format=github .
 
     - name: Run Ruff format
+      if: steps.uv-sync.outcome == 'success'
       run: uv run ruff format --verbose --config=ruff.toml --check .
 
     - name: Run basedpyright
+      if: steps.uv-sync.outcome == 'success'
       run: uv run basedpyright --verbose

@@ -20,7 +20,7 @@ def main() -> None:
     i(example_dict)
 
     msg = "This is a test message."
-    raise ValueError(msg)
+    raise ValueError("This is a test message.")
 
 
 if __name__ == "__main__":
