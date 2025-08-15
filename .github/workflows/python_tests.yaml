@@ -29,10 +29,10 @@ jobs:
       run: uv sync --locked --all-extras --dev
 
     - name: Run Ruff check
-      run: uv run ruff check --config=ruff.toml --output-format=github .
+      run: uv run ruff check --verbose --config=ruff.toml --output-format=github .
 
     - name: Run Ruff format
-      run: uv run ruff format --config=ruff.toml --check .
+      run: uv run ruff format --verbose --config=ruff.toml --check .
 
     - name: Run basedpyright
-      run: uv run basedpyright
+      run: uv run basedpyright --verbose
