@@ -50,11 +50,11 @@
 
 [dependency-groups]
     dev = [
-        "basedpyright>=1.31.0",
+        "basedpyright>=1.31.2",
         "jupyter>=1.1.1",
-        "poethepoet>=0.36.0",
+        "poethepoet>=0.37.0",
         "pytest>=8.4.1",
-        "ruff>=0.12.4",
+        "ruff>=0.12.9",
     ]
 
 [build-system]
@@ -63,6 +63,9 @@
         "hatchling",
     ]
     build-backend = "hatchling.build"
+
+[tool.uv]
+    required-version = "==0.8.11"
 
 [tool.hatch.metadata]
     allow-direct-references = true
