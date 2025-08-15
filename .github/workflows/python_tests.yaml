@@ -40,3 +40,7 @@ jobs:
     - name: Run basedpyright
       if: always()
       run: uv run basedpyright --verbose
+
+    - name: Run pytest
+      if: always()
+      run: uv run pytest --verbose --doctest-modules

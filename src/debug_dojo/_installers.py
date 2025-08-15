@@ -96,17 +96,40 @@ def _inspect() -> None:
 
 
 def _compare() -> None:
-    """Print the object using a custom inspect function."""
+    """Print the object using a custom inspect function.
+
+    >>> _compare()
+    >>> import builtins
+    >>> callable(builtins.c)
+    True
+
+    """
     builtins.c = inspect_objects_side_by_side  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def _breakpoint() -> None:
-    """Install the breakpoint function."""
+    """Install the breakpoint function.
+
+    >>> _breakpoint()
+    >>> import builtins
+    >>> callable(builtins.b)
+    True
+
+    """
     builtins.b = breakpoint  # pyright: ignore[reportAttributeAccessIssue]
 
 
 def _rich_print() -> None:
-    """Install the print from rich."""
+    """Install the print from rich.
+
+    >>> _rich_print()
+    >>> import builtins
+    >>> callable(builtins.p)
+    True
+    >>> p("test")
+    test
+
+    """
     from rich import print as rich_print
 
     builtins.p = rich_print  # pyright: ignore[reportAttributeAccessIssue]
