@@ -2,11 +2,11 @@
 fail_fast: false
 repos:
   - hooks:
-      - args: [--unsafe-fixes, --config, ruff.toml]
-        id: ruff
-      - args: [--config, ruff.toml]
-        id: ruff-format
+      - args: [ --fix ]
+        id: ruff-check
+      - id: ruff-format
     repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
     rev: v0.12.9
   - hooks:
       - id: check-case-conflict
@@ -27,3 +27,16 @@ repos:
       - id: uv-export
     repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.8.11
+  - hooks:
+      # Run the linter.
+      - id: gitleaks
+        name: 🔒 security · Detect hardcoded secrets
+    repo: https://github.com/gitleaks/gitleaks
+    rev: v8.28.0
+  - hooks:
+      - additional_dependencies:
+          - validate-pyproject-schema-store[all]
+        id: validate-pyproject
+        name: 🐍 python · Validate pyproject.toml
+    repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.24.1
