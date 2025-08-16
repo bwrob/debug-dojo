@@ -1,12 +1,14 @@
 ---
+edit_uri: edit/main/docs/
 markdown_extensions:
   - smarty
   - toc:
       permalink: true
   - sane_lists
 nav:
-  - CLI: cli-reference.md
-  - API: api-reference.md
+  - Introduction: index.md
+  - CLI Usage: cli-reference.md
+  - API Reference: api-reference.md
   - Configuration: configuration.md
   - Development: development.md
   - Changelog: changelog.md
@@ -21,20 +23,72 @@ plugins:
           options:
             show_symbol_type_toc: true
   - mkdocs-typer2
-repo_name: debug dojo
+  - git-revision-date-localized:
+      enable_creation_date: true
+  - git-committers:
+      branch: main
+      repository: bwrob/debug-dojo
+# repo
+repo_name: bwrob/debug-dojo
 repo_url: https://github.com/bwrob/debug-dojo
+# site
 site_author: bwrob
 site_description: debug dojo, a place for zen debugging
 site_name: debug dojo
 site_url: https://bwrob.github.io/debug-dojo/
 theme:
   color_mode: dark
-  hljs_languages:
-    - python
-    - toml
-    - bash
-    - console
-    - yaml
-  locale: en
-  name: mkdocs
-  user_color_mode_toggle: true
+  features:
+    - announce.dismiss
+    - content.action.edit
+    - content.action.view
+    - content.code.annotate
+    - content.code.copy
+    # - content.code.select
+    # - content.footnote.tooltips
+    # - content.tabs.link
+    - content.tooltips
+    # - header.autohide
+    # - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    # - navigation.instant
+    # - navigation.instant.prefetch
+    # - navigation.instant.progress
+    # - navigation.prune
+    - navigation.sections
+    - navigation.tabs
+    # - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+    - toc.integrate
+  icon:
+    edit: material/pencil
+    repo: fontawesome/brands/git-alt
+    view: material/eye
+  name: material
+  palette:
+    - accent: yellow
+      media: (prefers-color-scheme)
+      primary: blue
+      toggle:
+        icon: material/brightness-auto
+        name: Switch to light mode
+    - accent: yellow
+      media: '(prefers-color-scheme: light)'
+      primary: blue
+      scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - accent: yellow
+      media: '(prefers-color-scheme: dark)'
+      primary: blue
+      scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to system preference
