@@ -60,7 +60,7 @@
         "mkdocs-git-authors-plugin>=0.10.0",
         "mkdocs-git-committers-plugin-2>=2.5.0",
         "mkdocs-git-revision-date-localized-plugin>=1.4.7",
-        "mkdocs-material>=9.6.17",
+        "mkdocs-material[all]>=9.6.17",
         "mkdocs-typer2>=0.1.5",
         "mkdocstrings-python>=1.17.0",
 ]

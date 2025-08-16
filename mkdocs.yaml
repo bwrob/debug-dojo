@@ -1,5 +1,11 @@
 ---
+copyright: Copyright &copy; 2025 bwrob
 edit_uri: edit/main/docs/
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/bwrob/
 markdown_extensions:
   - smarty
   - toc:
@@ -13,11 +19,11 @@ markdown_extensions:
   - pymdownx.superfences
 nav:
   - Introduction: index.md
-  - CLI Usage: cli-reference.md
-  - API Reference: api-reference.md
   - Configuration: configuration.md
+  - CLI Usage: cli-reference.md
   - Development: development.md
   - Changelog: changelog.md
+  - API Reference: api-reference.md
   - License: license.md
   - Author: ../
 plugins:
@@ -45,27 +51,27 @@ site_name: debug dojo
 site_url: https://bwrob.github.io/debug-dojo/
 theme:
   color_mode: dark
+  favicon: logo/logo_white.png
   features:
     - announce.dismiss
     - content.action.edit
     - content.action.view
     - content.code.annotate
     - content.code.copy
-    # - content.code.select
-    # - content.footnote.tooltips
-    # - content.tabs.link
+    - content.code.select
+    - content.footnote.tooltips
+    - content.tabs.link
     - content.tooltips
-    # - header.autohide
-    # - navigation.expand
+    - navigation.expand
     - navigation.footer
     - navigation.indexes
-    # - navigation.instant
-    # - navigation.instant.prefetch
-    # - navigation.instant.progress
-    # - navigation.prune
+    - navigation.instant
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.prune
     - navigation.sections
     - navigation.tabs
-    # - navigation.tabs.sticky
+    - navigation.tabs.sticky
     - navigation.top
     - navigation.tracking
     - search.highlight
@@ -77,6 +83,7 @@ theme:
     edit: material/pencil
     repo: fontawesome/brands/git-alt
     view: material/eye
+  logo: logo/logo_white.png
   name: material
   palette:
     - accent: yellow
