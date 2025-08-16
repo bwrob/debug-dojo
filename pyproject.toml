@@ -36,13 +36,13 @@
         "Topic :: Software Development :: Debuggers",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ]
-    version = "0.4.0"
+    version = "0.4.1"
     dynamic = ['readme']
 
     [project.urls]
-        Homepage      = "https://github.com/bwrob/debug-dojo"
-        Documentation = "https://github.com/bwrob/debug-dojo/blob/main/README.md"
-        Source        = "https://github.com/bwrob/debug-dojo/tree/main/src/debug_dojo"
+        Homepage      = "https://bwrob.github.io/debug-dojo/"
+        Documentation = "https://bwrob.github.io/debug-dojo/"
+        Source        = "https://github.com/bwrob/debug-dojo/"
         Changelog     = "https://github.com/bwrob/debug-dojo/blob/main/HISTORY.md"
 
     [project.scripts]
@@ -51,11 +51,19 @@
 [dependency-groups]
     dev = [
         "basedpyright>=1.31.2",
-        "jupyter>=1.1.1",
         "poethepoet>=0.37.0",
         "pytest>=8.4.1",
         "ruff>=0.12.9",
     ]
+    docs = [
+        "mkdocs>=1.6.1",
+        "mkdocs-git-authors-plugin>=0.10.0",
+        "mkdocs-git-committers-plugin-2>=2.5.0",
+        "mkdocs-git-revision-date-localized-plugin>=1.4.7",
+        "mkdocs-material>=9.6.17",
+        "mkdocs-typer2>=0.1.5",
+        "mkdocstrings-python>=1.17.0",
+]
 
 [build-system]
     requires = [
@@ -75,8 +83,7 @@
         # construct the PyPI readme from README.md and HISTORY.md
         fragments = [
             { path = 'README.md' },
-            { text = "\n\n## Changelog\n\n" },
-            { path = 'HISTORY.md' },
+            { path = './docs/changelog.md' },
         ]
 
 
