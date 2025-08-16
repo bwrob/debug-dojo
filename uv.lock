@@ -143,7 +143,7 @@ wheels = [
 
 [[package]]
 name = "debug-dojo"
-version = "0.4.0"
+version = "0.4.1"
 source = { editable = "." }
 dependencies = [
     { name = "debugpy" },
@@ -195,7 +195,7 @@ docs = [
     { name = "mkdocs-git-authors-plugin", specifier = ">=0.10.0" },
     { name = "mkdocs-git-committers-plugin-2", specifier = ">=2.5.0" },
     { name = "mkdocs-git-revision-date-localized-plugin", specifier = ">=1.4.7" },
-    { name = "mkdocs-material", extras = ["all"], specifier = ">=9.6.17" },
+    { name = "mkdocs-material", specifier = ">=9.6.17" },
     { name = "mkdocs-typer2", specifier = ">=0.1.5" },
     { name = "mkdocstrings-python", specifier = ">=1.17.0" },
 ]
