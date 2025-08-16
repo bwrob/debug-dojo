@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.4.1 (2025-08-10)
+
+*release tag*: [v0.4.1](https://github.com/bwrob/debug-dojo/releases/tag/v0.4.1)
+
+- Mkdocs documentation at [debug dojo](https://bwrob.github.io/debug-dojo).
+
 ## v0.4.0 (2025-08-10)
 
 *release tag*: [v0.4.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.4.0)
