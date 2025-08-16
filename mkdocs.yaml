@@ -5,6 +5,12 @@ markdown_extensions:
   - toc:
       permalink: true
   - sane_lists
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      linenums: true
+      use_pygments: true
+  - pymdownx.superfences
 nav:
   - Introduction: index.md
   - CLI Usage: cli-reference.md
@@ -16,6 +22,7 @@ nav:
   - Author: ../
 plugins:
   - search
+  - git-authors
   - mkdocstrings:
       default_handler: python
       handlers:
