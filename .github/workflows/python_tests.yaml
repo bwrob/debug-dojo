@@ -14,12 +14,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
         # test against lowest supported Python version and latest
         python-version: ["3.10", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
+      name: 🛠️ Check out the repository
 
     - name: 🛠️ Install uv and set the python version to ${{ matrix.python-version }}
       uses: astral-sh/setup-uv@v6
