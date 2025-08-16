@@ -1,3 +1,5 @@
+# debug dojo
+
 <p align="center">
   <img src="https://github.com/bwrob/debug-dojo/blob/main/docs/logo/logo_python.png?raw=true" alt="debug dojo" style="width:50%; max-width:300px;"/>
 </p>
