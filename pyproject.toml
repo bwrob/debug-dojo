@@ -48,7 +48,6 @@
 [dependency-groups]
     dev = [
         "basedpyright>=1.31.2",
-        "jupyter>=1.1.1",
         "poethepoet>=0.37.0",
         "pytest>=8.4.1",
         "ruff>=0.12.9",
@@ -115,11 +114,11 @@
         "format",
         "lint",
         "type-check",
-    ], help = "Run all code quality checks." }
+    ], help = "Run all code quality checks.", ignore_fail = "return_non_zero" }
     fix = { default_item_type = "cmd", sequence = [
         "ruff check --fix --unsafe-fixes --config=pyproject.toml",
         "ruff format --config=pyproject.toml",
-    ], help = "Code quality fixes using ruff." }
+    ], help = "Code quality fixes using ruff.", ignore_fail = "return_non_zero" }
     publish = [
         "code-quality",
         { cmd = "rm -rf dist" },
