@@ -66,7 +66,10 @@ def load_raw_config(
     # If config is in [tool.debug_dojo] (pyproject.toml), extract it.
     if config_path.name == "pyproject.toml":
         try:
-            dojo_config = cast("dict[str, Any]", config_data["tool"]["debug_dojo"])
+            dojo_config = cast(
+                "dict[str, Any]",  # pyright: ignore[reportExplicitAny]
+                config_data["tool"]["debug_dojo"],
+            )
         except KeyError:
             return {}
         else:

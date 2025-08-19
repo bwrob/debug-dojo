@@ -6,13 +6,16 @@ import runpy
 import sys
 from bdb import BdbQuit
 from pathlib import Path
-from typing import Annotated
+from typing import TYPE_CHECKING, Annotated
 
 import typer
 from rich import print as rich_print
 
-from ._config import DebugDojoConfig, DebuggerType, load_config
+from ._config import load_config
 from ._installers import install_by_config
+
+if TYPE_CHECKING:
+    from ._config_models import DebugDojoConfig, DebuggerType
 
 cli = typer.Typer(
     name="debug_dojo",

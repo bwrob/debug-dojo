@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
 
@@ -8,7 +9,9 @@ from pydantic import BaseModel, ConfigDict
 class BaseConfig(BaseModel):
     """Base configuration class with extra fields forbidden."""
 
-    model_config = ConfigDict(extra="forbid", validate_assignment=True)
+    model_config: ClassVar[ConfigDict] = ConfigDict(
+        extra="forbid", validate_assignment=True
+    )
 
 
 class DebuggerType(Enum):
