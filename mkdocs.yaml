@@ -24,7 +24,6 @@ nav:
   - Development: development.md
   - Changelog: changelog.md
   - API Reference: api-reference.md
-  - License: license.md
   - Author: ../
 plugins:
   - search
