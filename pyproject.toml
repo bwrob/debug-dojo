@@ -19,7 +19,7 @@
         "tomlkit>=0.13.3",
         "typer>=0.15.0",
     ]
-    description = "🏣 Debugging dojo for Python developers"
+    description = "🏣 debug dojo, a place for zen debugging"
     keywords = [ "debugging", "inspection", "tools", "development" ]
     license = 'MIT'
     license-files = [ 'LICENSE' ]
