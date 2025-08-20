@@ -54,7 +54,7 @@
         "mkdocs-material>=9.6.17",
         "mkdocs-typer2>=0.1.5",
         "mkdocstrings-python>=1.17.0",
-    ]
+]
 
 
 [tool.uv]

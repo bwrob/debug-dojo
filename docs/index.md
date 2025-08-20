@@ -22,16 +22,16 @@ from `rich`, and easy integration with different debuggers -- `debugpy`,
 
 ## Features
 
--   **Convenient CLI** Quickly run your code with debugging tools
+- **Convenient CLI** Quickly run your code with debugging tools
     enabled.
--   **Simple API:** Install all tools or only what you need.
--   **Debugger integration:** Quickly enable Debugpy, PuDB, PDB, or IPDB
+- **Simple API:** Install all tools or only what you need.
+- **Debugger integration:** Quickly enable Debugpy, PuDB, PDB, or IPDB
     as your default pre-configured debugger.
--   **Rich tracebacks:** Get readable, colorized tracebacks for easier
+- **Rich tracebacks:** Get readable, colorized tracebacks for easier
     debugging.
--   **Side-by-side object inspection:** Visually compare Python objects,
+- **Side-by-side object inspection:** Visually compare Python objects,
     their attributes, and methods in the terminal.
--   **Configuration:** Easily configure the debugging tools using
+- **Configuration:** Easily configure the debugging tools using
     `dojo.toml` or `pyproject.toml`.
 
 ## Usage
@@ -74,7 +74,6 @@ into builtins:
 - `p(object_1)` is pretty printing of an object using Rich.
 - `i(object_1)` to inspect an object using Rich.
 - `c(object_1, object_2)` to compare two objects side-by-side.
-
 
 ## Installation
 

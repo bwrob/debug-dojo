@@ -6,16 +6,14 @@ import runpy
 import sys
 from bdb import BdbQuit
 from pathlib import Path
-from typing import TYPE_CHECKING, Annotated
+from typing import Annotated
 
 import typer
 from rich import print as rich_print
 
 from ._config import load_config
+from ._config_models import DebugDojoConfig, DebuggerType  # noqa: TC001
 from ._installers import install_by_config
-
-if TYPE_CHECKING:
-    from ._config_models import DebugDojoConfig, DebuggerType
 
 cli = typer.Typer(
     name="debug_dojo",
@@ -24,7 +22,7 @@ cli = typer.Typer(
 )
 
 
-def execute_with_debug(  # noqa: C901
+def __execute_with_debug(  # noqa: C901
     target_name: str,
     target_args: list[str],
     *,
@@ -45,31 +43,32 @@ def execute_with_debug(  # noqa: C901
         runner = runpy.run_module
     else:
         if not Path(target_name).exists():
-            sys.exit(1)
+            raise typer.Exit(1)
+
         runner = runpy.run_path
 
     try:
         _ = runner(target_name, run_name="__main__")
     except ImportError as e:
         rich_print(f"[red]Error importing {target_name}:[/red]\n{e}")
-        sys.exit(1)
+        raise typer.Exit(1) from e
     except BdbQuit:
         rich_print("[red]Debugging session terminated by user.[/red]")
-        sys.exit(0)
+        raise typer.Exit(0) from None
     except KeyboardInterrupt:
         rich_print("[red]Execution interrupted by user.[/red]")
-        sys.exit(0)
+        raise typer.Exit(0) from None
     except SystemExit as e:
         if e.code:
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:
         rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
         if config.exceptions.post_mortem:
             import pdb  # noqa: PLC0415, T100
 
             rich_print("[blue]Entering post-mortem debugging session...[/blue]")
             pdb.post_mortem(e.__traceback__)
-        sys.exit(1)
+        raise typer.Exit(1) from e
 
 
 def display_config(config: DebugDojoConfig) -> None:
@@ -112,7 +111,7 @@ def run_debug(  # noqa: PLR0913
         display_config(config)
 
     if target_name:
-        execute_with_debug(
+        __execute_with_debug(
             target_name=target_name,
             target_is_module=module,
             target_args=ctx.args,
