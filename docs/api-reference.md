@@ -4,7 +4,7 @@
 
 ::: debug_dojo._installers
 
-::: debug_dojo._compareres
+::: debug_dojo._compare
 
 ::: debug_dojo._config
 

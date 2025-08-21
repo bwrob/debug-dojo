@@ -1,15 +1,18 @@
 # debug dojo
 
 <p align="center">
-  <img src="https://github.com/bwrob/debug-dojo/blob/main/docs/logo/logo_python.png?raw=true" alt="debug dojo" style="width:50%; max-width:300px;"/>
+  <img src="https://github.com/bwrob/debug-dojo/blob/main/docs/logo/logo_python.png?raw=true" alt="debug dojo" style="width:50%; max-width:350px;"/>
 </p>
 
 <p align="center">
-    <em>debug dojo, a place for zen debugging</em>
+<em>🏣 debug dojo, a place for zen debugging</em>
 </p>
 
 [![PyPi Version](https://img.shields.io/pypi/v/debug-dojo.svg?style=flat-square)](https://pypi.org/project/debug-dojo)
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/debug-dojo.svg?style=flat-square)](https://pypi.org/pypi/debug-dojo/)
+[![downloads](https://static.pepy.tech/badge/debug-dojo/month)](https://pepy.tech/project/debug-dojo)
+[![license](https://img.shields.io/github/license/bwrob/debug-dojo.svg)](https://github.com/bwrob/debug-dojo/blob/main/LICENSE)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bwrob/debug-dojo/main.svg)](https://results.pre-commit.ci/latest/github/bwrob/debug-dojo/main)
 
 [**debug-dojo**](https://bwrob.github.io/debug-dojo/) is a Python package providing utilities for enhanced debugging and inspection in the terminal.
 It leverages [`rich`](https://github.com/Textualize/rich) for beautiful output and offers helpers for side-by-side object comparison, improved tracebacks from `rich`, and easy integration with different debuggers -- `debugpy`, `pudb`, `pdb`, and `ipdb`.

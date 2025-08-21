@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
+from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict
 
@@ -8,7 +9,9 @@ from pydantic import BaseModel, ConfigDict
 class BaseConfig(BaseModel):
     """Base configuration class with extra fields forbidden."""
 
-    model_config = ConfigDict(extra="forbid", validate_assignment=True)
+    model_config: ClassVar[ConfigDict] = ConfigDict(
+        extra="forbid", validate_assignment=True
+    )
 
 
 class DebuggerType(Enum):
@@ -49,12 +52,36 @@ class DebugpyConfig(BaseConfig):
     log_to_file: bool = False
     """Whether to log debugpy output to a file."""
 
+    @property
+    def set_trace_hook(self) -> str:
+        return "debugpy.breakpoint"
+
 
 class IpdbConfig(BaseConfig):
     """Configuration for ipdb debugger."""
 
     context_lines: int = 20
     """Number of context lines to show in ipdb."""
+
+    @property
+    def set_trace_hook(self) -> str:
+        return "ipdb.set_trace"
+
+
+class PdbConfig(BaseConfig):
+    """Configuration for pdb debugger."""
+
+    @property
+    def set_trace_hook(self) -> str:
+        return "pdb.set_trace"
+
+
+class PudbConfig(BaseConfig):
+    """Configuration for pudb debugger."""
+
+    @property
+    def set_trace_hook(self) -> str:
+        return "pudb.set_trace"
 
 
 class DebuggersConfig(BaseConfig):
@@ -68,6 +95,10 @@ class DebuggersConfig(BaseConfig):
     """Configuration for debugpy debugger."""
     ipdb: IpdbConfig = IpdbConfig()
     """Configuration for ipdb debugger."""
+    pdb: PdbConfig = PdbConfig()
+    """Configuration for pdb debugger."""
+    pudb: PudbConfig = PudbConfig()
+    """Configuration for pudb debugger."""
 
 
 class ExceptionsConfig(BaseConfig):
@@ -129,10 +160,11 @@ class DebugDojoConfigV2(BaseModel):
     model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     exceptions: ExceptionsConfig = ExceptionsConfig()
+    """Better exception messages."""
     debuggers: DebuggersConfig = DebuggersConfig()
     """Default debugger and configs."""
     features: FeaturesConfig = FeaturesConfig()
-    """Features mnemonics ."""
+    """Features mnemonics."""
 
 
 DebugDojoConfig = DebugDojoConfigV2
