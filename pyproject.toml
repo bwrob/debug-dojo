@@ -115,3 +115,7 @@
             { cmd = "uv build" },
             { cmd = "uv publish" },
         ]
+
+[tool.docformatter]
+    black   = true
+    non-cap = [ "dojo" ]

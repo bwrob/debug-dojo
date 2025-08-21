@@ -1,4 +1,4 @@
-"""Example script demonstrating cl argument printing and dictionary inspection."""
+"""Example script demonstrating cl argument printing and inspection."""
 
 import sys
 

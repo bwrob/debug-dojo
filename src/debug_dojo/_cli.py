@@ -30,7 +30,7 @@ def __execute_with_debug(  # noqa: C901
     verbose: bool,
     config: DebugDojoConfig,
 ) -> None:
-    """Execute a target script or module with installation of debugging tools."""
+    """Execute a target script or module with installed debugging tools."""
     sys.argv = [target_name, *target_args]
 
     if verbose:

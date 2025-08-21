@@ -52,3 +52,10 @@ repos:
         name: 🐍 python · Validate pyproject.toml
     repo: https://github.com/abravalheri/validate-pyproject
     rev: v0.24.1
+  - repo: https://github.com/PyCQA/docformatter
+    rev: v1.7.7
+    hooks:
+      - id: docformatter
+        name: 📝 docformatter · Format docstrings
+        additional_dependencies: [tomli]
+        args: [--in-place, --config, ./pyproject.toml]

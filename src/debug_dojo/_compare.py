@@ -1,7 +1,7 @@
-"""Utilities for side-by-side inspection and comparison of Python objects using Rich.
+"""Utilities for side-by-side inspection and comparison of Python objects.
 
-This module provides functions to display attributes and methods of two objects
-in a visually appealing, side-by-side format in the terminal.
+This module provides functions to display attributes and methods of two objects in a
+visually appealing, side-by-side format in the terminal.
 """
 
 from __future__ import annotations
@@ -15,15 +15,7 @@ from rich.text import Text
 
 
 def _get_object_attributes(obj: object) -> list[str]:
-    """Extract and format non-callable attributes of an object.
-
-    Args:
-        obj: The object to inspect.
-
-    Returns:
-        A list of strings, each representing an attribute in 'name=value' format.
-
-    """
+    """Extract and format non-callable attributes of an object."""
     attributes: list[str] = []
     for attr_name in sorted(dir(obj)):
         # Safely get attribute, returning None if it doesn't exist
@@ -37,15 +29,7 @@ def _get_object_attributes(obj: object) -> list[str]:
 
 
 def _get_object_methods(obj: object) -> list[str]:
-    """Extract and format public callable methods of an object.
-
-    Args:
-        obj: The object to inspect.
-
-    Returns:
-        A list of strings, each representing a method name.
-
-    """
+    """Extract and format public callable methods of an object."""
     methods: list[str] = []
     for method_name in sorted(dir(obj)):
         # Safely get attribute, returning None if it doesn't exist
@@ -59,15 +43,8 @@ def _get_object_methods(obj: object) -> list[str]:
 def _get_simplified_object_info(obj: object) -> list[Text]:
     """Generate a simplified, Rich-formatted inspection output for an object.
 
-    Handles basic Python types by displaying their value directly. For other
-    objects, it lists their attributes and public methods.
-
-    Args:
-        obj: The object to generate info for.
-
-    Returns:
-        A list of Rich Text objects, each representing a line of information.
-
+    Handles basic Python types by displaying their value directly. For other objects, it
+    lists their attributes and public methods.
     """
     info_lines: list[Text] = []
     obj_type: str = type(obj).__name__
