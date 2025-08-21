@@ -9,21 +9,35 @@ repos:
     rev: v0.12.9
   - hooks:
       - id: check-case-conflict
+        name: 🛠️ pre-commit · Check for case conflicts
       - id: check-merge-conflict
+        name: 🛠️ pre-commit · Check for merge conflicts
       - id: check-yaml
+        name: 🛠️ pre-commit · Check YAML files
       - id: end-of-file-fixer
+        name: 🛠️ pre-commit · Fix end of file
       - id: mixed-line-ending
+        name: 🛠️ pre-commit · Check mixed line endings
       - id: trailing-whitespace
+        name: 🛠️ pre-commit · Check trailing whitespace
       - id: check-json
+        name: 🛠️ pre-commit · Check JSON files
+      - id: check-added-large-files
+        name: 🛠️ pre-commit · Check for large files
       - id: check-xml
+        name: 🛠️ pre-commit · Check XML files
       - id: check-toml
+        name: 🛠️ pre-commit · Check TOML files
       - args: ["--autofix", "--indent=4"]
+        name: 🛠️ pre-commit · Check and fix JSON files
         id: pretty-format-json
     repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
   - hooks:
       - id: uv-lock
+        name: 🐍 uv · Lock dependencies
       - id: uv-export
+        name: 🐍 uv · Export dependencies to pip format
     repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.8.12
   - hooks:
