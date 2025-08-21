@@ -20,7 +20,7 @@ jobs:
           - os: ubuntu-latest
             python-version: "3.10"
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
       name: 🛠️ Check out the repository
 
     - name: 🛠️ Install uv and set the python version to ${{ matrix.python-version }}
