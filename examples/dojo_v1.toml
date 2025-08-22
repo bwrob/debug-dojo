@@ -1,7 +1,0 @@
-debugger = "ipdb"
-
-[features]
-    rich_inspect = true
-    rich_print   = true
-    comparer     = false
-    breakpoint   = true

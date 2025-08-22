@@ -4,8 +4,12 @@
 
 * UV build.
 * PyProject cleanup.
+
 * README index alignment.
+
 * Fixes to configuration reading.
+* Added `--exec` option to `dojo` command -- debug dojo can now run arbitrary commands.
+
 * Pre-commit CI and extending pre-commit config.
 * Set up Dependabot.
 * CI improvements.

@@ -54,6 +54,12 @@ debugger type. Both script files and modules are supported:
 dojo --debugger ipdb --config dojo.toml --verbose --module my_module
 ```
 
+dojo can let you debug into:
+
+- any Python script -- `dojo my_script.py`
+- any runnable module -- `dojo -m my_module`
+- or even an executable, `dojo -e my_executable` (like `pytest`)
+
 ### From the code
 
 In the `PuDB` style, you can install all debugging tools and enter the
