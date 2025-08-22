@@ -91,15 +91,17 @@
 
 
 [tool.poe.tasks]
+
     format     = { cmd = "ruff format --diff --config=pyproject.toml", help = "Check code formatting using ruff." }
     lint       = { cmd = "uv run ruff check --config=pyproject.toml", help = "Check code rules using ruff." }
+    precommit  = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
     test       = { cmd = "pytest --verbose --doctest-modules", help = "Run tests using pytest." }
     type-check = { cmd = "basedpyright", help = "Check static typing using basedpyright." }
 
     [tool.poe.tasks.code-quality]
         help        = "Run all code quality checks."
         ignore_fail = "return_non_zero"
-        sequence    = [ "format", "lint", "type-check" ]
+        sequence    = [ "fix", "precommit", "format", "lint", "type-check" ]
 
     [tool.poe.tasks.fix]
         default_item_type = "cmd"

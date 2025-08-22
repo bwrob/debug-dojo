@@ -5,6 +5,7 @@ from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
 from debug_dojo._config_models import DebugDojoConfig
+from tests.constants import TEST_CONFIG_PATH
 
 runner = CliRunner()
 
@@ -34,7 +35,7 @@ def test_config_print_default() -> None:
 
 def test_config_print_file() -> None:
     """Test printing config from CLI."""
-    args = ["--config", "tests/assets/test_config.toml", "--verbose"]
+    args = ["--config", TEST_CONFIG_PATH, "--verbose"]
     result = runner.invoke(cli, args)
 
     rich.print(result.output)
