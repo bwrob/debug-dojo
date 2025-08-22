@@ -1,5 +1,6 @@
 """Tests for debug-dojo CLI config print command."""
 
+import rich
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
@@ -13,7 +14,7 @@ def test_config_print_default() -> None:
     args = ["--verbose"]
     result = runner.invoke(cli, args)
 
-    print(result.output)
+    rich.print(result.output)
 
     assert result.exit_code == 0
 
@@ -36,7 +37,7 @@ def test_config_print_file() -> None:
     args = ["--config", "tests/assets/test_config.toml", "--verbose"]
     result = runner.invoke(cli, args)
 
-    print(result.output)
+    rich.print(result.output)
 
     assert result.exit_code == 0
 

@@ -64,7 +64,7 @@
 
 
 [tool.basedpyright]
-    ignore           = [ "examples" ]
+    ignore           = [ "examples", "tests/assets" ]
     pythonVersion    = "3.10"
     strict           = [ "src/debug_dojo/*" ]
     typeCheckingMode = "all"
@@ -84,6 +84,7 @@
             "examples/test_target.py"       = [ "F821" ]
             "src/debug_dojo/_installers.py" = [ "PLC0415", "T100" ]
             "tests/*"                       = [ "S101", "T201" ]
+            "tests/assets/*"                = [ "T201", "INP001", "F821" ]
 
     [tool.ruff.format]
         docstring-code-format = true
