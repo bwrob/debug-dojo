@@ -10,13 +10,13 @@ def main() -> None:
     if len(sys.argv) > 1:
         rich_print(sys.argv[1::])
 
-    example_dict = {
+    example_dict = {  # noqa: F841
         "key1": "value1",
         "key2": "value2",
         "key3": "value3",
     }
 
-    i(example_dict)
+    b()
 
 
 if __name__ == "__main__":
