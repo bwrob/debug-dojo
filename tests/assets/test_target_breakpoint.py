@@ -16,7 +16,7 @@ def main() -> None:
         "key3": "value3",
     }
 
-    b()
+    breakpoint()  # noqa: T100
 
 
 if __name__ == "__main__":

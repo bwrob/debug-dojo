@@ -4,7 +4,7 @@ import rich
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
-from tests.constants import TEST_TARGET_BREAKPOINT
+from tests.constants import TEST_CONFIG_PATH, TEST_TARGET_BREAKPOINT
 
 runner = CliRunner()
 
@@ -19,11 +19,11 @@ def test_breakpoint_ipdb() -> None:
     Only testing ipdb here since pdb is caught by pytest runner and does not behave as
     expected.
     """
-    args = ["-d", "ipdb", TEST_TARGET_BREAKPOINT]
+    args = ["-d", "ipdb", "-c", TEST_CONFIG_PATH, TEST_TARGET_BREAKPOINT]
     inputs = [
-        "i(example_dict)",
-        f"p('{__TEST_STRING}')",
-        f"c('{__TEST_STRING}','{__ANOTHER_TEST_STRING}')",
+        "inspect(example_dict)",
+        f"print('{__TEST_STRING}')",
+        f"compare('{__TEST_STRING}','{__ANOTHER_TEST_STRING}')",
         "c",
         "\n",
     ]
@@ -35,7 +35,7 @@ def test_breakpoint_ipdb() -> None:
     # ipdb prompt
     assert "ipdb>" in result.output
     # breakpoint line in code context
-    assert "b()" in result.output
+    assert "breakpoint()" in result.output
     # inspected dict output through prompt
     assert __EXPECTED_DICT_OUTPUT in result.output
     # printed test string through prompt

@@ -10,7 +10,7 @@
 
 [features]
     # Empty string means disable the feature
-    breakpoint   = "b"
-    comparer     = "c"
-    rich_inspect = "i"
-    rich_print   = "p"
+    breakpoint   = "breakpoint"
+    comparer     = "compare"
+    rich_inspect = "inspect"
+    rich_print   = "print"
