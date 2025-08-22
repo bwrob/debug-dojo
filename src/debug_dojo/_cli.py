@@ -97,11 +97,11 @@ def run_debug(  # noqa: PLR0913
     ] = None,
     verbose: Annotated[
         bool,
-        typer.Option("--verbose", "-v", is_flag=True, help="Enable verbose output"),
+        typer.Option("--verbose", "-v", help="Enable verbose output"),
     ] = False,
     module: Annotated[
         bool,
-        typer.Option("--module", "-m", is_flag=True, help="Run as a module"),
+        typer.Option("--module", "-m", help="Run as a module"),
     ] = False,
 ) -> None:
     """Run the command-line interface."""

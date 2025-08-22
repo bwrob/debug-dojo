@@ -83,6 +83,7 @@
             "examples/*"                    = [ "INP001" ]
             "examples/test_target.py"       = [ "F821" ]
             "src/debug_dojo/_installers.py" = [ "PLC0415", "T100" ]
+            "tests/*"                       = [ "S101", "T201" ]
 
     [tool.ruff.format]
         docstring-code-format = true
