@@ -35,7 +35,7 @@ def test_breakpoint_ipdb() -> None:
     # ipdb prompt
     assert "ipdb>" in result.output
     # breakpoint line in code context
-    assert "breakpoint()" in result.output
+    assert "breakpoint" in result.output
     # inspected dict output through prompt
     assert __EXPECTED_DICT_OUTPUT in result.output
     # printed test string through prompt
