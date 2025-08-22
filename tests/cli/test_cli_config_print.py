@@ -41,5 +41,5 @@ def test_config_print_file() -> None:
     assert result.exit_code == 0
 
     assert "DebugDojoConfigV2" in result.output
-    assert '"port": 123' in result.output
+    assert '"port": 1235' in result.output
     assert '"context_lines": 1' in result.output
