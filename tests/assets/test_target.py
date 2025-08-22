@@ -15,12 +15,8 @@ def main() -> None:
         "key2": "value2",
         "key3": "value3",
     }
-    b()
 
     i(example_dict)
-
-    msg = "This is a test message."
-    raise ValueError(msg)
 
 
 if __name__ == "__main__":

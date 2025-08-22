@@ -5,7 +5,9 @@ from __future__ import annotations
 import runpy
 import sys
 from bdb import BdbQuit
+from enum import Enum
 from pathlib import Path
+from shutil import which
 from typing import Annotated
 
 import typer
@@ -14,6 +16,15 @@ from rich import print as rich_print
 from ._config import load_config
 from ._config_models import DebugDojoConfig, DebuggerType  # noqa: TC001
 from ._installers import install_by_config
+
+
+class ExecMode(Enum):
+    """Execution mode for the target."""
+
+    FILE = "file"
+    MODULE = "module"
+    EXECUTABLE = "executable"
+
 
 cli = typer.Typer(
     name="debug_dojo",
@@ -26,7 +37,7 @@ def __execute_with_debug(  # noqa: C901
     target_name: str,
     target_args: list[str],
     *,
-    target_is_module: bool,
+    target_mode: ExecMode,
     verbose: bool,
     config: DebugDojoConfig,
 ) -> None:
@@ -39,9 +50,12 @@ def __execute_with_debug(  # noqa: C901
 
     install_by_config(config)
 
-    if target_is_module:
+    if target_mode is ExecMode.MODULE:
         runner = runpy.run_module
     else:
+        if target_mode is ExecMode.EXECUTABLE:
+            target_name = which(target_name) or target_name
+
         if not Path(target_name).exists():
             raise typer.Exit(1)
 
@@ -101,10 +115,28 @@ def run_debug(  # noqa: PLR0913
     ] = False,
     module: Annotated[
         bool,
-        typer.Option("--module", "-m", help="Run as a module"),
+        typer.Option("--module", "-m", help="Run a module"),
+    ] = False,
+    executable: Annotated[
+        bool,
+        typer.Option("--exec", "-e", help="Run a command"),
     ] = False,
 ) -> None:
     """Run the command-line interface."""
+    if module and executable:
+        rich_print(
+            "[red]Error: --module and --command options are mutually exclusive.[/red]"
+        )
+        raise typer.Exit(1)
+
+    mode = (
+        ExecMode.EXECUTABLE
+        if executable
+        else ExecMode.MODULE
+        if module
+        else ExecMode.FILE
+    )
+
     config = load_config(config_path, verbose=verbose, debugger=debugger)
 
     if verbose:
@@ -113,7 +145,7 @@ def run_debug(  # noqa: PLR0913
     if target_name:
         __execute_with_debug(
             target_name=target_name,
-            target_is_module=module,
+            target_mode=mode,
             target_args=ctx.args,
             verbose=verbose,
             config=config,
