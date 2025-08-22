@@ -21,7 +21,7 @@ def test_config_print_default() -> None:
     assert f"{type(default_config).__name__}" in result.output
 
     debuggers = default_config.debuggers
-    assert f'"port": {debuggers.debugpy.port}' in result.output
+    assert f'"port": {debuggers.debugpy.port},' in result.output
     assert f'"context_lines": {debuggers.ipdb.context_lines}' in result.output
 
     features = default_config.features
@@ -41,5 +41,5 @@ def test_config_print_file() -> None:
     assert result.exit_code == 0
 
     assert "DebugDojoConfigV2" in result.output
-    assert '"port": 1235' in result.output
+    assert '"port": 1234,' in result.output
     assert '"context_lines": 1' in result.output
