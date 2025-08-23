@@ -26,7 +26,7 @@
     name = "debug-dojo"
     readme = "README.md"
     requires-python = ">=3.10,<3.14"
-    version = "0.4.1"
+version = "0.5.0"
 
     [project.urls]
         Changelog     = "https://bwrob.github.io/debug-dojo/changelog/"
