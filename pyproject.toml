@@ -26,7 +26,7 @@
     name = "debug-dojo"
     readme = "README.md"
     requires-python = ">=3.10,<3.14"
-version = "0.5.0"
+    version = "0.5.0"
 
     [project.urls]
         Changelog     = "https://bwrob.github.io/debug-dojo/changelog/"
@@ -98,7 +98,7 @@ version = "0.5.0"
     format     = { cmd = "ruff format --diff --config=pyproject.toml", help = "Check code formatting using ruff." }
     lint       = { cmd = "uv run ruff check --config=pyproject.toml", help = "Check code rules using ruff." }
     precommit  = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
-    test       = { cmd = "pytest --verbose --doctest-modules", help = "Run tests using pytest." }
+    test       = { cmd = "pytest", help = "Run tests using pytest." }
     type-check = { cmd = "basedpyright", help = "Check static typing using basedpyright." }
 
     [tool.poe.tasks.code-quality]
@@ -126,3 +126,9 @@ version = "0.5.0"
 [tool.docformatter]
     black   = true
     non-cap = [ "dojo" ]
+
+[tool.pytest.ini_options]
+    addopts                = "--verbose --doctest-modules"
+    collect_imported_tests = false
+    console_output_style   = "classic"
+    minversion             = "8.0"
