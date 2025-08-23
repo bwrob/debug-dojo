@@ -4,7 +4,7 @@
     ipdb    = { context_lines = 1 }
 
 [exceptions]
-    locals_in_traceback = false
+    locals_in_traceback = true
     post_mortem         = true
     rich_traceback      = true
 

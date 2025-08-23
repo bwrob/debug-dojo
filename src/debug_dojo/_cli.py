@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import runpy
 import sys
+import traceback
 from bdb import BdbQuit
 from enum import Enum
 from pathlib import Path
@@ -77,11 +78,12 @@ def __execute_with_debug(  # noqa: C901
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
     except Exception as e:
         rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
+        rich_print(traceback.format_exc())
         if config.exceptions.post_mortem:
-            import pdb  # noqa: PLC0415, T100
+            import ipdb  # noqa: PLC0415, T100 pyright: ignore[reportMissingTypeStubs]
 
             rich_print("[blue]Entering post-mortem debugging session...[/blue]")
-            pdb.post_mortem(e.__traceback__)
+            ipdb.post_mortem(e.__traceback__)
         raise typer.Exit(1) from e
 
 

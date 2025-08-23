@@ -5,12 +5,9 @@ from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
 from debug_dojo._config_models import DebugDojoConfig
-from tests.constants import TEST_CONFIG_PATH
-
-runner = CliRunner()
 
 
-def test_config_print_default() -> None:
+def test_config_print_default(runner: CliRunner) -> None:
     """Test printing config from CLI."""
     args = ["--verbose"]
     result = runner.invoke(cli, args)
@@ -33,9 +30,9 @@ def test_config_print_default() -> None:
     assert f'"{features.breakpoint}"' in result.output
 
 
-def test_config_print_file() -> None:
+def test_config_print_file(runner: CliRunner, test_config_path: str) -> None:
     """Test printing config from CLI."""
-    args = ["--config", TEST_CONFIG_PATH, "--verbose"]
+    args = ["--config", test_config_path, "--verbose"]
     result = runner.invoke(cli, args)
 
     rich.print(result.output)
