@@ -80,10 +80,10 @@ def __execute_with_debug(  # noqa: C901
         rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
         rich_print(traceback.format_exc())
         if config.exceptions.post_mortem:
-            import ipdb  # noqa: PLC0415, T100 pyright: ignore[reportMissingTypeStubs]
+            import ipdb  # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415, T100
 
             rich_print("[blue]Entering post-mortem debugging session...[/blue]")
-            ipdb.post_mortem(e.__traceback__)
+            ipdb.post_mortem(e.__traceback__)  # pyright: ignore[reportUnknownMemberType]
         raise typer.Exit(1) from e
 
 
