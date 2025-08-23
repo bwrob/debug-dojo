@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 @pytest.fixture
 def test_config_path() -> str:
     """Path to a test config file."""
-    return "tests/assets/test_config.toml"
+    return "tests/assets/config.toml"
 
 
 @pytest.fixture
