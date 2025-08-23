@@ -10,8 +10,8 @@ on:
 
 jobs:
   test:
-
     name: Build and Test
+
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -51,6 +51,8 @@ jobs:
 
   # https://github.com/marketplace/actions/alls-green#why
   check:  # This job does nothing and is only used for the branch protection
+    name: 🛠️ Check if all jobs succeeded
+
     if: always()
     needs:
       - test
