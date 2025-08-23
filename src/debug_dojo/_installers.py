@@ -106,7 +106,6 @@ def _compare(mnemonic: str = "c") -> None:
     >>> import builtins
     >>> callable(builtins.c)
     True
-
     """
     if not mnemonic:
         return
@@ -121,7 +120,6 @@ def _breakpoint(mnemonic: str = "b") -> None:
     >>> import builtins
     >>> callable(builtins.b)
     True
-
     """
     if not mnemonic:
         return
@@ -138,7 +136,6 @@ def _rich_print(mnemonic: str = "p") -> None:
     True
     >>> p("test")
     test
-
     """
     if not mnemonic:
         return

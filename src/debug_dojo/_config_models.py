@@ -17,10 +17,10 @@ class BaseConfig(BaseModel):
 class DebuggerType(Enum):
     """Enum for different types of debuggers."""
 
+    DEBUGPY = "debugpy"
+    IPDB = "ipdb"
     PDB = "pdb"
     PUDB = "pudb"
-    IPDB = "ipdb"
-    DEBUGPY = "debugpy"
 
 
 class Features(BaseModel):
@@ -43,14 +43,14 @@ class Features(BaseModel):
 class DebugpyConfig(BaseConfig):
     """Configuration for debugpy debugger."""
 
-    port: int = 1992
-    """Port for debugpy debugger."""
     host: str = "localhost"
     """Host for debugpy debugger."""
-    wait_for_client: bool = True
-    """Whether to wait for the client to connect before starting debugging."""
     log_to_file: bool = False
     """Whether to log debugpy output to a file."""
+    port: int = 1992
+    """Port for debugpy debugger."""
+    wait_for_client: bool = True
+    """Whether to wait for the client to connect before starting debugging."""
 
     @property
     def set_trace_hook(self) -> str:
@@ -91,6 +91,7 @@ class DebuggersConfig(BaseConfig):
     """Default debugger to use."""
     prompt_name: str = "debug-dojo> "
     """Prompt name for the debugger, used in the REPL."""
+
     debugpy: DebugpyConfig = DebugpyConfig()
     """Configuration for debugpy debugger."""
     ipdb: IpdbConfig = IpdbConfig()
@@ -104,25 +105,25 @@ class DebuggersConfig(BaseConfig):
 class ExceptionsConfig(BaseConfig):
     """Configuration for exceptions handling."""
 
-    rich_traceback: bool = True
-    """Enable rich traceback for better error reporting."""
     locals_in_traceback: bool = False
     """Include local variables in traceback."""
     post_mortem: bool = True
     """Enable post-mortem debugging after an exception."""
+    rich_traceback: bool = True
+    """Enable rich traceback for better error reporting."""
 
 
 class FeaturesConfig(BaseConfig):
     """Configuration for installing debug features."""
 
+    breakpoint: str = "b"
+    """Install breakpoint as 'b' for setting breakpoints in code."""
+    comparer: str = "c"
+    """Install comparer as 'c' for side-by-side object comparison."""
     rich_inspect: str = "i"
     """Install rich inspect as 'i' for enhanced object inspection."""
     rich_print: str = "p"
     """Install rich print as 'p' for enhanced printing."""
-    comparer: str = "c"
-    """Install comparer as 'c' for side-by-side object comparison."""
-    breakpoint: str = "b"
-    """Install breakpoint as 'b' for setting breakpoints in code."""
 
 
 class DebugDojoConfigV1(BaseModel):

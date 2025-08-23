@@ -4,8 +4,11 @@ from __future__ import annotations
 
 import runpy
 import sys
+import traceback
 from bdb import BdbQuit
+from enum import Enum
 from pathlib import Path
+from shutil import which
 from typing import Annotated
 
 import typer
@@ -14,6 +17,15 @@ from rich import print as rich_print
 from ._config import load_config
 from ._config_models import DebugDojoConfig, DebuggerType  # noqa: TC001
 from ._installers import install_by_config
+
+
+class ExecMode(Enum):
+    """Execution mode for the target."""
+
+    FILE = "file"
+    MODULE = "module"
+    EXECUTABLE = "executable"
+
 
 cli = typer.Typer(
     name="debug_dojo",
@@ -26,11 +38,11 @@ def __execute_with_debug(  # noqa: C901
     target_name: str,
     target_args: list[str],
     *,
-    target_is_module: bool,
+    target_mode: ExecMode,
     verbose: bool,
     config: DebugDojoConfig,
 ) -> None:
-    """Execute a target script or module with installation of debugging tools."""
+    """Execute a target script or module with installed debugging tools."""
     sys.argv = [target_name, *target_args]
 
     if verbose:
@@ -39,9 +51,12 @@ def __execute_with_debug(  # noqa: C901
 
     install_by_config(config)
 
-    if target_is_module:
+    if target_mode is ExecMode.MODULE:
         runner = runpy.run_module
     else:
+        if target_mode is ExecMode.EXECUTABLE:
+            target_name = which(target_name) or target_name
+
         if not Path(target_name).exists():
             raise typer.Exit(1)
 
@@ -63,11 +78,12 @@ def __execute_with_debug(  # noqa: C901
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
     except Exception as e:
         rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
+        rich_print(traceback.format_exc())
         if config.exceptions.post_mortem:
-            import pdb  # noqa: PLC0415, T100
+            import ipdb  # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415, T100
 
             rich_print("[blue]Entering post-mortem debugging session...[/blue]")
-            pdb.post_mortem(e.__traceback__)
+            ipdb.post_mortem(e.__traceback__)  # pyright: ignore[reportUnknownMemberType]
         raise typer.Exit(1) from e
 
 
@@ -97,14 +113,32 @@ def run_debug(  # noqa: PLR0913
     ] = None,
     verbose: Annotated[
         bool,
-        typer.Option("--verbose", "-v", is_flag=True, help="Enable verbose output"),
+        typer.Option("--verbose", "-v", help="Enable verbose output"),
     ] = False,
     module: Annotated[
         bool,
-        typer.Option("--module", "-m", is_flag=True, help="Run as a module"),
+        typer.Option("--module", "-m", help="Run a module"),
+    ] = False,
+    executable: Annotated[
+        bool,
+        typer.Option("--exec", "-e", help="Run a command"),
     ] = False,
 ) -> None:
     """Run the command-line interface."""
+    if module and executable:
+        rich_print(
+            "[red]Error: --module and --command options are mutually exclusive.[/red]"
+        )
+        raise typer.Exit(1)
+
+    mode = (
+        ExecMode.EXECUTABLE
+        if executable
+        else ExecMode.MODULE
+        if module
+        else ExecMode.FILE
+    )
+
     config = load_config(config_path, verbose=verbose, debugger=debugger)
 
     if verbose:
@@ -113,7 +147,7 @@ def run_debug(  # noqa: PLR0913
     if target_name:
         __execute_with_debug(
             target_name=target_name,
-            target_is_module=module,
+            target_mode=mode,
             target_args=ctx.args,
             verbose=verbose,
             config=config,

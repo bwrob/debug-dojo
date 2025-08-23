@@ -42,10 +42,11 @@
 
     dev = [
         "basedpyright>=1.31.2",
+        "coverage>=7.10.4",
         "poethepoet>=0.37.0",
         "pytest>=8.4.1",
         "ruff>=0.12.9",
-    ]
+]
     docs = [
         "mkdocs>=1.6.1",
         "mkdocs-git-authors-plugin>=0.10.0",
@@ -64,7 +65,7 @@
 
 
 [tool.basedpyright]
-    ignore           = [ "examples" ]
+    ignore           = [ "examples", "tests/assets" ]
     pythonVersion    = "3.10"
     strict           = [ "src/debug_dojo/*" ]
     typeCheckingMode = "all"
@@ -83,21 +84,25 @@
             "examples/*"                    = [ "INP001" ]
             "examples/test_target.py"       = [ "F821" ]
             "src/debug_dojo/_installers.py" = [ "PLC0415", "T100" ]
+            "tests/*"                       = [ "S101", "T201" ]
+            "tests/assets/*"                = [ "T201", "INP001", "F821" ]
 
     [tool.ruff.format]
         docstring-code-format = true
 
 
 [tool.poe.tasks]
+
     format     = { cmd = "ruff format --diff --config=pyproject.toml", help = "Check code formatting using ruff." }
     lint       = { cmd = "uv run ruff check --config=pyproject.toml", help = "Check code rules using ruff." }
+    precommit  = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
     test       = { cmd = "pytest --verbose --doctest-modules", help = "Run tests using pytest." }
     type-check = { cmd = "basedpyright", help = "Check static typing using basedpyright." }
 
     [tool.poe.tasks.code-quality]
         help        = "Run all code quality checks."
         ignore_fail = "return_non_zero"
-        sequence    = [ "format", "lint", "type-check" ]
+        sequence    = [ "fix", "precommit", "format", "lint", "type-check" ]
 
     [tool.poe.tasks.fix]
         default_item_type = "cmd"
@@ -115,3 +120,7 @@
             { cmd = "uv build" },
             { cmd = "uv publish" },
         ]
+
+[tool.docformatter]
+    black   = true
+    non-cap = [ "dojo" ]

@@ -1,7 +1,7 @@
 """Debug Dojo configuration module.
 
-It includes configurations for different debuggers, exception handling,
-and features that can be enabled or disabled.
+It includes configurations for different debuggers, exception handling, and features
+that can be enabled or disabled.
 """
 
 from __future__ import annotations
@@ -38,7 +38,10 @@ def __filter_pydantic_error_msg(error: ValidationError) -> str:
 
 
 def __resolve_config_path(config_path: Path | None) -> Path | None:
-    """Resolve the configuration path, returning a default if none is provided."""
+    """Resolve the configuration path.
+
+    Returning a default if none is provided.
+    """
     if config_path:
         if not config_path.exists():
             msg = f"Configuration file not found:\n{config_path.resolve()}"
@@ -57,8 +60,8 @@ def __resolve_config_path(config_path: Path | None) -> Path | None:
 def __load_raw_config(config_path: Path) -> JSON_ro:
     """Load the Debug Dojo configuration from a file.
 
-    Currently supports 'dojo.toml' or 'pyproject.toml'.
-    If no path is provided, it checks the current directory for these files.
+    Currently supports 'dojo.toml' or 'pyproject.toml'. If no path is provided, it
+    checks the current directory for these files.
     """
     config_str = config_path.read_text(encoding="utf-8")
 
@@ -125,7 +128,13 @@ def load_config(
     verbose: bool = False,
     debugger: DebuggerType | None = None,
 ) -> DebugDojoConfig:
-    """Load the Debug Dojo configuration and return a DebugDojoConfig instance."""
+    """Load the Debug Dojo configuration.
+
+    Return a DebugDojoConfig instance with the loaded configuration.
+
+    If no configuration file is found, it returns a default configuration. If a debugger
+    is specified, it overrides the config.
+    """
     resolved_path = __resolve_config_path(config_path)
 
     if verbose:

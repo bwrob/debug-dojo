@@ -1,11 +1,21 @@
 # Changelog
 
-## v0.5.0 (TBD)
+## v0.5.0 (2025-08-23)
+
+*release tag*: [v0.5.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.5.0)
+
+### Features
+
+* Fixes to configuration reading.
+* Post-mortem debugging support with `ipdb`.
+* Added `--exec` option to `dojo` command -- debug dojo can now run arbitrary commands.
+
+### Project Improvements
 
 * UV build.
 * PyProject cleanup.
-* README index alignment.
-* Fixes to configuration reading.
+* Testing the CLI with typer's CLI runner and pytest fixtures.
+* README and docs index alignment.
 * Pre-commit CI and extending pre-commit config.
 * Set up Dependabot.
 * CI improvements.
