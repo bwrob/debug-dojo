@@ -1,6 +1,7 @@
+name: Tests
+
 permissions:
   contents: read
-name: Python package
 
 on:
   push:
@@ -20,8 +21,8 @@ jobs:
         python-version: [ "3.10", "3.11", "3.12", "3.13" ]
 
     steps:
-    - uses: actions/checkout@v5
-      name: 🛠️ Check out the repository
+    - name: 🛠️ Check out the repository
+      uses: actions/checkout@v5
 
     - name: 🛠️ Install uv and use Python ${{ matrix.python-version }}
       uses: astral-sh/setup-uv@v6
@@ -49,14 +50,15 @@ jobs:
       if: always()
       run: uv run poe test
 
-  # https://github.com/marketplace/actions/alls-green#why
-  check:  # This job does nothing and is only used for the branch protection
+
+  check:
     name: 🛠️ Check if all jobs succeeded
 
     if: always()
     needs:
       - test
     runs-on: ubuntu-latest
+
     steps:
       - name: Dump GitHub context
         env:
