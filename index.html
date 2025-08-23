@@ -351,25 +351,6 @@
   
   
     <li class="md-tabs__item">
-      <a href="license/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  License
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
       <a href=".././" class="md-tabs__link">
         
   
@@ -676,28 +657,6 @@
   
   
     <li class="md-nav__item">
-      <a href="license/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    License
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href=".././" class="md-nav__link">
         
   
@@ -751,14 +710,14 @@
 </p>
 
 <p align="center">
-<em>debug dojo, a place for zen debugging</em>
+<em>🏣 debug dojo, a place for zen debugging</em>
 </p>
 
 <p><a href="https://pypi.org/project/debug-dojo"><img alt="PyPi Version" src="https://img.shields.io/pypi/v/debug-dojo.svg?style=flat-square" /></a>
 <a href="https://pypi.org/pypi/debug-dojo/"><img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/debug-dojo.svg?style=flat-square" /></a>
 <a href="https://pepy.tech/project/debug-dojo"><img alt="downloads" src="https://static.pepy.tech/badge/debug-dojo/month" /></a>
-<a href="https://github.com/bwrob/debug-dojo/blob/main/docs/license.md"><img alt="license" src="https://img.shields.io/github/license/bwrob/debug-dojo.svg" /></a>
-<a href="https://docs.pydantic.dev/latest/contributing/#badges"><img alt="Pydantic v2" src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/pydantic/pydantic/main/docs/badge/v2.json" /></a></p>
+<a href="https://github.com/bwrob/debug-dojo/blob/main/LICENSE"><img alt="license" src="https://img.shields.io/github/license/bwrob/debug-dojo.svg" /></a>
+<a href="https://results.pre-commit.ci/latest/github/bwrob/debug-dojo/main"><img alt="pre-commit.ci status" src="https://results.pre-commit.ci/badge/github/bwrob/debug-dojo/main.svg" /></a></p>
 <p><strong>debug-dojo</strong> is a Python package providing utilities for enhanced
 debugging and inspection in the terminal. It leverages
 <a href="https://github.com/Textualize/rich"><code>rich</code></a> for beautiful output and
@@ -789,6 +748,12 @@ from <code>rich</code>, and easy integration with different debuggers &ndash; <c
 debugger type. Both script files and modules are supported:</p>
 <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="go">dojo --debugger ipdb --config dojo.toml --verbose --module my_module</span>
 </span></code></pre></div></td></tr></table></div>
+<p>dojo can let you debug into:</p>
+<ul>
+<li>any Python script &ndash; <code>dojo my_script.py</code></li>
+<li>any runnable module &ndash; <code>dojo -m my_module</code></li>
+<li>or even an executable, <code>dojo -e my_executable</code> (like <code>pytest</code>)</li>
+</ul>
 <h3 id="from-the-code">From the code<a class="headerlink" href="#from-the-code" title="Permanent link">&para;</a></h3>
 <p>In the <code>PuDB</code> style, you can install all debugging tools and enter the
 debugging mode with a single command:</p>
@@ -845,7 +810,7 @@ Python package management tools.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 16, 2025 14:15:16 UTC">August 16, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 23, 2025 12:13:24 UTC">August 23, 2025</span>
   </span>
 
     
@@ -865,13 +830,12 @@ Python package management tools.</p>
   <span class="md-source-file__fact">
     <span class="md-icon" title="Contributors">
       
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
       
     </span>
     <nav>
       
-        <a href="mailto:43605200+bwrob@users.noreply.github.com">Bartosz Marcin Wróblewski</a>, 
-        <a href="mailto:bartosz.marcin.wroblewski@gmail.com">bwrob</a>
+        <a href="mailto:43605200+bwrob@users.noreply.github.com">Bartosz Marcin Wróblewski</a>
     </nav>
   </span>
 

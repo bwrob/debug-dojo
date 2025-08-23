@@ -353,25 +353,6 @@
   
   
     <li class="md-tabs__item">
-      <a href="../license/" class="md-tabs__link">
-        
-  
-  
-    
-  
-  License
-
-      </a>
-    </li>
-  
-
-      
-        
-  
-  
-  
-  
-    <li class="md-tabs__item">
       <a href="../../" class="md-tabs__link">
         
   
@@ -560,9 +541,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Environment setup
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#lint-and-type-check" class="md-nav__link">
     <span class="md-ellipsis">
       Lint and type check
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-commit-hooks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pre-commit hooks
     </span>
   </a>
   
@@ -645,28 +644,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../license/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    License
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../" class="md-nav__link">
         
   
@@ -715,21 +692,46 @@
 
 
 <h1 id="development-and-contributing">Development and contributing<a class="headerlink" href="#development-and-contributing" title="Permanent link">&para;</a></h1>
-<p>Project uses <code>poe</code> for defining developer tasks.</p>
+<p>Project uses <code>poe</code> for defining and speeding up developer tasks.</p>
+<h2 id="environment-setup">Environment setup<a class="headerlink" href="#environment-setup" title="Permanent link">&para;</a></h2>
+<p>It&rsquo;s recommended to use <code>uv</code> for managing virtual environments. You can create a new environment with:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="go">uv sync</span>
+</span></code></pre></div></td></tr></table></div>
+<p>This will create a new virtual environment in <code>.venv</code> folder and install all dependencies from <code>pyproject.toml</code>.</p>
+<p>You can activate the environment with:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span>
+<span class="normal"><a href="#__codelineno-1-2">2</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="go">./.venv/Scripts/activate  # Windows</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="go">source .venv/bin/activate  # Linux / macOS</span>
+</span></code></pre></div></td></tr></table></div>
+<p>If for some reason you don&rsquo;t want to use <code>uv</code>, there&rsquo;s a <code>requirements.txt</code> file generated from <code>pyproject.toml</code> that you can use to install dependencies with <code>pip</code>:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="go">pip install -r requirements.txt</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The environment is kept up to date by dependabot, but you can also update dependencies manually with:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="go">uv sync --upgrade</span>
+</span></code></pre></div></td></tr></table></div>
 <h2 id="lint-and-type-check">Lint and type check<a class="headerlink" href="#lint-and-type-check" title="Permanent link">&para;</a></h2>
 <p>We&rsquo;re using <code>ruff</code> as formatter and linter and <code>basedpyright</code> for static type checking.
 You can run all three with simple command:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="go">poe code-quality</span>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="go">poe code-quality</span>
 </span></code></pre></div></td></tr></table></div>
+<h2 id="pre-commit-hooks">Pre-commit hooks<a class="headerlink" href="#pre-commit-hooks" title="Permanent link">&para;</a></h2>
+<p>Its recommended setting up <code>pre-commit</code> hooks to run quality checks before committing code.</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="go">pre-commit install</span>
+</span></code></pre></div></td></tr></table></div>
+<p>The project uses <code>pre-commit.ci</code> to automatically run checks on pull requests. If you don&rsquo;t have <code>pre-commit</code> installed locally, the checks will still run on the CI and possibly edit the code. This can lead to confusing situations where your code is modified after the PR is created.</p>
 <h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
-<p><code>Pytest</code> is used for testing. Currently only few example doc tests are set up.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="go">poe test</span>
+<p><code>Pytest</code> is used for testing. Tests include:</p>
+<ul>
+<li>docstring tests</li>
+<li>unit tests for internal functions</li>
+<li>integration tests for command line interface using <code>CLI Runner</code> from <code>Typer</code>.</li>
+</ul>
+<p>You can run all tests with:</p>
+<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="go">poe test</span>
 </span></code></pre></div></td></tr></table></div>
+<p>(this is just a shortcut for <code>pytest</code> with some additional options).</p>
 <h2 id="contributing">Contributing<a class="headerlink" href="#contributing" title="Permanent link">&para;</a></h2>
 <p>You&rsquo;re welcome to contribute both new features and fixes. The above quality checks need to pass for a contribution to be accepted to <code>debug-dojo</code>. This is tested with Pull Requests job hook.</p>
-<p>It is recommended to set up a pre-commit hook based on the included config.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="go">pre-commit install</span>
-</span></code></pre></div></td></tr></table></div>
 
 
 
@@ -752,7 +754,7 @@ You can run all three with simple command:</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 16, 2025 14:08:17 UTC">August 16, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 23, 2025 12:13:24 UTC">August 23, 2025</span>
   </span>
 
     
