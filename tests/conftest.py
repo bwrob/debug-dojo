@@ -13,19 +13,19 @@ def test_config_path() -> str:
 @pytest.fixture
 def test_target_inspect() -> str:
     """Path to a test target file for inspection."""
-    return "tests/assets/test_target_inspect.py"
+    return "tests/assets/main_inspect.py"
 
 
 @pytest.fixture
 def test_target_exception() -> str:
     """Path to a test target file for exception testing."""
-    return "tests/assets/test_target_exception.py"
+    return "tests/assets/main_exception.py"
 
 
 @pytest.fixture
 def test_target_breakpoint() -> str:
     """Path to a test target file for breakpoint testing."""
-    return "tests/assets/test_target_breakpoint.py"
+    return "tests/assets/main_breakpoint.py"
 
 
 @pytest.fixture
