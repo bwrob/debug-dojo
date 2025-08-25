@@ -1,3 +1,5 @@
+permissions:
+  contents: read
 name: Python package
 
 on:
@@ -7,9 +9,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  test:
+    name: 🐍 Python Tests and Code Quality
 
-    name: Build and Test
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -46,3 +48,21 @@ jobs:
     - name: 🐍 Run pytest
       if: always()
       run: uv run poe test
+
+  # https://github.com/marketplace/actions/alls-green#why
+  check:  # This job does nothing and is only used for the branch protection
+    name: 🛠️ Check if all jobs succeeded
+
+    if: always()
+    needs:
+      - test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
