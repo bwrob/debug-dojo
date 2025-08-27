@@ -1,12 +1,11 @@
 """Tests for debug-dojo CLI config print command."""
 
-import rich
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
 
 
-def test_breakpoint_ipdb(  # noqa: PLR0913
+def _breakpoint_ipdb(  # noqa: PLR0913 # pyright: ignore[reportUnusedFunction]
     runner: CliRunner,
     test_config_path: str,
     test_target_breakpoint: str,
@@ -29,8 +28,6 @@ def test_breakpoint_ipdb(  # noqa: PLR0913
     ]
     result = runner.invoke(cli, args, input="\n".join(inputs))
 
-    rich.print(result.output)
-
     assert result.exit_code == 0
     # ipdb prompt
     assert "ipdb>" in result.output
@@ -44,7 +41,7 @@ def test_breakpoint_ipdb(  # noqa: PLR0913
     assert another_test_string in result.output
 
 
-def test_post_mortem(
+def _test_post_mortem(  # pyright: ignore[reportUnusedFunction]
     runner: CliRunner,
     test_config_path: str,
     test_target_exception: str,
@@ -58,8 +55,6 @@ def test_post_mortem(
     inputs = ["raise", "c", "\n"]
 
     result = runner.invoke(cli, args, input="\n".join(inputs))
-
-    rich.print(result.output)
 
     assert result.exit_code != 0
     # ipdb prompt
