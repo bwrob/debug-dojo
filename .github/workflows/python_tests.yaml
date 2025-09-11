@@ -1,4 +1,7 @@
-name: Python package
+name: Package Tests
+
+permissions:
+  contents: read
 
 on:
   push:
@@ -7,9 +10,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  test:
+    name: 🐍 Python Tests and Code Quality
 
-    name: Build and Test
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -18,8 +21,8 @@ jobs:
         python-version: [ "3.10", "3.11", "3.12", "3.13" ]
 
     steps:
-    - uses: actions/checkout@v5
-      name: 🛠️ Check out the repository
+    - name: 🛠️ Check out the repository
+      uses: actions/checkout@v5
 
     - name: 🛠️ Install uv and use Python ${{ matrix.python-version }}
       uses: astral-sh/setup-uv@v6
@@ -46,3 +49,22 @@ jobs:
     - name: 🐍 Run pytest
       if: always()
       run: uv run poe test
+
+
+  check:
+    name: 🛠️ Check if all jobs succeeded
+
+    if: always()
+    needs:
+      - test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
