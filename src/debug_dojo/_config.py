@@ -23,21 +23,21 @@ from ._config_models import (
     DebuggerType,
 )
 
-JSON_ro: TypeAlias = (
-    Mapping[str, "JSON_ro"] | Sequence["JSON_ro"] | str | int | float | bool | None
+JSON: TypeAlias = (
+    Mapping[str, "JSON"] | Sequence["JSON"] | str | int | float | bool | None
 )
 
 
-def __filter_pydantic_error_msg(error: ValidationError) -> str:
+def filter_pydantic_error_msg(error: ValidationError) -> str:
     """Filter out specific lines from a Pydantic validation error."""
     return "\n".join(
         line
         for line in str(error).splitlines()
-        if not line.startswith("For further information visit")
+        if not line.strip().startswith("For further information visit")
     )
 
 
-def __resolve_config_path(config_path: Path | None) -> Path | None:
+def resolve_config_path(config_path: Path | None) -> Path | None:
     """Resolve the configuration path.
 
     Returning a default if none is provided.
@@ -57,7 +57,7 @@ def __resolve_config_path(config_path: Path | None) -> Path | None:
     return None
 
 
-def __load_raw_config(config_path: Path) -> JSON_ro:
+def load_raw_config(config_path: Path) -> JSON:
     """Load the Debug Dojo configuration from a file.
 
     Currently supports 'dojo.toml' or 'pyproject.toml'. If no path is provided, it
@@ -68,7 +68,7 @@ def __load_raw_config(config_path: Path) -> JSON_ro:
     try:
         config_data = parse(config_str).unwrap()
     except TOMLKitError as e:
-        msg = f"Error parsing configuration file {config_path.resolve()}."
+        msg = f"Error parsing configuration file {config_path.resolve()}.."
         raise ValueError(msg) from e
 
     # If config is in [tool.debug_dojo] (pyproject.toml), extract it.
@@ -86,9 +86,7 @@ def __load_raw_config(config_path: Path) -> JSON_ro:
     return config_data
 
 
-def __validated_and_updated_config(
-    raw_config: JSON_ro, *, verbose: bool
-) -> DebugDojoConfig:
+def validated_and_updated_config(raw_config: JSON, *, verbose: bool) -> DebugDojoConfig:
     config = None
 
     for model in (DebugDojoConfigV2, DebugDojoConfigV1):
@@ -99,7 +97,7 @@ def __validated_and_updated_config(
             if verbose:
                 msg = (
                     f"[yellow]Configuration validation error for {model_name}:\n"
-                    f"{__filter_pydantic_error_msg(e)}\n\n"
+                    f"{filter_pydantic_error_msg(e)}\n\n"
                 )
                 rich_print(msg)
         else:
@@ -135,7 +133,7 @@ def load_config(
     If no configuration file is found, it returns a default configuration. If a debugger
     is specified, it overrides the config.
     """
-    resolved_path = __resolve_config_path(config_path)
+    resolved_path = resolve_config_path(config_path)
 
     if verbose:
         if resolved_path:
@@ -147,8 +145,8 @@ def load_config(
     if not resolved_path:
         return DebugDojoConfig()
 
-    raw_config = __load_raw_config(resolved_path)
-    config = __validated_and_updated_config(raw_config, verbose=verbose)
+    raw_config = load_raw_config(resolved_path)
+    config = validated_and_updated_config(raw_config, verbose=verbose)
 
     # If a debugger is specified, override the config.
     if debugger:

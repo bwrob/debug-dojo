@@ -14,7 +14,7 @@ from rich.panel import Panel
 from rich.text import Text
 
 
-def _get_object_attributes(obj: object) -> list[str]:
+def get_object_attributes(obj: object) -> list[str]:
     """Extract and format non-callable attributes of an object."""
     attributes: list[str] = []
     for attr_name in sorted(dir(obj)):
@@ -28,7 +28,7 @@ def _get_object_attributes(obj: object) -> list[str]:
     return attributes
 
 
-def _get_object_methods(obj: object) -> list[str]:
+def get_object_methods(obj: object) -> list[str]:
     """Extract and format public callable methods of an object."""
     methods: list[str] = []
     for method_name in sorted(dir(obj)):
@@ -40,7 +40,7 @@ def _get_object_methods(obj: object) -> list[str]:
     return methods
 
 
-def _get_simplified_object_info(obj: object) -> list[Text]:
+def get_simplified_object_info(obj: object) -> list[Text]:
     """Generate a simplified, Rich-formatted inspection output for an object.
 
     Handles basic Python types by displaying their value directly. For other objects, it
@@ -62,7 +62,7 @@ def _get_simplified_object_info(obj: object) -> list[Text]:
         return info_lines
 
     # For other objects, list attributes
-    attributes = _get_object_attributes(obj)
+    attributes = get_object_attributes(obj)
     if attributes:
         info_lines.append(Text("Attributes:", style="bold"))
         info_lines.extend([Text(f"  {attr}") for attr in attributes])
@@ -71,7 +71,7 @@ def _get_simplified_object_info(obj: object) -> list[Text]:
     info_lines.append(Text(""))
 
     # List methods
-    methods = _get_object_methods(obj)
+    methods = get_object_methods(obj)
     if methods:
         info_lines.append(Text("Methods:", style="bold"))
         info_lines.extend([Text(f"  {method}()") for method in methods])
@@ -91,8 +91,8 @@ def inspect_objects_side_by_side(
     """
     main_console: Console = Console()
 
-    lines1: list[Text] = _get_simplified_object_info(obj1)
-    lines2: list[Text] = _get_simplified_object_info(obj2)
+    lines1: list[Text] = get_simplified_object_info(obj1)
+    lines2: list[Text] = get_simplified_object_info(obj2)
 
     # Determine the maximum number of lines to ensure consistent height
     max_lines: int = max(len(lines1), len(lines2))
