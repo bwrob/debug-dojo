@@ -30,7 +30,7 @@ BREAKPOINT_ENV_VAR = "PYTHONBREAKPOINT"
 IPDB_CONTEXT_SIZE = "IPDB_CONTEXT_SIZE"
 
 
-def _use_pdb(config: PdbConfig) -> None:
+def use_pdb(config: PdbConfig) -> None:
     """Set PDB as the default debugger."""
     import pdb
 
@@ -38,7 +38,7 @@ def _use_pdb(config: PdbConfig) -> None:
     sys.breakpointhook = pdb.set_trace
 
 
-def _use_pudb(config: PudbConfig) -> None:
+def use_pudb(config: PudbConfig) -> None:
     """Check if PuDB is available and set it as the default debugger."""
     import pudb  # pyright: ignore[reportMissingTypeStubs]
 
@@ -46,7 +46,7 @@ def _use_pudb(config: PudbConfig) -> None:
     sys.breakpointhook = pudb.set_trace
 
 
-def _use_ipdb(config: IpdbConfig) -> None:
+def use_ipdb(config: IpdbConfig) -> None:
     """Set IPDB as the default debugger."""
     import ipdb  # pyright: ignore[reportMissingTypeStubs]
 
@@ -55,7 +55,7 @@ def _use_ipdb(config: IpdbConfig) -> None:
     sys.breakpointhook = ipdb.set_trace  # pyright: ignore[reportUnknownMemberType]
 
 
-def _use_debugpy(config: DebugpyConfig) -> None:
+def use_debugpy(config: DebugpyConfig) -> None:
     """Check if IPDB is available and set it as the default debugger."""
     import debugpy  # pyright: ignore[reportMissingTypeStubs]
 
@@ -79,14 +79,14 @@ def _use_debugpy(config: DebugpyConfig) -> None:
     debugpy.wait_for_client()
 
 
-def _rich_traceback(*, locals_in_traceback: bool) -> None:
+def rich_traceback(*, locals_in_traceback: bool) -> None:
     """Check if Rich Traceback is available and set it as the default."""
     from rich import traceback
 
     _ = traceback.install(show_locals=locals_in_traceback)
 
 
-def _inspect(mnemonic: str = "i") -> None:
+def install_inspect(mnemonic: str = "i") -> None:
     """Print the object using a custom inspect function."""
     from rich import inspect
 
@@ -99,10 +99,10 @@ def _inspect(mnemonic: str = "i") -> None:
     builtins.__dict__[mnemonic] = inspect_with_defaults
 
 
-def _compare(mnemonic: str = "c") -> None:
+def install_compare(mnemonic: str = "c") -> None:
     """Print the object using a custom inspect function.
 
-    >>> _compare()
+    >>> install_compare()
     >>> import builtins
     >>> callable(builtins.c)
     True
@@ -113,10 +113,10 @@ def _compare(mnemonic: str = "c") -> None:
     builtins.__dict__[mnemonic] = inspect_objects_side_by_side
 
 
-def _breakpoint(mnemonic: str = "b") -> None:
+def install_breakpoint(mnemonic: str = "b") -> None:
     """Install the breakpoint function.
 
-    >>> _breakpoint()
+    >>> install_breakpoint()
     >>> import builtins
     >>> callable(builtins.b)
     True
@@ -127,10 +127,10 @@ def _breakpoint(mnemonic: str = "b") -> None:
     builtins.__dict__[mnemonic] = breakpoint
 
 
-def _rich_print(mnemonic: str = "p") -> None:
+def install_rich_print(mnemonic: str = "p") -> None:
     """Install the print from rich.
 
-    >>> _rich_print()
+    >>> install_rich_print()
     >>> import builtins
     >>> callable(builtins.p)
     True
@@ -145,38 +145,38 @@ def _rich_print(mnemonic: str = "p") -> None:
     builtins.__dict__[mnemonic] = rich_print
 
 
-def _install_features(features: FeaturesConfig) -> None:
+def install_features(features: FeaturesConfig) -> None:
     """Install the specified debugging features."""
-    _inspect(features.rich_inspect)
-    _rich_print(features.rich_print)
-    _compare(features.comparer)
-    _breakpoint(features.breakpoint)
+    install_inspect(features.rich_inspect)
+    install_rich_print(features.rich_print)
+    install_compare(features.comparer)
+    install_breakpoint(features.breakpoint)
 
 
-def _set_debugger(config: DebuggersConfig) -> None:
+def set_debugger(config: DebuggersConfig) -> None:
     """Set the debugger based on the configuration."""
     debugger = config.default
 
     if debugger == DebuggerType.PDB:
-        _use_pdb(config.pdb)
+        use_pdb(config.pdb)
     if debugger == DebuggerType.PUDB:
-        _use_pudb(config.pudb)
+        use_pudb(config.pudb)
     if debugger == DebuggerType.IPDB:
-        _use_ipdb(config.ipdb)
+        use_ipdb(config.ipdb)
     if debugger == DebuggerType.DEBUGPY:
-        _use_debugpy(config.debugpy)
+        use_debugpy(config.debugpy)
 
     sys.ps1 = config.prompt_name
 
 
-def _set_exceptions(exceptions: ExceptionsConfig) -> None:
+def set_exceptions(exceptions: ExceptionsConfig) -> None:
     """Set the exception handling based on the configuration."""
     if exceptions.rich_traceback:
-        _rich_traceback(locals_in_traceback=exceptions.locals_in_traceback)
+        rich_traceback(locals_in_traceback=exceptions.locals_in_traceback)
 
 
 def install_by_config(config: DebugDojoConfig) -> None:
     """Install debugging tools."""
-    _set_debugger(config.debuggers)
-    _set_exceptions(config.exceptions)
-    _install_features(config.features)
+    set_debugger(config.debuggers)
+    set_exceptions(config.exceptions)
+    install_features(config.features)
