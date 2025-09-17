@@ -100,7 +100,7 @@
     lint       = { cmd = "uv run ruff check --config=pyproject.toml", help = "Check code rules using ruff." }
     precommit  = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
     test       = { cmd = "pytest", help = "Run tests using pytest." }
-    type-check = { cmd = "basedpyright", help = "Check static typing using basedpyright." }
+    type-check = { cmd = "basedpyright src tests", help = "Check static typing using basedpyright." }
 
     [tool.poe.tasks.code-quality]
         help        = "Run all code quality checks."
