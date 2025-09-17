@@ -7,14 +7,15 @@
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "Topic :: Software Development :: Debuggers",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ]
     dependencies = [
+        "dacite>=1.9.2",
         "debugpy>=1.8.0",
         "ipdb>=0.13.0",
         "pudb>=2020.1",
-        "pydantic>=2.11.7",
         "rich>=12.0.0",
         "tomlkit>=0.13.3",
         "typer>=0.15.0",
@@ -25,7 +26,7 @@
     license-files = [ 'LICENSE' ]
     name = "debug-dojo"
     readme = "README.md"
-    requires-python = ">=3.10,<3.14"
+    requires-python = ">=3.10,<3.15"
     version = "0.5.0"
 
     [project.urls]
@@ -61,7 +62,6 @@
 
 
 [tool.uv]
-    default-groups   = "all"
     package          = true
     required-version = ">=0.8.0"
 
@@ -100,7 +100,7 @@
     lint       = { cmd = "uv run ruff check --config=pyproject.toml", help = "Check code rules using ruff." }
     precommit  = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
     test       = { cmd = "pytest", help = "Run tests using pytest." }
-    type-check = { cmd = "basedpyright", help = "Check static typing using basedpyright." }
+    type-check = { cmd = "basedpyright src tests", help = "Check static typing using basedpyright." }
 
     [tool.poe.tasks.code-quality]
         help        = "Run all code quality checks."

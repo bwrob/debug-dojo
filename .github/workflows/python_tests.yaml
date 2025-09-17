@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-        python-version: [ "3.10", "3.11", "3.12", "3.13" ]
+        python-version: [ "3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - name: 🛠️ Check out the repository
@@ -31,7 +31,7 @@ jobs:
 
     - name: 🛠️ Install the project dependencies
       id: uv-sync
-      run: uv sync --locked --all-extras --dev
+      run: uv sync --locked --dev
 
     # Use poe to sync local checks with CI
     - name: 🐍 Run ruff linter check

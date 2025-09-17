@@ -8,15 +8,16 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, TypeAlias, cast
+from typing import TypeAlias, cast
 
-from pydantic import ValidationError
+from dacite import DaciteError, from_dict
 from rich import print as rich_print
 from tomlkit import parse
 from tomlkit.exceptions import TOMLKitError
 from typer import Exit
 
 from ._config_models import (
+    DACITE_CONFIG,
     DebugDojoConfig,
     DebugDojoConfigV1,
     DebugDojoConfigV2,
@@ -28,21 +29,14 @@ JSON: TypeAlias = (
 )
 
 
-def filter_pydantic_error_msg(error: ValidationError) -> str:
-    """Filter out specific lines from a Pydantic validation error.
-
-    Args:
-        error (ValidationError): The Pydantic validation error object.
-
-    Returns:
-        str: The filtered error message.
-
-    """
-    return "\n".join(
-        line
-        for line in str(error).splitlines()
-        if not line.strip().startswith("For further information visit")
-    )
+def _validate_model(
+    model: type[DebugDojoConfigV1 | DebugDojoConfigV2],
+    raw_config: JSON,
+) -> DebugDojoConfigV1 | DebugDojoConfigV2:
+    if not isinstance(raw_config, dict):
+        msg = "Configuration must be a dictionary."
+        raise DaciteError(msg)
+    return from_dict(data_class=model, data=raw_config, config=DACITE_CONFIG)
 
 
 def resolve_config_path(config_path: Path | None) -> Path | None:
@@ -101,19 +95,16 @@ def load_raw_config(config_path: Path) -> JSON:
         msg = f"Error parsing configuration file {config_path.resolve()}.."
         raise ValueError(msg) from e
 
-    # If config is in [tool.debug_dojo] (pyproject.toml), extract it.
-    if config_path.name == "pyproject.toml":
-        try:
-            dojo_config = cast(
-                "dict[str, Any]",  # pyright: ignore[reportExplicitAny]
-                config_data["tool"]["debug_dojo"],
-            )
-        except KeyError:
-            return {}
-        else:
-            return dojo_config
+    if config_path.name != "pyproject.toml":
+        return config_data
 
-    return config_data
+    # If config is in [tool.debug_dojo] (pyproject.toml), extract it.
+    try:
+        dojo_config = cast("JSON", config_data["tool"]["debug_dojo"])
+    except KeyError:
+        return {}
+    else:
+        return dojo_config
 
 
 def validated_and_updated_config(raw_config: JSON, *, verbose: bool) -> DebugDojoConfig:
@@ -130,17 +121,16 @@ def validated_and_updated_config(raw_config: JSON, *, verbose: bool) -> DebugDoj
         typer.Exit: If the configuration cannot be validated against any known version.
 
     """
-    config = None
+    config: DebugDojoConfigV1 | DebugDojoConfigV2 | None = None
 
     for model in (DebugDojoConfigV2, DebugDojoConfigV1):
         model_name = model.__name__
         try:
-            config = model.model_validate(raw_config)
-        except ValidationError as e:
+            config = _validate_model(model, raw_config)
+        except (DaciteError, TypeError, ValueError) as e:
             if verbose:
                 msg = (
-                    f"[yellow]Configuration validation error for {model_name}:\n"
-                    f"{filter_pydantic_error_msg(e)}\n\n"
+                    f"[yellow]Configuration validation error for {model_name}:\n{e}\n\n"
                 )
                 rich_print(msg)
         else:
