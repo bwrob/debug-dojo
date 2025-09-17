@@ -1,3 +1,9 @@
+"""Pydantic models for Debug Dojo's configuration.
+
+This module defines the data structures used to validate and manage the configuration of
+debug-dojo, including settings for debuggers, exception handling, and features.
+"""
+
 from __future__ import annotations
 
 from enum import Enum
@@ -24,7 +30,7 @@ class DebuggerType(Enum):
 
 
 class Features(BaseModel):
-    """Configuration for installing debug features."""
+    """Legacy configuration for installing debug features (used in V1 config)."""
 
     model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
 
@@ -127,7 +133,7 @@ class FeaturesConfig(BaseConfig):
 
 
 class DebugDojoConfigV1(BaseModel):
-    """Configuration for Debug Dojo."""
+    """Legacy configuration for Debug Dojo (version 1)."""
 
     model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
 

@@ -42,7 +42,20 @@ def __execute_with_debug(  # noqa: C901
     verbose: bool,
     config: DebugDojoConfig,
 ) -> None:
-    """Execute a target script or module with installed debugging tools."""
+    """Execute a target script or module with installed debugging tools.
+
+    Args:
+        target_name (str): The name of the script, module, or executable to run.
+        target_args (list[str]): Arguments to pass to the target.
+        target_mode (ExecMode): The execution mode (FILE, MODULE, or EXECUTABLE).
+        verbose (bool): If True, print verbose output.
+        config (DebugDojoConfig): The debug-dojo configuration.
+
+    Raises:
+        typer.Exit: If the target file is not found, or if an import error occurs,
+                    or if the script exits with a non-zero code.
+
+    """
     sys.argv = [target_name, *target_args]
 
     if verbose:
@@ -88,7 +101,12 @@ def __execute_with_debug(  # noqa: C901
 
 
 def display_config(config: DebugDojoConfig) -> None:
-    """Display the configuration for the debug dojo."""
+    """Display the current debug-dojo configuration.
+
+    Args:
+        config (DebugDojoConfig): The configuration object to display.
+
+    """
     rich_print("[blue]Using debug-dojo configuration:[/blue]")
     rich_print(config.model_dump_json(indent=4))
 
@@ -124,7 +142,33 @@ def run_debug(  # noqa: PLR0913
         typer.Option("--exec", "-e", help="Run a command"),
     ] = False,
 ) -> None:
-    """Run the command-line interface."""
+    """Run a Python script, module, or executable with debug-dojo tools.
+
+    This command acts as the main entry point for `debug-dojo`, allowing users to
+    execute their code while automatically installing and configuring debugging tools
+    based on the provided options or configuration file.
+
+    Args:
+        ctx (typer.Context): The Typer context object.
+        target_name (str | None): The path to the script, name of the module, or
+                                  name of the executable to run. If not provided,
+                                  the command will exit.
+        config_path (Path | None): Path to a custom configuration file
+                                   (e.g., `dojo.toml`).
+        debugger (DebuggerType | None): Override the default debugger specified
+                                        in the config.
+        verbose (bool): Enable verbose output, showing loaded configuration
+                        and installation steps.
+        module (bool): Treat `target_name` as a Python module to run
+                       (e.g., `dojo -m my_package.my_module`).
+        executable (bool): Treat `target_name` as an executable command to run
+                           (e.g., `dojo -e pytest`).
+
+    Raises:
+        typer.Exit: If `--module` and `--exec` are used together, or if the target
+                    cannot be executed, or if an error occurs during execution.
+
+    """
     if module and executable:
         rich_print(
             "[red]Error: --module and --command options are mutually exclusive.[/red]"

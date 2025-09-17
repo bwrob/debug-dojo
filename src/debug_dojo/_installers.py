@@ -1,7 +1,9 @@
-"""Debugging tools for Python.
+"""Module for installing and configuring various debugging tools and features.
 
-This module provides functions to set up debugging tools like PuDB and Rich Traceback.
-It checks for the availability of these tools and configures them accordingly.
+This module provides functions to set up different debuggers (PDB, PuDB, IPDB,
+Debugpy) and to install enhanced debugging features like Rich Traceback, Rich
+Inspect, Rich Print, and a side-by-side object comparer. These installations
+are typically driven by the `DebugDojoConfig`.
 """
 
 from __future__ import annotations
@@ -31,7 +33,11 @@ IPDB_CONTEXT_SIZE = "IPDB_CONTEXT_SIZE"
 
 
 def use_pdb(config: PdbConfig) -> None:
-    """Set PDB as the default debugger."""
+    """Set PDB as the default debugger.
+
+    Configures `sys.breakpointhook` to use `pdb.set_trace` and sets the
+    `PYTHONBREAKPOINT` environment variable.
+    """
     import pdb
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
@@ -39,7 +45,11 @@ def use_pdb(config: PdbConfig) -> None:
 
 
 def use_pudb(config: PudbConfig) -> None:
-    """Check if PuDB is available and set it as the default debugger."""
+    """Set PuDB as the default debugger.
+
+    Configures `sys.breakpointhook` to use `pudb.set_trace` and sets the
+    `PYTHONBREAKPOINT` environment variable.
+    """
     import pudb  # pyright: ignore[reportMissingTypeStubs]
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
@@ -47,7 +57,11 @@ def use_pudb(config: PudbConfig) -> None:
 
 
 def use_ipdb(config: IpdbConfig) -> None:
-    """Set IPDB as the default debugger."""
+    """Set IPDB as the default debugger.
+
+    Configures `sys.breakpointhook` to use `ipdb.set_trace`, sets the
+    `PYTHONBREAKPOINT` environment variable, and configures `IPDB_CONTEXT_SIZE`.
+    """
     import ipdb  # pyright: ignore[reportMissingTypeStubs]
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
@@ -56,7 +70,12 @@ def use_ipdb(config: IpdbConfig) -> None:
 
 
 def use_debugpy(config: DebugpyConfig) -> None:
-    """Check if IPDB is available and set it as the default debugger."""
+    """Set Debugpy as the default debugger.
+
+    Configures `sys.breakpointhook` to use `debugpy.breakpoint`, sets the
+    `PYTHONBREAKPOINT` environment variable, and starts a debugpy server
+    waiting for a client connection.
+    """
     import debugpy  # pyright: ignore[reportMissingTypeStubs]
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
@@ -80,14 +99,28 @@ def use_debugpy(config: DebugpyConfig) -> None:
 
 
 def rich_traceback(*, locals_in_traceback: bool) -> None:
-    """Check if Rich Traceback is available and set it as the default."""
+    """Install Rich Traceback for enhanced error reporting.
+
+    Args:
+        locals_in_traceback (bool): Whether to include local variables in the traceback.
+
+    """
     from rich import traceback
 
     _ = traceback.install(show_locals=locals_in_traceback)
 
 
 def install_inspect(mnemonic: str = "i") -> None:
-    """Print the object using a custom inspect function."""
+    """Injects `rich.inspect` into builtins under the given mnemonic.
+
+    Args:
+        mnemonic (str): The name to use for the inspect function in builtins.
+                        If an empty string, the feature is not installed.
+
+    """
+    if not mnemonic:
+        return
+
     from rich import inspect
 
     def inspect_with_defaults(obj: object, **kwargs: bool) -> None:
@@ -100,12 +133,17 @@ def install_inspect(mnemonic: str = "i") -> None:
 
 
 def install_compare(mnemonic: str = "c") -> None:
-    """Print the object using a custom inspect function.
+    """Injects the side-by-side object comparison function into builtins.
+
+    Args:
+        mnemonic (str): The name to use for the compare function in builtins.
+                        If an empty string, the feature is not installed.
 
     >>> install_compare()
     >>> import builtins
     >>> callable(builtins.c)
     True
+
     """
     if not mnemonic:
         return
@@ -114,12 +152,17 @@ def install_compare(mnemonic: str = "c") -> None:
 
 
 def install_breakpoint(mnemonic: str = "b") -> None:
-    """Install the breakpoint function.
+    """Inject the`breakpoint()` function into builtins under the given mnemonic.
+
+    Args:
+        mnemonic (str): The name to use for the breakpoint function in builtins.
+                        If an empty string, the feature is not installed.
 
     >>> install_breakpoint()
     >>> import builtins
     >>> callable(builtins.b)
     True
+
     """
     if not mnemonic:
         return
@@ -128,7 +171,11 @@ def install_breakpoint(mnemonic: str = "b") -> None:
 
 
 def install_rich_print(mnemonic: str = "p") -> None:
-    """Install the print from rich.
+    """Injects `rich.print` into builtins under the given mnemonic.
+
+    Args:
+        mnemonic (str): The name to use for the print function in builtins.
+                        If an empty string, the feature is not installed.
 
     >>> install_rich_print()
     >>> import builtins
@@ -136,6 +183,7 @@ def install_rich_print(mnemonic: str = "p") -> None:
     True
     >>> p("test")
     test
+
     """
     if not mnemonic:
         return
@@ -146,7 +194,13 @@ def install_rich_print(mnemonic: str = "p") -> None:
 
 
 def install_features(features: FeaturesConfig) -> None:
-    """Install the specified debugging features."""
+    """Installs debugging features based on the provided configuration.
+
+    Args:
+        features (FeaturesConfig): Configuration object specifying which features
+                                   to install and their mnemonics.
+
+    """
     install_inspect(features.rich_inspect)
     install_rich_print(features.rich_print)
     install_compare(features.comparer)
@@ -154,7 +208,12 @@ def install_features(features: FeaturesConfig) -> None:
 
 
 def set_debugger(config: DebuggersConfig) -> None:
-    """Set the debugger based on the configuration."""
+    """Set the default debugger based on the provided configuration.
+
+    Args:
+        config (DebuggersConfig): Configuration object for debuggers.
+
+    """
     debugger = config.default
 
     if debugger == DebuggerType.PDB:
@@ -170,13 +229,25 @@ def set_debugger(config: DebuggersConfig) -> None:
 
 
 def set_exceptions(exceptions: ExceptionsConfig) -> None:
-    """Set the exception handling based on the configuration."""
+    """Configure exception handling based on the provided configuration.
+
+    Args:
+        exceptions (ExceptionsConfig): Configuration object for exception handling.
+
+    """
     if exceptions.rich_traceback:
         rich_traceback(locals_in_traceback=exceptions.locals_in_traceback)
 
 
 def install_by_config(config: DebugDojoConfig) -> None:
-    """Install debugging tools."""
+    """Installs all debugging tools and features based on the given configuration.
+
+    This is the main entry point for applying `debug-dojo` settings.
+
+    Args:
+        config (DebugDojoConfig): The complete debug-dojo configuration object.
+
+    """
     set_debugger(config.debuggers)
     set_exceptions(config.exceptions)
     install_features(config.features)

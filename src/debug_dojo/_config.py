@@ -29,7 +29,15 @@ JSON: TypeAlias = (
 
 
 def filter_pydantic_error_msg(error: ValidationError) -> str:
-    """Filter out specific lines from a Pydantic validation error."""
+    """Filter out specific lines from a Pydantic validation error.
+
+    Args:
+        error (ValidationError): The Pydantic validation error object.
+
+    Returns:
+        str: The filtered error message.
+
+    """
     return "\n".join(
         line
         for line in str(error).splitlines()
@@ -41,6 +49,18 @@ def resolve_config_path(config_path: Path | None) -> Path | None:
     """Resolve the configuration path.
 
     Returning a default if none is provided.
+
+    Args:
+        config_path (Path | None): The explicit path to the configuration file, or None.
+
+    Returns:
+        Path | None: The resolved absolute path to the configuration file, or None if no
+                     configuration file is found and no explicit path was given.
+
+    Raises:
+        FileNotFoundError: If an explicit `config_path` is provided but the file
+                           does not exist.
+
     """
     if config_path:
         if not config_path.exists():
@@ -62,6 +82,16 @@ def load_raw_config(config_path: Path) -> JSON:
 
     Currently supports 'dojo.toml' or 'pyproject.toml'. If no path is provided, it
     checks the current directory for these files.
+
+    Args:
+        config_path (Path): The absolute path to the configuration file.
+
+    Returns:
+        JSON: The raw configuration data as a JSON-like dictionary.
+
+    Raises:
+        ValueError: If there is an error parsing the TOML file.
+
     """
     config_str = config_path.read_text(encoding="utf-8")
 
@@ -87,6 +117,19 @@ def load_raw_config(config_path: Path) -> JSON:
 
 
 def validated_and_updated_config(raw_config: JSON, *, verbose: bool) -> DebugDojoConfig:
+    """Validate and update the raw configuration to the latest DebugDojoConfig version.
+
+    Args:
+        raw_config (JSON): The raw configuration data loaded from a file.
+        verbose (bool): If True, print verbose messages during validation and update.
+
+    Returns:
+        DebugDojoConfig: A validated and updated DebugDojoConfig instance.
+
+    Raises:
+        typer.Exit: If the configuration cannot be validated against any known version.
+
+    """
     config = None
 
     for model in (DebugDojoConfigV2, DebugDojoConfigV1):
@@ -132,6 +175,16 @@ def load_config(
 
     If no configuration file is found, it returns a default configuration. If a debugger
     is specified, it overrides the config.
+
+    Args:
+        config_path (Path | None): Optional path to a configuration file.
+        verbose (bool): If True, print verbose messages during configuration loading.
+        debugger (DebuggerType | None): Optional debugger type to override the default
+                                        debugger specified in the configuration.
+
+    Returns:
+        DebugDojoConfig: The loaded and potentially overridden DebugDojoConfig instance.
+
     """
     resolved_path = resolve_config_path(config_path)
 
