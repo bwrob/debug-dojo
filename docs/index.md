@@ -73,15 +73,14 @@ import debug_dojo.install; b()
 p(object_1)  # Pretty print an object with Rich
 ```
 
-### Features in debugging mode
+### Features in debugging mode (when `debug_dojo.install` is used)
 
-The following functions are available in the debugging mode, injected
-into builtins:
+When you use `import debug_dojo.install; b()`, the following convenience functions are injected into Python's builtins, making them globally available within your debugging session:
 
-- `b()` is a hook that sets a breakpoint using the configured debugger.
-- `p(object_1)` is pretty printing of an object using Rich.
-- `i(object_1)` to inspect an object using Rich.
-- `c(object_1, object_2)` to compare two objects side-by-side.
+- `b()`: Sets a breakpoint using the debugger configured in `debug-dojo`. This is equivalent to calling `breakpoint()` but respects your `debug-dojo` debugger settings.
+- `p(obj)`: Pretty prints an object using `rich.print`, providing enhanced readability for complex data structures.
+- `i(obj)`: Inspects an object using `rich.inspect`, offering a detailed, colorized view of its attributes and methods.
+- `c(obj1, obj2)`: Compares two Python objects side-by-side using `debug-dojo`'s comparison utility, highlighting differences for easier debugging.
 
 ## Installation
 

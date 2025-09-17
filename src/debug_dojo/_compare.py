@@ -15,7 +15,15 @@ from rich.text import Text
 
 
 def get_object_attributes(obj: object) -> list[str]:
-    """Extract and format non-callable attributes of an object."""
+    """Extract and format non-callable attributes of an object.
+
+    Args:
+        obj (object): The object to extract attributes from.
+
+    Returns:
+        list[str]: A list of formatted strings, each representing an attribute.
+
+    """
     attributes: list[str] = []
     for attr_name in sorted(dir(obj)):
         # Safely get attribute, returning None if it doesn't exist
@@ -29,7 +37,15 @@ def get_object_attributes(obj: object) -> list[str]:
 
 
 def get_object_methods(obj: object) -> list[str]:
-    """Extract and format public callable methods of an object."""
+    """Extract and format public callable methods of an object.
+
+    Args:
+        obj (object): The object to extract methods from.
+
+    Returns:
+        list[str]: A list of method names.
+
+    """
     methods: list[str] = []
     for method_name in sorted(dir(obj)):
         # Safely get attribute, returning None if it doesn't exist
@@ -45,6 +61,13 @@ def get_simplified_object_info(obj: object) -> list[Text]:
 
     Handles basic Python types by displaying their value directly. For other objects, it
     lists their attributes and public methods.
+
+    Args:
+        obj (object): The object to generate info for.
+
+    Returns:
+        list[Text]: A list of Rich Text objects representing the object's information.
+
     """
     info_lines: list[Text] = []
     obj_type: str = type(obj).__name__
@@ -88,6 +111,11 @@ def inspect_objects_side_by_side(
     """Display two Python objects side-by-side in the terminal using Rich.
 
     Showing their attributes and methods in a simplified, aligned format.
+
+    Args:
+        obj1 (object): The first object to display.
+        obj2 (object): The second object to display.
+
     """
     main_console: Console = Console()
 
