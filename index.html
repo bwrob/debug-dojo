@@ -20,7 +20,7 @@
       
       
       <link rel="icon" href="logo/logo_white.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.17">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.19">
     
     
       
@@ -510,9 +510,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#features-in-debugging-mode" class="md-nav__link">
+  <a href="#features-in-debugging-mode-when-debug_dojoinstall-is-used" class="md-nav__link">
     <span class="md-ellipsis">
-      Features in debugging mode
+      Features in debugging mode (when debug_dojo.install is used)
     </span>
   </a>
   
@@ -767,14 +767,13 @@ debugging mode with a single command:</p>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">debug_dojo.install</span><span class="p">;</span> <span class="n">b</span><span class="p">()</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="n">p</span><span class="p">(</span><span class="n">object_1</span><span class="p">)</span>  <span class="c1"># Pretty print an object with Rich</span>
 </span></code></pre></div></td></tr></table></div>
-<h3 id="features-in-debugging-mode">Features in debugging mode<a class="headerlink" href="#features-in-debugging-mode" title="Permanent link">&para;</a></h3>
-<p>The following functions are available in the debugging mode, injected
-into builtins:</p>
+<h3 id="features-in-debugging-mode-when-debug_dojoinstall-is-used">Features in debugging mode (when <code>debug_dojo.install</code> is used)<a class="headerlink" href="#features-in-debugging-mode-when-debug_dojoinstall-is-used" title="Permanent link">&para;</a></h3>
+<p>When you use <code>import debug_dojo.install; b()</code>, the following convenience functions are injected into Python&rsquo;s builtins, making them globally available within your debugging session:</p>
 <ul>
-<li><code>b()</code> is a hook that sets a breakpoint using the configured debugger.</li>
-<li><code>p(object_1)</code> is pretty printing of an object using Rich.</li>
-<li><code>i(object_1)</code> to inspect an object using Rich.</li>
-<li><code>c(object_1, object_2)</code> to compare two objects side-by-side.</li>
+<li><code>b()</code>: Sets a breakpoint using the debugger configured in <code>debug-dojo</code>. This is equivalent to calling <code>breakpoint()</code> but respects your <code>debug-dojo</code> debugger settings.</li>
+<li><code>p(obj)</code>: Pretty prints an object using <code>rich.print</code>, providing enhanced readability for complex data structures.</li>
+<li><code>i(obj)</code>: Inspects an object using <code>rich.inspect</code>, offering a detailed, colorized view of its attributes and methods.</li>
+<li><code>c(obj1, obj2)</code>: Compares two Python objects side-by-side using <code>debug-dojo</code>&rsquo;s comparison utility, highlighting differences for easier debugging.</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>The package is available on PyPI and can be installed using standard
@@ -810,7 +809,7 @@ Python package management tools.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 23, 2025 12:13:24 UTC">August 23, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="September 17, 2025 05:43:22 UTC">September 17, 2025</span>
   </span>
 
     
@@ -830,12 +829,13 @@ Python package management tools.</p>
   <span class="md-source-file__fact">
     <span class="md-icon" title="Contributors">
       
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4a4 4 0 0 1 4 4 4 4 0 0 1-4 4 4 4 0 0 1-4-4 4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 5.5A3.5 3.5 0 0 1 15.5 9a3.5 3.5 0 0 1-3.5 3.5A3.5 3.5 0 0 1 8.5 9 3.5 3.5 0 0 1 12 5.5M5 8c.56 0 1.08.15 1.53.42-.15 1.43.27 2.85 1.13 3.96C7.16 13.34 6.16 14 5 14a3 3 0 0 1-3-3 3 3 0 0 1 3-3m14 0a3 3 0 0 1 3 3 3 3 0 0 1-3 3c-1.16 0-2.16-.66-2.66-1.62a5.54 5.54 0 0 0 1.13-3.96c.45-.27.97-.42 1.53-.42M5.5 18.25c0-2.07 2.91-3.75 6.5-3.75s6.5 1.68 6.5 3.75V20h-13zM0 20v-1.5c0-1.39 1.89-2.56 4.45-2.9-.59.68-.95 1.62-.95 2.65V20zm24 0h-3.5v-1.75c0-1.03-.36-1.97-.95-2.65 2.56.34 4.45 1.51 4.45 2.9z"/></svg>
       
     </span>
     <nav>
       
-        <a href="mailto:43605200+bwrob@users.noreply.github.com">Bartosz Marcin Wróblewski</a>
+        <a href="mailto:43605200+bwrob@users.noreply.github.com">Bartosz Marcin Wróblewski</a>, 
+        <a href="mailto:bartosz.marcin.wroblewski@gmail.com">bwrob</a>
     </nav>
   </span>
 
@@ -930,7 +930,8 @@ Python package management tools.</p>
   
 </div>
       
-        <div class="md-social">
+        
+<div class="md-social">
   
     
     
