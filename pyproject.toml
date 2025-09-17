@@ -62,7 +62,6 @@
 
 
 [tool.uv]
-    default-groups   = "all"
     package          = true
     required-version = ">=0.8.0"
 
