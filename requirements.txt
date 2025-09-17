@@ -157,6 +157,10 @@ coverage==7.10.6 \
     --hash=sha256:f644a3ae5933a552a29dbb9aa2f90c677a875f80ebea028e5a52a4f429044b90 \
     --hash=sha256:ffea0575345e9ee0144dfe5701aa17f3ba546f8c3bb48db62ae101afb740e7d6
     # via pytest-cov
+dacite==1.9.2 \
+    --hash=sha256:053f7c3f5128ca2e9aceb66892b1a3c8936d02c686e707bee96e19deef4bc4a0 \
+    --hash=sha256:6ccc3b299727c7aa17582f0021f6ae14d5de47c7227932c47fec4cdfefd26f09
+    # via debug-dojo
 debugpy==1.8.16 \
     --hash=sha256:19c9521962475b87da6f673514f7fd610328757ec993bf7ec0d8c96f9a325f9e \
     --hash=sha256:2a3958fb9c2f40ed8ea48a0d34895b461de57a1f9862e7478716c35d76f56c65 \
@@ -452,9 +456,7 @@ pure-eval==0.2.3 \
 pydantic==2.11.7 \
     --hash=sha256:d989c3c6cb79469287b1569f7447a17848c998458d49ebe294e975b9baf0f0db \
     --hash=sha256:dde5df002701f6de26248661f6835bbe296a47bf73990135c7d07ce741b9623b
-    # via
-    #   debug-dojo
-    #   mkdocs-typer2
+    # via mkdocs-typer2
 pydantic-core==2.33.2 \
     --hash=sha256:0069c9acc3f3981b9ff4cdfaf088e98d83440a4c7ea1bc07460af3d4dc22e72d \
     --hash=sha256:031c57d67ca86902726e0fae2214ce6770bbe2f710dc33063187a68744a5ecac \

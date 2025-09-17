@@ -4,11 +4,9 @@ from pathlib import Path
 from unittest.mock import patch
 
 import pytest
-from pydantic import ValidationError
 from typer import Exit
 
 from debug_dojo._config import (
-    filter_pydantic_error_msg,
     load_config,
     load_raw_config,
     resolve_config_path,
@@ -27,15 +25,6 @@ default = "pudb"
     config_path = tmp_path / "dojo.toml"
     _ = config_path.write_text(config_content)
     return config_path
-
-
-def test_filter_pydantic_error_msg() -> None:
-    """Test that the Pydantic error message is filtered correctly."""
-    try:
-        _ = DebugDojoConfig.model_validate({"debuggers": {"default": "invalid"}})
-    except ValidationError as e:
-        filtered_msg = filter_pydantic_error_msg(e)
-        assert "For further information visit" not in filtered_msg
 
 
 def test_resolve_config_path_exists(tmp_path: Path) -> None:

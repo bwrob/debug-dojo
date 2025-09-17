@@ -1,4 +1,4 @@
-"""Pydantic models for Debug Dojo's configuration.
+"""Dataclass models for Debug Dojo's configuration.
 
 This module defines the data structures used to validate and manage the configuration of
 debug-dojo, including settings for debuggers, exception handling, and features.
@@ -6,18 +6,10 @@ debug-dojo, including settings for debuggers, exception handling, and features.
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from enum import Enum
-from typing import ClassVar
 
-from pydantic import BaseModel, ConfigDict
-
-
-class BaseConfig(BaseModel):
-    """Base configuration class with extra fields forbidden."""
-
-    model_config: ClassVar[ConfigDict] = ConfigDict(
-        extra="forbid", validate_assignment=True
-    )
+from dacite import Config
 
 
 class DebuggerType(Enum):
@@ -29,10 +21,9 @@ class DebuggerType(Enum):
     PUDB = "pudb"
 
 
-class Features(BaseModel):
+@dataclass
+class Features:
     """Legacy configuration for installing debug features (used in V1 config)."""
-
-    model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     rich_inspect: bool = True
     """Install rich inspect as 'i' for enhanced object inspection."""
@@ -46,7 +37,8 @@ class Features(BaseModel):
     """Install breakpoint as 'b' for setting breakpoints in code."""
 
 
-class DebugpyConfig(BaseConfig):
+@dataclass
+class DebugpyConfig:
     """Configuration for debugpy debugger."""
 
     host: str = "localhost"
@@ -63,7 +55,8 @@ class DebugpyConfig(BaseConfig):
         return "debugpy.breakpoint"
 
 
-class IpdbConfig(BaseConfig):
+@dataclass
+class IpdbConfig:
     """Configuration for ipdb debugger."""
 
     context_lines: int = 20
@@ -74,7 +67,8 @@ class IpdbConfig(BaseConfig):
         return "ipdb.set_trace"
 
 
-class PdbConfig(BaseConfig):
+@dataclass
+class PdbConfig:
     """Configuration for pdb debugger."""
 
     @property
@@ -82,7 +76,8 @@ class PdbConfig(BaseConfig):
         return "pdb.set_trace"
 
 
-class PudbConfig(BaseConfig):
+@dataclass
+class PudbConfig:
     """Configuration for pudb debugger."""
 
     @property
@@ -90,7 +85,8 @@ class PudbConfig(BaseConfig):
         return "pudb.set_trace"
 
 
-class DebuggersConfig(BaseConfig):
+@dataclass
+class DebuggersConfig:
     """Configuration for debuggers."""
 
     default: DebuggerType = DebuggerType.IPDB
@@ -98,17 +94,18 @@ class DebuggersConfig(BaseConfig):
     prompt_name: str = "debug-dojo> "
     """Prompt name for the debugger, used in the REPL."""
 
-    debugpy: DebugpyConfig = DebugpyConfig()
+    debugpy: DebugpyConfig = field(default_factory=DebugpyConfig)
     """Configuration for debugpy debugger."""
-    ipdb: IpdbConfig = IpdbConfig()
+    ipdb: IpdbConfig = field(default_factory=IpdbConfig)
     """Configuration for ipdb debugger."""
-    pdb: PdbConfig = PdbConfig()
+    pdb: PdbConfig = field(default_factory=PdbConfig)
     """Configuration for pdb debugger."""
-    pudb: PudbConfig = PudbConfig()
+    pudb: PudbConfig = field(default_factory=PudbConfig)
     """Configuration for pudb debugger."""
 
 
-class ExceptionsConfig(BaseConfig):
+@dataclass
+class ExceptionsConfig:
     """Configuration for exceptions handling."""
 
     locals_in_traceback: bool = False
@@ -119,7 +116,8 @@ class ExceptionsConfig(BaseConfig):
     """Enable rich traceback for better error reporting."""
 
 
-class FeaturesConfig(BaseConfig):
+@dataclass
+class FeaturesConfig:
     """Configuration for installing debug features."""
 
     breakpoint: str = "b"
@@ -132,14 +130,25 @@ class FeaturesConfig(BaseConfig):
     """Install rich print as 'p' for enhanced printing."""
 
 
-class DebugDojoConfigV1(BaseModel):
-    """Legacy configuration for Debug Dojo (version 1)."""
+@dataclass
+class DebugDojoConfigV2:
+    """Configuration for Debug Dojo."""
 
-    model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
+    exceptions: ExceptionsConfig = field(default_factory=ExceptionsConfig)
+    """Better exception messages."""
+    debuggers: DebuggersConfig = field(default_factory=DebuggersConfig)
+    """Default debugger and configs."""
+    features: FeaturesConfig = field(default_factory=FeaturesConfig)
+    """Features mnemonics."""
+
+
+@dataclass
+class DebugDojoConfigV1:
+    """Legacy configuration for Debug Dojo (version 1)."""
 
     debugger: DebuggerType = DebuggerType.PUDB
     """The type of debugger to use."""
-    features: Features = Features()
+    features: Features = field(default_factory=Features)
     """Features to install for debugging."""
 
     def update(self) -> DebugDojoConfigV2:
@@ -161,17 +170,6 @@ class DebugDojoConfigV1(BaseModel):
         )
 
 
-class DebugDojoConfigV2(BaseModel):
-    """Configuration for Debug Dojo."""
-
-    model_config = ConfigDict(extra="forbid")  # pyright: ignore[reportUnannotatedClassAttribute]
-
-    exceptions: ExceptionsConfig = ExceptionsConfig()
-    """Better exception messages."""
-    debuggers: DebuggersConfig = DebuggersConfig()
-    """Default debugger and configs."""
-    features: FeaturesConfig = FeaturesConfig()
-    """Features mnemonics."""
-
-
 DebugDojoConfig = DebugDojoConfigV2
+
+DACITE_CONFIG = Config(cast=[Enum], strict=True)

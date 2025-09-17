@@ -100,17 +100,6 @@ def __execute_with_debug(  # noqa: C901
         raise typer.Exit(1) from e
 
 
-def display_config(config: DebugDojoConfig) -> None:
-    """Display the current debug-dojo configuration.
-
-    Args:
-        config (DebugDojoConfig): The configuration object to display.
-
-    """
-    rich_print("[blue]Using debug-dojo configuration:[/blue]")
-    rich_print(config.model_dump_json(indent=4))
-
-
 @cli.command(
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,
@@ -186,7 +175,7 @@ def run_debug(  # noqa: PLR0913
     config = load_config(config_path, verbose=verbose, debugger=debugger)
 
     if verbose:
-        display_config(config)
+        rich_print(f"[blue]Using debug-dojo configuration: {config} [/blue]")
 
     if target_name:
         __execute_with_debug(
