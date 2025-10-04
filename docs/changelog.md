@@ -4,6 +4,8 @@
 
 ### Features
 
+*   Integrate tach for architecture management.
+*   Widen dependency version ranges.
 *   Add 3.14 to supported Python versions.
 *   Switching to dacite for config loading.
 *   Unit tests for internal functions.
@@ -14,7 +16,6 @@
 *   Gemini generated docs improvements.
 *   Project has 90% coverage.
 *   Precommit update-hooks.
-*   Pre-commit autoupdate.
 *   Upgrade environment.
 *   Disable tests that require user interaction; they break coverage reports.
 
@@ -39,16 +40,6 @@
 *   Pre-commit CI and extending pre-commit config.
 *   Set up Dependabot.
 *   CI improvements.
-
-### Dependencies
-
-*   Bump pydantic-core from 2.33.2 to 2.39.0.
-*   Bump backrefs from 5.9 to 6.0.1.
-*   Bump actions/checkout from 4 to 5.
-*   Bump markdown-it-py from 3.0.0 to 4.0.0.
-*   Bump debugpy from 1.8.15 to 1.8.16.
-*   Bump nodejs-wheel-binaries from 22.17.0 to 22.18.0.
-*   Bump basedpyright from 1.31.2 to 1.31.3.
 
 ## v0.4.1 (2025-08-10)
 
