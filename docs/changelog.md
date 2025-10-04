@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.6.0 (TBA)
+## v0.6.0 (2025-10-04)
 
 ### Features
 
