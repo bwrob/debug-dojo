@@ -308,6 +308,7 @@ docs = [
     { name = "mkdocs-material" },
     { name = "mkdocs-typer2" },
     { name = "mkdocstrings-python" },
+    { name = "pymdown-extensions" },
 ]
 
 [package.metadata]
@@ -340,6 +341,7 @@ docs = [
     { name = "mkdocs-material", specifier = ">=9.6.17" },
     { name = "mkdocs-typer2", specifier = ">=0.1.5" },
     { name = "mkdocstrings-python", specifier = ">=1.17.0" },
+    { name = "pymdown-extensions", specifier = ">=10.16.1" },
 ]
 
 [[package]]
