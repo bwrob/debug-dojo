@@ -4,6 +4,8 @@
 
 ### Features
 
+*   Integrate tach for architecture management.
+*   Widen dependency version ranges.
 *   Add 3.14 to supported Python versions.
 *   Switching to dacite for config loading.
 *   Unit tests for internal functions.
@@ -17,6 +19,14 @@
 *   Pre-commit autoupdate.
 *   Upgrade environment.
 *   Disable tests that require user interaction; they break coverage reports.
+
+### Dependencies
+
+*   Bump coverage from 7.10.5 to 7.10.6
+*   Bump ruff from v0.12.9 to v0.12.10
+*   Bump uv from 0.8.12 to 0.8.13
+*   Bump ruff from v0.12.10 to v0.13.0
+*   Bump uv from 0.8.13 to 0.8.17
 
 ## v0.5.0 (2025-08-23)
 
