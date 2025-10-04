@@ -16,17 +16,8 @@
 *   Gemini generated docs improvements.
 *   Project has 90% coverage.
 *   Precommit update-hooks.
-*   Pre-commit autoupdate.
 *   Upgrade environment.
 *   Disable tests that require user interaction; they break coverage reports.
-
-### Dependencies
-
-*   Bump coverage from 7.10.5 to 7.10.6
-*   Bump ruff from v0.12.9 to v0.12.10
-*   Bump uv from 0.8.12 to 0.8.13
-*   Bump ruff from v0.12.10 to v0.13.0
-*   Bump uv from 0.8.13 to 0.8.17
 
 ## v0.5.0 (2025-08-23)
 
@@ -49,16 +40,6 @@
 *   Pre-commit CI and extending pre-commit config.
 *   Set up Dependabot.
 *   CI improvements.
-
-### Dependencies
-
-*   Bump pydantic-core from 2.33.2 to 2.39.0.
-*   Bump backrefs from 5.9 to 6.0.1.
-*   Bump actions/checkout from 4 to 5.
-*   Bump markdown-it-py from 3.0.0 to 4.0.0.
-*   Bump debugpy from 1.8.15 to 1.8.16.
-*   Bump nodejs-wheel-binaries from 22.17.0 to 22.18.0.
-*   Bump basedpyright from 1.31.2 to 1.31.3.
 
 ## v0.4.1 (2025-08-10)
 
