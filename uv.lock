@@ -314,7 +314,7 @@ docs = [
 requires-dist = [
     { name = "dacite", specifier = ">=1.0.0" },
     { name = "debugpy", specifier = ">=1.0.0" },
-    { name = "ipdb", specifier = ">=0.13.2" },
+    { name = "ipdb", specifier = ">=0.12.0" },
     { name = "pudb", specifier = ">=2019.1" },
     { name = "rich", specifier = ">=10.0.0" },
     { name = "tomlkit", specifier = ">=0.7.0" },
