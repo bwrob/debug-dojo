@@ -27,7 +27,7 @@
     name = "debug-dojo"
     readme = "README.md"
     requires-python = ">=3.10,<3.15"
-version = "0.6.0"
+    version = "0.6.0"
 
     [project.urls]
         Changelog     = "https://bwrob.github.io/debug-dojo/changelog/"
@@ -66,77 +66,3 @@ version = "0.6.0"
 [tool.uv]
     package          = true
     required-version = ">=0.8.0"
-
-
-[tool.basedpyright]
-    ignore           = [ "examples", "tests/assets" ]
-    pythonVersion    = "3.10"
-    strict           = [ "src/debug_dojo/*" ]
-    typeCheckingMode = "all"
-
-
-[tool.ruff]
-    line-length    = 88
-    target-version = "py310"
-
-    [tool.ruff.lint]
-        exclude = [ "examples" ]
-        ignore  = [ "COM", "D203", "D211", "D213" ]
-        select  = [ "ALL" ]
-
-        [tool.ruff.lint.per-file-ignores]
-            "examples/*"                    = [ "INP001" ]
-            "examples/test_target.py"       = [ "F821" ]
-            "src/debug_dojo/_installers.py" = [ "PLC0415", "T100" ]
-            "tests/*"                       = [ "S101", "T201" ]
-            "tests/assets/*"                = [ "T201", "INP001", "F821" ]
-
-    [tool.ruff.format]
-        docstring-code-format = true
-
-
-[tool.poe.tasks]
-
-    coverage         = { cmd = "pytest --doctest-modules --verbose --cov --cov-report=xml", help = "Create test coverage report." }
-    dependencies     = { cmd = "tach check", help = "Check dependency layers using tach." }
-    dependency-graph = { cmd = "tach show --mermaid -o docs/dependency_graph.mmd", help = "Generate the dependency graph." }
-    docs             = { cmd = "hap run mkdocs serve", help = "Spawn docs server." }
-    format           = { cmd = "ruff format --diff --config=pyproject.toml", help = "Check code formatting using ruff." }
-    lint             = { cmd = "uv run ruff check --config=pyproject.toml", help = "Check code rules using ruff." }
-    precommit        = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
-    publish-docs     = { cmd = "mkdocs gh-deploy --force", help = "Publish the docs to GitHub Pages." }
-    test             = { cmd = "pytest", help = "Run tests using pytest." }
-    type-check       = { cmd = "basedpyright src tests", help = "Check static typing using basedpyright." }
-
-    [tool.poe.tasks.code-quality]
-        help        = "Run all code quality checks."
-        ignore_fail = "return_non_zero"
-        sequence    = [ "fix", "precommit", "format", "lint", "type-check" ]
-
-    [tool.poe.tasks.fix]
-        default_item_type = "cmd"
-        help = "Code quality fixes using ruff."
-        ignore_fail = "return_non_zero"
-        sequence = [
-            "ruff check --fix --unsafe-fixes --config=pyproject.toml",
-            "ruff format --config=pyproject.toml",
-        ]
-
-    [tool.poe.tasks.publish]
-        sequence = [
-            "code-quality",
-            { cmd = "rm -rf dist" },
-            { cmd = "uv build" },
-            { cmd = "uv publish" },
-            "publish-docs",
-        ]
-
-[tool.docformatter]
-    black   = true
-    non-cap = [ "dojo" ]
-
-[tool.pytest.ini_options]
-    addopts                = "--verbose --doctest-modules"
-    collect_imported_tests = false
-    console_output_style   = "classic"
-    minversion             = "8.0"
