@@ -5,9 +5,9 @@ permissions:
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   test:
@@ -17,39 +17,38 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-        python-version: [ "3.10", "3.11", "3.12", "3.13"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13", "3.14"]
 
     steps:
-    - name: 🛠️ Check out the repository
-      uses: actions/checkout@v5
+      - name: 🛠️ Check out the repository
+        uses: actions/checkout@v5
 
-    - name: 🛠️ Install uv and use Python ${{ matrix.python-version }}
-      uses: astral-sh/setup-uv@v6
-      with:
-       python-version: ${{ matrix.python-version }}
+      - name: 🛠️ Install uv and use Python ${{ matrix.python-version }}
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
 
-    - name: 🛠️ Install the project dependencies
-      id: uv-sync
-      run: uv sync --locked --dev
+      - name: 🛠️ Install the project dependencies
+        id: uv-sync
+        run: uv sync --locked --dev
 
-    # Use poe to sync local checks with CI
-    - name: 🐍 Run ruff linter check
-      if: always()
-      run: uv run poe lint --output-format=github
+      # Use poe to sync local checks with CI
+      - name: 🐍 Run ruff linter check
+        if: always()
+        run: uv run poe lint --output-format=github
 
-    - name: 🐍 Run ruff formatter check
-      if: always()
-      run: uv run poe format
+      - name: 🐍 Run ruff formatter check
+        if: always()
+        run: uv run poe format
 
-    - name: 🐍 Run basedpyright type checker
-      if: always()
-      run: uv run poe type-check
+      - name: 🐍 Run basedpyright type checker
+        if: always()
+        run: uv run poe type-check
 
-    - name: 🐍 Run pytest
-      if: always()
-      run: uv run poe test
-
+      - name: 🐍 Run pytest
+        if: always()
+        run: uv run poe test
 
   check:
     name: 🛠️ Check if all jobs succeeded
