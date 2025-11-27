@@ -1,5 +1,8 @@
 name: Package Tests
 
+env:
+  UV_NO_SYNC: true
+
 permissions:
   contents: read
 

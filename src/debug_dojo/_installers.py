@@ -31,6 +31,12 @@ from ._config_models import (
 BREAKPOINT_ENV_VAR = "PYTHONBREAKPOINT"
 IPDB_CONTEXT_SIZE = "IPDB_CONTEXT_SIZE"
 
+_NOT_INSTALLED = (
+    "[yellow]{name} is not installed."
+    "Please install it to use this debugger."
+    "Defaulting to standard debugger.[/yellow]"
+)
+
 
 def use_pdb(config: PdbConfig) -> None:
     """Set PDB as the default debugger.
@@ -50,7 +56,11 @@ def use_pudb(config: PudbConfig) -> None:
     Configures `sys.breakpointhook` to use `pudb.set_trace` and sets the
     `PYTHONBREAKPOINT` environment variable.
     """
-    import pudb  # pyright: ignore[reportMissingTypeStubs]
+    try:
+        import pudb  # pyright: ignore[reportMissingTypeStubs]
+    except ImportError:
+        rich_print(_NOT_INSTALLED.format(name="PuDB"))
+        return
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
     sys.breakpointhook = pudb.set_trace
@@ -62,7 +72,11 @@ def use_ipdb(config: IpdbConfig) -> None:
     Configures `sys.breakpointhook` to use `ipdb.set_trace`, sets the
     `PYTHONBREAKPOINT` environment variable, and configures `IPDB_CONTEXT_SIZE`.
     """
-    import ipdb  # pyright: ignore[reportMissingTypeStubs]
+    try:
+        import ipdb  # pyright: ignore[reportMissingTypeStubs]
+    except ImportError:
+        rich_print(_NOT_INSTALLED.format(name="IPDB"))
+        return
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
     os.environ[IPDB_CONTEXT_SIZE] = str(config.context_lines)
@@ -76,7 +90,11 @@ def use_debugpy(config: DebugpyConfig) -> None:
     `PYTHONBREAKPOINT` environment variable, and starts a debugpy server
     waiting for a client connection.
     """
-    import debugpy  # pyright: ignore[reportMissingTypeStubs]
+    try:
+        import debugpy  # pyright: ignore[reportMissingTypeStubs]
+    except ImportError:
+        rich_print(_NOT_INSTALLED.format(name="Debugpy"))
+        return
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
     sys.breakpointhook = debugpy.breakpoint
