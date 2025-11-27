@@ -60,7 +60,8 @@
         "mkdocs-typer2>=0.1.5",
         "mkdocstrings-python>=1.17.0",
         "pymdown-extensions>=10.16.1",
-    ]
+        "typst>=0.14.2",
+]
 
 
 [tool.uv]
