@@ -1,7 +1,7 @@
-# debug dojo
+#
 
 <p align="center">
-  <img src="https://github.com/bwrob/debug-dojo/blob/main/docs/logo/banner.png?raw=true" alt="debug dojo" style="width:100%; max-width:800px;"/>
+  <img src="https://github.com/bwrob/debug-dojo/blob/main/docs/logo/banner.png?raw=true" alt="debug dojo" style="width:100%;"/>
 </p>
 
 <p align="center">
