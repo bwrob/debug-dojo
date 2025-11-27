@@ -302,22 +302,27 @@ wheels = [
 
 [[package]]
 name = "debug-dojo"
-version = "0.6.0"
+version = "0.7.0"
 source = { editable = "." }
 dependencies = [
     { name = "dacite" },
-    { name = "debugpy" },
-    { name = "ipdb" },
-    { name = "pudb" },
     { name = "rich" },
     { name = "tomlkit" },
     { name = "typer" },
+]
+
+[package.optional-dependencies]
+all-debuggers = [
+    { name = "debugpy" },
+    { name = "ipdb" },
+    { name = "pudb" },
 ]
 
 [package.dev-dependencies]
 dev = [
     { name = "basedpyright" },
     { name = "coverage" },
+    { name = "debug-dojo", extra = ["all-debuggers"] },
     { name = "diff-cover" },
     { name = "poethepoet" },
     { name = "pytest" },
@@ -340,18 +345,20 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "dacite", specifier = ">=1.0.0" },
-    { name = "debugpy", specifier = ">=1.0.0" },
-    { name = "ipdb", specifier = ">=0.12.0" },
-    { name = "pudb", specifier = ">=2019.1" },
+    { name = "debugpy", marker = "extra == 'all-debuggers'", specifier = ">=1.0.0" },
+    { name = "ipdb", marker = "extra == 'all-debuggers'", specifier = ">=0.12.0" },
+    { name = "pudb", marker = "extra == 'all-debuggers'", specifier = ">=2020.1" },
     { name = "rich", specifier = ">=10.0.0" },
     { name = "tomlkit", specifier = ">=0.7.0" },
     { name = "typer", specifier = ">=0.3.0" },
 ]
+provides-extras = ["all-debuggers"]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "basedpyright", specifier = ">=1.31.2" },
     { name = "coverage", specifier = ">=7.10.4" },
+    { name = "debug-dojo", extras = ["all-debuggers"], editable = "." },
     { name = "diff-cover", specifier = ">=9.6.0" },
     { name = "poethepoet", specifier = ">=0.37.0" },
     { name = "pytest", specifier = ">=8.4.1" },

@@ -47,7 +47,7 @@ pip install debug-dojo
 For full debugger support, you might want to install optional dependencies:
 
 ```bash
-pip install "debug-dojo[all]"
+pip install "debug-dojo[all-debuggers]"
 ```
 
 ## 💻 CLI Usage

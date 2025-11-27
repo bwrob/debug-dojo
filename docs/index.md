@@ -91,6 +91,12 @@ Python package management tools.
 pip install debug-dojo
 ```
 
+For full debugger support, you might want to install optional dependencies:
+
+```bash
+pip install "debug-dojo[all-debuggers]"
+```
+
 You can also use `poetry` or `uv` to add it to your project:
 
 ``` console
