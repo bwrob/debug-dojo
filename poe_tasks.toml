@@ -1,36 +1,48 @@
 [tool.poe.tasks]
 
-coverage         = { cmd = "pytest --doctest-modules --verbose --cov --cov-report=xml", help = "Create test coverage report." }
-dependencies     = { cmd = "tach check", help = "Check dependency layers using tach." }
-dependency-graph = { cmd = "tach show --mermaid -o docs/dependency_graph.mmd", help = "Generate the dependency graph." }
-generate-banner  = { cmd = "uv run python scripts/compile_banner.py", help = "Generate the banner image from Typst source." }
-docs             = { sequence = ["generate-banner", { cmd = "hap run mkdocs serve" }], help = "Spawn docs server." }
-format           = { cmd = "ruff format --diff", help = "Check code formatting using ruff." }
-lint             = { cmd = "uv run ruff check", help = "Check code rules using ruff." }
-precommit        = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
-publish-docs     = { sequence = ["generate-banner", { cmd = "mkdocs gh-deploy --force" }], help = "Publish the docs to GitHub Pages." }
-test             = { cmd = "pytest", help = "Run tests using pytest." }
-type-check       = { cmd = "basedpyright --project pyrightconfig.json src tests", help = "Check static typing using basedpyright." }
+    coverage = { cmd = "pytest --doctest-modules --verbose --cov --cov-report=xml", help = "Create test coverage report." }
+    dependencies = { cmd = "tach check", help = "Check dependency layers using tach." }
+    dependency-graph = { cmd = "tach show --mermaid -o docs/dependency_graph.mmd", help = "Generate the dependency graph." }
+    docs = { sequence = [
+        "generate-banner",
+        { cmd = "hap run mkdocs serve" },
+    ], help = "Spawn docs server." }
+    format = { cmd = "ruff format --diff", help = "Check code formatting using ruff." }
+    generate-banner = { cmd = "uv run python scripts/compile_banner.py", help = "Generate the banner image from Typst source." }
+    lint = { cmd = "uv run ruff check --config ruff.toml", help = "Check code rules using ruff." }
+    precommit = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
+    publish-docs = { sequence = [
+        "generate-banner",
+        { cmd = "mkdocs gh-deploy --force" },
+    ], help = "Publish the docs to GitHub Pages." }
+    test = { cmd = "pytest", help = "Run tests using pytest." }
+    type-check = { cmd = "basedpyright --project pyrightconfig.json src tests", help = "Check static typing using basedpyright." }
 
 [tasks.code-quality]
-help        = "Run all code quality checks."
-ignore_fail = "return_non_zero"
-sequence    = [ "fix", "precommit", "format", "lint", "type-check" ]
+    help = "Run all code quality checks."
+    ignore_fail = "return_non_zero"
+    sequence = [
+        "fix",
+        "precommit",
+        "format",
+        "lint",
+        "type-check",
+    ]
 
 [tasks.fix]
-default_item_type = "cmd"
-help = "Code quality fixes using ruff."
-ignore_fail = "return_non_zero"
-sequence = [
-    "ruff check --fix --unsafe-fixes",
-    "ruff format",
-]
+    default_item_type = "cmd"
+    help = "Code quality fixes using ruff."
+    ignore_fail = "return_non_zero"
+    sequence = [
+        "ruff check --fix --unsafe-fixes",
+        "ruff format",
+    ]
 
 [tasks.publish]
-sequence = [
-    "code-quality",
-    { cmd = "rm -rf dist" },
-    { cmd = "uv build" },
-    { cmd = "uv publish" },
-    "publish-docs",
-]
+    sequence = [
+        "code-quality",
+        { cmd = "rm -rf dist" },
+        { cmd = "uv build" },
+        { cmd = "uv publish" },
+        "publish-docs",
+    ]
