@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.6.0 (2025-10-04)
+## v0.6.0 (2025-11-27)
 
 ### Features
 
@@ -10,6 +10,7 @@
 *   Switching to dacite for config loading.
 *   Unit tests for internal functions.
 *   Add coverage report.
+*   Added ASCII banner to CLI.
 
 ### Improvements
 
@@ -18,6 +19,8 @@
 *   Precommit update-hooks.
 *   Upgrade environment.
 *   Disable tests that require user interaction; they break coverage reports.
+*   Separate tool configurations in repository.
+*   Document 'all-debuggers' optional dependency.
 
 ## v0.5.0 (2025-08-23)
 
