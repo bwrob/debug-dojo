@@ -28,11 +28,10 @@ nav:
   - CLI Usage: cli-reference.md
   - Development:
       - Setup: development.md
-      - Style Guide: style-guide.md
-      - Plan: development_plan.md
+      - Style Guide: STYLE_GUIDE.md
+      - Plan: DEVELOPMENT_PLAN.md
   - Changelog: changelog.md
   - API Reference: api-reference.md
-  - Author: ../
 plugins:
   - search
   - git-authors
