@@ -23,12 +23,13 @@ markdown_extensions:
           format: pymdownx.superfences.fence_code_format
   - pymdownx.snippets
 nav:
-  - Introduction: index.md
+  - Dojo: index.md
   - Configuration: configuration.md
   - CLI Usage: cli-reference.md
   - Development:
-      - Introduction: development.md
-      - Plan: DEVELOPMENT_PLAN.md
+      - Setup: development.md
+      - Style Guide: style-guide.md
+      - Plan: development_plan.md
   - Changelog: changelog.md
   - API Reference: api-reference.md
   - Author: ../
