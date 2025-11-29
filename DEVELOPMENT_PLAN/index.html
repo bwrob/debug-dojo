@@ -12,29 +12,31 @@
         <meta name="author" content="bwrob">
       
       
-        <link rel="canonical" href="https://bwrob.github.io/debug-dojo/">
+        <link rel="canonical" href="https://bwrob.github.io/debug-dojo/DEVELOPMENT_PLAN/">
       
       
+        <link rel="prev" href="../development/">
       
-        <link rel="next" href="configuration/">
+      
+        <link rel="next" href="../changelog/">
       
       
         
       
       
-      <link rel="icon" href="logo/logo_white.png">
+      <link rel="icon" href="../logo/logo_white.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
     
     
       
-        <title>debug dojo</title>
+        <title>Plan - debug dojo</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="assets/_mkdocstrings.css">
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -80,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#features" class="md-skip">
+        <a href="#development-plan" class="md-skip">
           Skip to content
         </a>
       
@@ -96,9 +98,9 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="debug dojo" class="md-header__button md-logo" aria-label="debug dojo" data-md-component="logo">
+    <a href=".." title="debug dojo" class="md-header__button md-logo" aria-label="debug dojo" data-md-component="logo">
       
-  <img src="logo/logo_white.png" alt="logo">
+  <img src="../logo/logo_white.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -115,7 +117,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Introduction
+              Plan
             
           </span>
         </div>
@@ -235,11 +237,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -258,7 +258,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="configuration/" class="md-tabs__link">
+      <a href="../configuration/" class="md-tabs__link">
         
   
   
@@ -277,7 +277,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="cli-reference/" class="md-tabs__link">
+      <a href="../cli-reference/" class="md-tabs__link">
         
   
   
@@ -294,11 +294,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="development/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../development/" class="md-tabs__link">
           
   
   
@@ -318,7 +320,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="changelog/" class="md-tabs__link">
+      <a href="../changelog/" class="md-tabs__link">
         
   
   
@@ -337,7 +339,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="api-reference/" class="md-tabs__link">
+      <a href="../api-reference/" class="md-tabs__link">
         
   
   
@@ -356,7 +358,7 @@
   
   
     <li class="md-tabs__item">
-      <a href=".././" class="md-tabs__link">
+      <a href="../../" class="md-tabs__link">
         
   
   
@@ -399,9 +401,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="debug dojo" class="md-nav__button md-logo" aria-label="debug dojo" data-md-component="logo">
+    <a href=".." title="debug dojo" class="md-nav__button md-logo" aria-label="debug dojo" data-md-component="logo">
       
-  <img src="logo/logo_white.png" alt="logo">
+  <img src="../logo/logo_white.png" alt="logo">
 
     </a>
     debug dojo
@@ -425,35 +427,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Introduction
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
         
   
   
@@ -469,96 +446,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Features
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Usage
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Usage">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cli" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#from-the-code" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        From the code
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#features-in-debugging-mode-when-debug_dojoinstall-is-used" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Features in debugging mode (when debug_dojo.install is used)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#installation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Installation
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -570,7 +457,7 @@
   
   
     <li class="md-nav__item">
-      <a href="configuration/" class="md-nav__link">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
@@ -597,7 +484,7 @@
   
   
     <li class="md-nav__item">
-      <a href="cli-reference/" class="md-nav__link">
+      <a href="../cli-reference/" class="md-nav__link">
         
   
   
@@ -621,37 +508,40 @@
       
   
   
-  
-  
     
-    
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-      
-        
-        
-      
-    
-    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
-      
-        
   
   
   
-    <a href="development/" class="md-nav__link">
+    
+    
       
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
   
   
   <span class="md-ellipsis">
@@ -665,12 +555,186 @@
   
   
 
-      
-        <span class="md-nav__icon md-icon"></span>
-      
-    </a>
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Development
   
 
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#project-goals" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Project Goals
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Roadmap
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Roadmap">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#features-enhancements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features &amp; Enhancements
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#maintenance-stability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Maintenance &amp; Stability
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-infrastructure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation &amp; Infrastructure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -683,7 +747,7 @@
   
   
     <li class="md-nav__item">
-      <a href="changelog/" class="md-nav__link">
+      <a href="../changelog/" class="md-nav__link">
         
   
   
@@ -710,7 +774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="api-reference/" class="md-nav__link">
+      <a href="../api-reference/" class="md-nav__link">
         
   
   
@@ -737,7 +801,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".././" class="md-nav__link">
+      <a href="../../" class="md-nav__link">
         
   
   
@@ -774,7 +838,7 @@
 
 
   
-    <a href="https://github.com/bwrob/debug-dojo/edit/main/docs/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/bwrob/debug-dojo/edit/main/docs/DEVELOPMENT_PLAN.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
     </a>
@@ -783,100 +847,43 @@
     
       
     
-    <a href="https://github.com/bwrob/debug-dojo/raw/main/docs/index.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/bwrob/debug-dojo/raw/main/docs/DEVELOPMENT_PLAN.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg>
     </a>
   
 
 
-  <h1>Introduction</h1>
-
-<p align="center">
-  <img src="https://github.com/bwrob/debug-dojo/blob/main/docs/logo/banner.png?raw=true" alt="debug dojo" style="width:100%;"/>
-</p>
-
-<p align="center">
-<em>🏣 debug dojo, a place for zen debugging</em>
-</p>
-
-<p><a href="https://pypi.org/project/debug-dojo"><img alt="PyPi Version" src="https://img.shields.io/pypi/v/debug-dojo.svg?style=flat-square" /></a>
-<a href="https://pypi.org/pypi/debug-dojo/"><img alt="PyPI pyversions" src="https://img.shields.io/pypi/pyversions/debug-dojo.svg?style=flat-square" /></a>
-<a href="https://pepy.tech/project/debug-dojo"><img alt="downloads" src="https://static.pepy.tech/badge/debug-dojo/month" /></a>
-<a href="https://github.com/bwrob/debug-dojo/blob/main/LICENSE"><img alt="license" src="https://img.shields.io/github/license/bwrob/debug-dojo.svg" /></a>
-<a href="https://results.pre-commit.ci/latest/github/bwrob/debug-dojo/main"><img alt="pre-commit.ci status" src="https://results.pre-commit.ci/badge/github/bwrob/debug-dojo/main.svg" /></a></p>
-<p><strong>debug-dojo</strong> is a Python package providing utilities for enhanced
-debugging and inspection in the terminal. It leverages
-<a href="https://github.com/Textualize/rich"><code>rich</code></a> for beautiful output and
-offers helpers for side-by-side object comparison, improved tracebacks
-from <code>rich</code>, and easy integration with different debuggers &ndash; <code>debugpy</code>,
-<code>pudb</code>, <code>pdb</code>, and <code>ipdb</code>.</p>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
+<h1 id="development-plan">Development Plan<a class="headerlink" href="#development-plan" title="Permanent link">&para;</a></h1>
+<h2 id="project-goals">Project Goals<a class="headerlink" href="#project-goals" title="Permanent link">&para;</a></h2>
+<p><code>debug-dojo</code> aims to provide a unified, &ldquo;zen&rdquo; debugging experience for Python developers. By abstracting the differences between various backend debuggers (<code>pdb</code>, <code>ipdb</code>, <code>pudb</code>, <code>debugpy</code>) and injecting useful runtime helpers (<code>p</code>, <code>c</code>, <code>i</code>, <code>b</code>), it allows developers to focus on the problem at hand rather than the toolchain configuration.</p>
+<h2 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h2>
+<p>The development roadmap is driven by GitHub issues. Below is the prioritized list of planned work.</p>
+<h3 id="features-enhancements">Features &amp; Enhancements<a class="headerlink" href="#features-enhancements" title="Permanent link">&para;</a></h3>
 <ul>
-<li><strong>Convenient CLI</strong> Quickly run your code with debugging tools
-    enabled.</li>
-<li><strong>Simple API:</strong> Install all tools or only what you need.</li>
-<li><strong>Debugger integration:</strong> Quickly enable Debugpy, PuDB, PDB, or IPDB
-    as your default pre-configured debugger.</li>
-<li><strong>Rich tracebacks:</strong> Get readable, colorized tracebacks for easier
-    debugging.</li>
-<li><strong>Side-by-side object inspection:</strong> Visually compare Python objects,
-    their attributes, and methods in the terminal.</li>
-<li><strong>Configuration:</strong> Easily configure the debugging tools using
-    <code>dojo.toml</code> or <code>pyproject.toml</code>.</li>
+<li><strong>[#89] Zen Notifications</strong>: System notifications for breakpoints and long-running tasks.</li>
+<li><strong>[#92] Dojo Belts (Gamification)</strong>: Local stats tracking for usage (bugs crushed).</li>
+<li><strong>[#2] Specialized Comparers</strong>: Improve the <code>c()</code> helper to provide clearer, structural diffs for <code>list</code> and <code>dict</code> types.</li>
+<li><strong>[#88] Specialized Object Inspectors</strong>: Extend inspection tools for specialized objects (Pandas, NumPy, Pydantic).</li>
+<li><strong>[#90] Mini-Profiler</strong>: Lightweight profiling option wrapping <code>cProfile</code>.</li>
+<li><strong>[#4] PuDB Breakpoint Management</strong>: Add functionality to manage <code>pudb</code>&rsquo;s saved breakpoints via tool configuration.</li>
+<li><strong>[#91] Robust Crash Handler</strong>: Unified interactive crash handler (&ldquo;Debug it? [Y/n]&rdquo;).</li>
+<li><strong>[#85] Enhanced UI with Rich</strong>: Leverage <code>rich</code> more extensively for interactive inspection tools during debugging sessions (e.g. better object inspectors, panels).</li>
+<li><strong>[#33] Direct IPython Integration</strong>: Refactor the <code>ipdb</code> backend to potentially use <code>IPython</code>&rsquo;s debugger directly.</li>
+<li><strong>[#87] Remote Debugging</strong>: Simplify the setup for remote debugging scenarios using <code>debugpy</code>.</li>
+<li><strong>[#86] Plugin System</strong>: Design and implement a plugin system to allow users to define their own helper functions or integrations.</li>
 </ul>
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<h3 id="cli">CLI<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h3>
-<p>Run your Python script with debugging tools enabled using the
-<code>debug-dojo</code> command:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="go">dojo my_script.py</span>
-</span></code></pre></div></td></tr></table></div>
-<p>You can optionally set configuration, verbose mode, and specify the
-debugger type. Both script files and modules are supported:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-1-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="go">dojo --debugger ipdb --config dojo.toml --verbose --module my_module</span>
-</span></code></pre></div></td></tr></table></div>
-<p>dojo can let you debug into:</p>
+<h3 id="maintenance-stability">Maintenance &amp; Stability<a class="headerlink" href="#maintenance-stability" title="Permanent link">&para;</a></h3>
 <ul>
-<li>any Python script &ndash; <code>dojo my_script.py</code></li>
-<li>any runnable module &ndash; <code>dojo -m my_module</code></li>
-<li>or even an executable, <code>dojo -e my_executable</code> (like <code>pytest</code>)</li>
+<li><strong>[#82] Maintenance: Dependency Updates</strong>: Keep dependencies updated, specifically ensuring compatibility with new versions of supported debuggers.</li>
+<li><strong>[#83] Stability: Environment Injection Tests</strong>: Improve test coverage for edge cases in environment injection logic (<code>_installers.py</code>).</li>
+<li><strong>[#35] Coverage Enforcement</strong>: Integrate coverage reporting into the CI pipeline to ensure code quality.</li>
 </ul>
-<h3 id="from-the-code">From the code<a class="headerlink" href="#from-the-code" title="Permanent link">&para;</a></h3>
-<p>In the <code>PuDB</code> style, you can install all debugging tools and enter the
-debugging mode with a single command:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-2-1">1</a></span>
-<span class="normal"><a href="#__codelineno-2-2">2</a></span>
-<span class="normal"><a href="#__codelineno-2-3">3</a></span>
-<span class="normal"><a href="#__codelineno-2-4">4</a></span>
-<span class="normal"><a href="#__codelineno-2-5">5</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="n">object_1</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;foo&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;bar&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="n">object_2</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3"></a>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="kn">import</span><span class="w"> </span><span class="nn">debug_dojo.install</span><span class="p">;</span> <span class="n">b</span><span class="p">()</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="n">p</span><span class="p">(</span><span class="n">object_1</span><span class="p">)</span>  <span class="c1"># Pretty print an object with Rich</span>
-</span></code></pre></div></td></tr></table></div>
-<h3 id="features-in-debugging-mode-when-debug_dojoinstall-is-used">Features in debugging mode (when <code>debug_dojo.install</code> is used)<a class="headerlink" href="#features-in-debugging-mode-when-debug_dojoinstall-is-used" title="Permanent link">&para;</a></h3>
-<p>When you use <code>import debug_dojo.install; b()</code>, the following convenience functions are injected into Python&rsquo;s builtins, making them globally available within your debugging session:</p>
+<h3 id="documentation-infrastructure">Documentation &amp; Infrastructure<a class="headerlink" href="#documentation-infrastructure" title="Permanent link">&para;</a></h3>
 <ul>
-<li><code>b()</code>: Sets a breakpoint using the debugger configured in <code>debug-dojo</code>. This is equivalent to calling <code>breakpoint()</code> but respects your <code>debug-dojo</code> debugger settings.</li>
-<li><code>p(obj)</code>: Pretty prints an object using <code>rich.print</code>, providing enhanced readability for complex data structures.</li>
-<li><code>i(obj)</code>: Inspects an object using <code>rich.inspect</code>, offering a detailed, colorized view of its attributes and methods.</li>
-<li><code>c(obj1, obj2)</code>: Compares two Python objects side-by-side using <code>debug-dojo</code>&rsquo;s comparison utility, highlighting differences for easier debugging.</li>
+<li><strong>[#84] Documentation: Advanced Usage</strong>: Expand the documentation to include more examples of advanced configuration and usage scenarios.</li>
+<li><strong>[#19] Automated Publishing Workflow</strong>: Verify and refine the GitHub Actions for publishing to PyPI and deploying GitHub Pages.</li>
 </ul>
-<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<p>The package is available on PyPI and can be installed using standard
-Python package management tools.</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-3-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="go">pip install debug-dojo</span>
-</span></code></pre></div></td></tr></table></div>
-<p>For full debugger support, you might want to install optional dependencies:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-4-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;debug-dojo[all-debuggers]&quot;</span>
-</span></code></pre></div></td></tr></table></div>
-<p>You can also use <code>poetry</code> or <code>uv</code> to add it to your project:</p>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-5-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="go">poetry add debug-dojo</span>
-</span></code></pre></div></td></tr></table></div>
-<div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-6-1">1</a></span></pre></div></td><td class="code"><div><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="go">uv add debug-dojo</span>
-</span></code></pre></div></td></tr></table></div>
-<p>Note that dojo most likely will not work when installed via <code>pipx</code> or
-<code>uvx</code>, as it relies on the current Python environment dependencies.</p>
 
 
 
@@ -899,7 +906,7 @@ Python package management tools.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 27, 2025 21:01:59 UTC">November 27, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 29, 2025 12:17:28 UTC">November 29, 2025</span>
   </span>
 
     
@@ -909,7 +916,7 @@ Python package management tools.</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 16, 2025 14:08:17 UTC">August 16, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 29, 2025 12:17:28 UTC">November 29, 2025</span>
   </span>
 
     
@@ -988,15 +995,31 @@ Python package management tools.</p>
       
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
+          
+          <a href="../development/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Introduction">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Introduction
+              </div>
+            </div>
+          </a>
+        
         
           
-          <a href="configuration/" class="md-footer__link md-footer__link--next" aria-label="Next: Configuration">
+          <a href="../changelog/" class="md-footer__link md-footer__link--next" aria-label="Next: Changelog">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Configuration
+                Changelog
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1050,10 +1073,10 @@ Python package management tools.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.prune", "navigation.sections", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.prune", "navigation.sections", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
       
     
   </body>
