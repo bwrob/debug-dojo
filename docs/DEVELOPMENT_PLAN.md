@@ -38,6 +38,11 @@ The project is organized as a standard Python package with a CLI entry point.
 - **Plugin System**: Potentially allow users to define their own helper functions or integrations.
 - **Remote Debugging**: Simplify the setup for remote debugging scenarios using `debugpy`.
 
+## Infrastructure and CI/CD
+
+- **Continuous Integration/Continuous Deployment (CI/CD)**: All code changes are validated and releases are automated via GitHub Actions pipelines.
+- **Publishing**: Package and documentation publishing are handled automatically through these pipelines.
+
 ## Release Process
 
 Releases are automated via GitHub Actions, triggered by `poe publish`. The process includes:
