@@ -10,6 +10,11 @@ The development roadmap is driven by GitHub issues. Below is the prioritized lis
 
 ### Features & Enhancements
 
+- **[#88] Specialized Object Inspectors**: Extend inspection tools for specialized objects (Pandas, NumPy, Pydantic).
+- **[#89] Zen Notifications**: System notifications for breakpoints and long-running tasks.
+- **[#90] Mini-Profiler**: Lightweight profiling option wrapping `cProfile`.
+- **[#91] Robust Crash Handler**: Unified interactive crash handler ("Debug it? [Y/n]").
+- **[#92] Dojo Belts (Gamification)**: Local stats tracking for usage (bugs crushed).
 - **[#85] Enhanced UI with Rich**: Leverage `rich` more extensively for interactive inspection tools during debugging sessions (e.g. better object inspectors, panels).
 - **[#86] Plugin System**: Design and implement a plugin system to allow users to define their own helper functions or integrations.
 - **[#87] Remote Debugging**: Simplify the setup for remote debugging scenarios using `debugpy`.
