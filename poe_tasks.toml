@@ -1,24 +1,54 @@
-[tool.poe.tasks]
+[tool.poe.tasks.coverage]
+    cmd  = "pytest --doctest-modules --verbose --cov --cov-report=xml"
+    help = "Create test coverage report."
 
-    coverage = { cmd = "pytest --doctest-modules --verbose --cov --cov-report=xml", help = "Create test coverage report." }
-    dependencies = { cmd = "tach check", help = "Check dependency layers using tach." }
-    dependency-graph = { cmd = "tach show --mermaid -o docs/dependency_graph.mmd", help = "Generate the dependency graph." }
-    docs = { sequence = [
+[tool.poe.tasks.dependencies]
+    cmd  = "tach check"
+    help = "Check dependency layers using tach."
+
+[tool.poe.tasks.dependency-graph]
+    cmd  = "tach show --mermaid -o docs/dependency_graph.mmd"
+    help = "Generate the dependency graph."
+
+[tool.poe.tasks.docs]
+    help = "Spawn docs server."
+    sequence = [
         "generate-banner",
         { cmd = "hap run mkdocs serve" },
-    ], help = "Spawn docs server." }
-    format = { cmd = "ruff format --diff", help = "Check code formatting using ruff." }
-    generate-banner = { cmd = "uv run python scripts/compile_banner.py", help = "Generate the banner image from Typst source." }
-    lint = { cmd = "uv run ruff check --config ruff.toml", help = "Check code rules using ruff." }
-    precommit = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
-    publish-docs = { sequence = [
+    ]
+
+[tool.poe.tasks.format]
+    cmd  = "ruff format --diff"
+    help = "Check code formatting using ruff."
+
+[tool.poe.tasks.generate-banner]
+    cmd  = "uv run python scripts/compile_banner.py"
+    help = "Generate the banner image from Typst source."
+
+[tool.poe.tasks.lint]
+    cmd  = "uv run ruff check --config ruff.toml"
+    help = "Check code rules using ruff."
+
+[tool.poe.tasks.precommit]
+    cmd  = "pre-commit run --all-files"
+    help = "Run all code quality checks."
+
+[tool.poe.tasks.publish-docs]
+    help = "Publish the docs to GitHub Pages."
+    sequence = [
         "generate-banner",
         { cmd = "mkdocs gh-deploy --force" },
-    ], help = "Publish the docs to GitHub Pages." }
-    test = { cmd = "pytest", help = "Run tests using pytest." }
-    type-check = { cmd = "basedpyright --project pyrightconfig.json src tests", help = "Check static typing using basedpyright." }
+    ]
 
-[tasks.code-quality]
+[tool.poe.tasks.test]
+    cmd  = "pytest"
+    help = "Run tests using pytest."
+
+[tool.poe.tasks.type-check]
+    cmd  = "basedpyright --project pyrightconfig.json src tests"
+    help = "Check static typing using basedpyright."
+
+[tool.poe.tasks.code-quality]
     help = "Run all code quality checks."
     ignore_fail = "return_non_zero"
     sequence = [
@@ -29,7 +59,7 @@
         "type-check",
     ]
 
-[tasks.fix]
+[tool.poe.tasks.fix]
     default_item_type = "cmd"
     help = "Code quality fixes using ruff."
     ignore_fail = "return_non_zero"
@@ -38,7 +68,8 @@
         "ruff format",
     ]
 
-[tasks.publish]
+[tool.poe.tasks.publish]
+    help = "Publish the package to PyPI."
     sequence = [
         "code-quality",
         { cmd = "rm -rf dist" },
