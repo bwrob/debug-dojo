@@ -10,17 +10,17 @@ The development roadmap is driven by GitHub issues. Below is the prioritized lis
 
 ### Features & Enhancements
 
-- **[#88] Specialized Object Inspectors**: Extend inspection tools for specialized objects (Pandas, NumPy, Pydantic).
 - **[#89] Zen Notifications**: System notifications for breakpoints and long-running tasks.
-- **[#90] Mini-Profiler**: Lightweight profiling option wrapping `cProfile`.
-- **[#91] Robust Crash Handler**: Unified interactive crash handler ("Debug it? [Y/n]").
 - **[#92] Dojo Belts (Gamification)**: Local stats tracking for usage (bugs crushed).
-- **[#85] Enhanced UI with Rich**: Leverage `rich` more extensively for interactive inspection tools during debugging sessions (e.g. better object inspectors, panels).
-- **[#86] Plugin System**: Design and implement a plugin system to allow users to define their own helper functions or integrations.
-- **[#87] Remote Debugging**: Simplify the setup for remote debugging scenarios using `debugpy`.
-- **[#33] Direct IPython Integration**: Refactor the `ipdb` backend to potentially use `IPython`'s debugger directly.
-- **[#4] PuDB Breakpoint Management**: Add functionality to manage `pudb`'s saved breakpoints via tool configuration.
 - **[#2] Specialized Comparers**: Improve the `c()` helper to provide clearer, structural diffs for `list` and `dict` types.
+- **[#88] Specialized Object Inspectors**: Extend inspection tools for specialized objects (Pandas, NumPy, Pydantic).
+- **[#90] Mini-Profiler**: Lightweight profiling option wrapping `cProfile`.
+- **[#4] PuDB Breakpoint Management**: Add functionality to manage `pudb`'s saved breakpoints via tool configuration.
+- **[#91] Robust Crash Handler**: Unified interactive crash handler ("Debug it? [Y/n]").
+- **[#85] Enhanced UI with Rich**: Leverage `rich` more extensively for interactive inspection tools during debugging sessions (e.g. better object inspectors, panels).
+- **[#33] Direct IPython Integration**: Refactor the `ipdb` backend to potentially use `IPython`'s debugger directly.
+- **[#87] Remote Debugging**: Simplify the setup for remote debugging scenarios using `debugpy`.
+- **[#86] Plugin System**: Design and implement a plugin system to allow users to define their own helper functions or integrations.
 
 ### Maintenance & Stability
 
