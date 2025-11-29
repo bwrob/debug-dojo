@@ -38,6 +38,14 @@ The project is organized as a standard Python package with a CLI entry point.
 - **Plugin System**: Potentially allow users to define their own helper functions or integrations.
 - **Remote Debugging**: Simplify the setup for remote debugging scenarios using `debugpy`.
 
+### Active Issues
+
+- **[#35] Coverage Enforcement**: Integrate coverage reporting into the CI pipeline to ensure code quality. The goal is to fail pull requests if test coverage drops below a defined threshold.
+- **[#33] Direct IPython Integration**: Refactor the `ipdb` backend to potentially use `IPython`'s debugger directly. This could reduce dependencies and offer better control over the debugger lifecycle.
+- **[#19] Automated Publishing Workflow**: Verify and refine the GitHub Actions for publishing to PyPI and deploying GitHub Pages. Ensure this process is fully automated on release tags.
+- **[#4] PuDB Breakpoint Management**: Add functionality to manage `pudb`'s saved breakpoints. This could involve clearing old breakpoints or persisting specific ones across sessions via the tool configuration.
+- **[#2] Specialized Comparers**: Improve the `c()` helper to provide clearer, structural diffs for `list` and `dict` types, aiding in visualizing differences in complex data structures.
+
 ## Infrastructure and CI/CD
 
 - **Continuous Integration/Continuous Deployment (CI/CD)**: All code changes are validated and releases are automated via GitHub Actions pipelines.
