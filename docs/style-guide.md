@@ -25,6 +25,7 @@ poe fix
 ```
 
 Individual checks can be run via:
+
 - **Format**: `poe format`
 - **Lint**: `poe lint`
 - **Type Check**: `poe type-check`

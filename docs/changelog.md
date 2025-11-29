@@ -1,6 +1,21 @@
 # Changelog
 
-## v0.6.0 (2025-11-27)
+
+## v0.7.0 (2025-11-27)
+
+*release tag*: [v0.5.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.7.0)
+
+### Features
+
+*   Added 'all-debuggers' optional dependency.
+
+### Improvements
+
+*   Added banner.
+
+## v0.6.0 (2025-10-20)
+
+*release tag*: [v0.5.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.7.0)
 
 ### Features
 
@@ -8,19 +23,13 @@
 *   Widen dependency version ranges.
 *   Add 3.14 to supported Python versions.
 *   Switching to dacite for config loading.
-*   Unit tests for internal functions.
-*   Add coverage report.
-*   Added ASCII banner to CLI.
 
 ### Improvements
 
 *   Gemini generated docs improvements.
 *   Project has 90% coverage.
 *   Precommit update-hooks.
-*   Upgrade environment.
-*   Disable tests that require user interaction; they break coverage reports.
-*   Separate tool configurations in repository.
-*   Document 'all-debuggers' optional dependency.
+
 
 ## v0.5.0 (2025-08-23)
 
