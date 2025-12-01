@@ -57,7 +57,7 @@ repos:
       - id: ruff-format
         name: 🐍 ruff · Format Python code
     repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.6
+    rev: v0.14.7
   - hooks:
       - id: uv-lock
         name: 🐍 uv · Lock dependencies
