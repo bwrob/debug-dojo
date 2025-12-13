@@ -15,10 +15,11 @@
     ]
     dependencies = [
         "dacite>=1.0.0",
+        "pyscn>=1.5.2",
         "rich>=10.0.0",
         "tomlkit>=0.7.0",
         "typer>=0.3.0",
-    ]
+]
     description = "🏣 debug dojo, a place for zen debugging"
     keywords = [
         "debugging",

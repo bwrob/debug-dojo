@@ -1,0 +1,8 @@
+[complexity]
+low_threshold = 15
+medium_threshold = 25
+max_complexity = 30
+
+[clones]
+similarity_threshold = 0.90
+enabled_clone_types = ["type1", "type2"]

@@ -16,7 +16,7 @@ from tomlkit import parse
 from tomlkit.exceptions import TOMLKitError
 from typer import Exit
 
-from ._config_models import (
+from debug_dojo._config_models import (
     DACITE_CONFIG,
     DebugDojoConfig,
     DebugDojoConfigV1,
@@ -107,7 +107,11 @@ def load_raw_config(config_path: Path) -> JSON:
         return dojo_config
 
 
-def validated_and_updated_config(raw_config: JSON, *, verbose: bool) -> DebugDojoConfig:
+def validated_and_updated_config(
+    raw_config: JSON,
+    *,
+    verbose: bool,
+) -> DebugDojoConfig:
     """Validate and update the raw configuration to the latest DebugDojoConfig version.
 
     Args:

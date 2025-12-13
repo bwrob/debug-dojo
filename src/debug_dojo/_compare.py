@@ -7,11 +7,33 @@ visually appealing, side-by-side format in the terminal.
 from __future__ import annotations
 
 import contextlib
+from typing import TYPE_CHECKING, Any
 
-from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
+from rich.table import Table
 from rich.text import Text
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+
+def _get_members(
+    obj: object,
+    predicate: Callable[[str, Any], bool],  # pyright: ignore[reportExplicitAny]
+    formatter: Callable[[str, Any], str],  # pyright: ignore[reportExplicitAny]
+) -> list[str]:
+    members: list[str] = []
+    for name in sorted(dir(obj)):
+        try:
+            value = getattr(obj, name)  # pyright: ignore[reportAny]
+        except Exception:  # noqa: S112, BLE001
+            continue
+
+        if predicate(name, value):
+            with contextlib.suppress(Exception):
+                members.append(formatter(name, value))
+    return members
 
 
 def get_object_attributes(obj: object) -> list[str]:
@@ -24,16 +46,11 @@ def get_object_attributes(obj: object) -> list[str]:
         list[str]: A list of formatted strings, each representing an attribute.
 
     """
-    attributes: list[str] = []
-    for attr_name in sorted(dir(obj)):
-        # Safely get attribute, returning None if it doesn't exist
-        attr = getattr(obj, attr_name, None)
-        # Exclude dunder methods and callable attributes
-        if not attr_name.startswith("__") and not callable(attr):
-            with contextlib.suppress(AttributeError):
-                # Use !r for robust string representation of the attribute value
-                attributes.append(f"{attr_name}={attr!r}")
-    return attributes
+    return _get_members(
+        obj,
+        lambda n, v: not n.startswith("__") and not callable(v),  # pyright: ignore[reportAny]
+        lambda n, v: f"{n}={v!r}",  # pyright: ignore[reportAny]
+    )
 
 
 def get_object_methods(obj: object) -> list[str]:
@@ -46,14 +63,58 @@ def get_object_methods(obj: object) -> list[str]:
         list[str]: A list of method names.
 
     """
-    methods: list[str] = []
-    for method_name in sorted(dir(obj)):
-        # Safely get attribute, returning None if it doesn't exist
-        attr = getattr(obj, method_name, None)
-        # Exclude private/protected methods (starting with '_') and non-callables.
-        if not method_name.startswith("_") and callable(attr):
-            methods.append(method_name)
-    return methods
+    return _get_members(
+        obj,
+        lambda n, v: not n.startswith("_") and callable(v),  # pyright: ignore[reportAny]
+        lambda n, _v: n,  # pyright: ignore[reportAny]
+    )
+
+
+def _is_basic_type(obj: object) -> bool:
+    """Check if the object is a basic Python type."""
+    return (
+        isinstance(obj, (str, int, float, list, dict, tuple, set, bool)) or obj is None
+    )
+
+
+def _get_basic_info(obj: object) -> list[Text]:
+    """Get information for basic types."""
+    return [
+        Text("Value:", style="bold"),
+        Text(f"  {obj!r}", style="yellow"),
+        Text(""),
+        Text("No attributes or methods to display for this type.", style="dim"),
+    ]
+
+
+def _format_section(title: str, items: list[str], empty_message: str) -> list[Text]:
+    """Format a section of the inspection output."""
+    lines: list[Text] = []
+    if items:
+        lines.append(Text(title, style="bold"))
+        lines.extend([Text(f"  {item}") for item in items])
+    else:
+        lines.append(Text(empty_message, style="dim"))
+    lines.append(Text(""))
+    return lines
+
+
+def _get_attributes_section(obj: object) -> list[Text]:
+    """Get the attributes section for the object info."""
+    return _format_section(
+        "Attributes:",
+        get_object_attributes(obj),
+        "No attributes found.",
+    )
+
+
+def _get_methods_section(obj: object) -> list[Text]:
+    """Get the methods section for the object info."""
+    return _format_section(
+        "Methods:",
+        [f"{method}()" for method in get_object_methods(obj)],
+        "No public methods found.",
+    )
 
 
 def get_simplified_object_info(obj: object) -> list[Text]:
@@ -74,32 +135,12 @@ def get_simplified_object_info(obj: object) -> list[Text]:
     info_lines.append(Text(f"<class '{obj_type}'>", style="cyan bold"))
     info_lines.append(Text(""))
 
-    # Handle basic data types by displaying their value directly
-    if isinstance(obj, (str, int, float, list, dict, tuple, set, bool)) or obj is None:
-        info_lines.append(Text("Value:", style="bold"))
-        info_lines.append(Text(f"  {obj!r}", style="yellow"))
-        info_lines.append(Text(""))
-        info_lines.append(
-            Text("No attributes or methods to display for this type.", style="dim")
-        )
+    if _is_basic_type(obj):
+        info_lines.extend(_get_basic_info(obj))
         return info_lines
 
-    # For other objects, list attributes
-    attributes = get_object_attributes(obj)
-    if attributes:
-        info_lines.append(Text("Attributes:", style="bold"))
-        info_lines.extend([Text(f"  {attr}") for attr in attributes])
-    else:
-        info_lines.append(Text("No attributes found.", style="dim"))
-    info_lines.append(Text(""))
-
-    # List methods
-    methods = get_object_methods(obj)
-    if methods:
-        info_lines.append(Text("Methods:", style="bold"))
-        info_lines.extend([Text(f"  {method}()") for method in methods])
-    else:
-        info_lines.append(Text("No public methods found.", style="dim"))
+    info_lines.extend(_get_attributes_section(obj))
+    info_lines.extend(_get_methods_section(obj))
 
     return info_lines
 
@@ -119,23 +160,22 @@ def inspect_objects_side_by_side(
     """
     main_console: Console = Console()
 
+    # Get info for both objects
     lines1: list[Text] = get_simplified_object_info(obj1)
     lines2: list[Text] = get_simplified_object_info(obj2)
 
-    # Determine the maximum number of lines to ensure consistent height
-    max_lines: int = max(len(lines1), len(lines2))
+    # Convert list of Text to a single Renderable for Panel
+    inspect_text1: Text = Text("\n").join(lines1)
+    inspect_text2: Text = Text("\n").join(lines2)
 
-    # Pad the shorter list of lines with empty Text objects to match the height
-    if len(lines1) < max_lines:
-        lines1.extend([Text("")] * (max_lines - len(lines1)))
-    if len(lines2) < max_lines:
-        lines2.extend([Text("")] * (max_lines - len(lines2)))
+    # Create Panels for each object's info
+    panel1: Panel = Panel(inspect_text1, border_style="green", expand=True)
+    panel2: Panel = Panel(inspect_text2, border_style="green", expand=True)
 
-    # Join the padded lines into a single Text object for the Panel content
-    padded_inspect_text1: Text = Text("\n").join(lines1)
-    padded_inspect_text2: Text = Text("\n").join(lines2)
+    # Use a Table to display panels side-by-side
+    table = Table(show_header=False, show_lines=False, expand=True)
+    table.add_column(width=main_console.width // 2 - 1)
+    table.add_column(width=main_console.width // 2 - 1)
+    table.add_row(panel1, panel2)
 
-    panel1: Panel = Panel(padded_inspect_text1, border_style="green", expand=True)
-    panel2: Panel = Panel(padded_inspect_text2, border_style="green", expand=True)
-
-    main_console.print(Columns([panel1, panel2]))
+    main_console.print(table)

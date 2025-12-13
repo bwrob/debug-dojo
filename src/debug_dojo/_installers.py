@@ -15,8 +15,8 @@ import sys
 
 from rich import print as rich_print
 
-from ._compare import inspect_objects_side_by_side
-from ._config_models import (
+from debug_dojo._compare import inspect_objects_side_by_side
+from debug_dojo._config_models import (
     DebugDojoConfig,
     DebuggersConfig,
     DebuggerType,
@@ -91,7 +91,7 @@ def use_debugpy(config: DebugpyConfig) -> None:
     waiting for a client connection.
     """
     try:
-        import debugpy  # pyright: ignore[reportMissingTypeStubs]
+        import debugpy
     except ImportError:
         rich_print(_NOT_INSTALLED.format(name="Debugpy"))
         return
