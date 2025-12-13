@@ -2,102 +2,21 @@
 
 from __future__ import annotations
 
-import runpy
-import sys
-import traceback
-from bdb import BdbQuit
-from enum import Enum
 from pathlib import Path
-from shutil import which
-from typing import Annotated
+from typing import Annotated  # Removed TYPE_CHECKING here
 
 import typer
 from rich import print as rich_print
 
-from ._config import load_config
-from ._config_models import DebugDojoConfig, DebuggerType  # noqa: TC001
-from ._installers import install_by_config
-
-
-class ExecMode(Enum):
-    """Execution mode for the target."""
-
-    FILE = "file"
-    MODULE = "module"
-    EXECUTABLE = "executable"
-
+from debug_dojo._config import load_config
+from debug_dojo._config_models import DebuggerType  # noqa: TC001
+from debug_dojo._execution import ExecMode, execute_with_debug
 
 cli = typer.Typer(
     name="debug_dojo",
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,
 )
-
-
-def __execute_with_debug(  # noqa: C901
-    target_name: str,
-    target_args: list[str],
-    *,
-    target_mode: ExecMode,
-    verbose: bool,
-    config: DebugDojoConfig,
-) -> None:
-    """Execute a target script or module with installed debugging tools.
-
-    Args:
-        target_name (str): The name of the script, module, or executable to run.
-        target_args (list[str]): Arguments to pass to the target.
-        target_mode (ExecMode): The execution mode (FILE, MODULE, or EXECUTABLE).
-        verbose (bool): If True, print verbose output.
-        config (DebugDojoConfig): The debug-dojo configuration.
-
-    Raises:
-        typer.Exit: If the target file is not found, or if an import error occurs,
-                    or if the script exits with a non-zero code.
-
-    """
-    sys.argv = [target_name, *target_args]
-
-    if verbose:
-        rich_print(f"[blue]Installing debugging tools for {target_name}.[/blue]")
-        rich_print(f"[blue]Arguments for target: {target_args}[/blue]")
-
-    install_by_config(config)
-
-    if target_mode is ExecMode.MODULE:
-        runner = runpy.run_module
-    else:
-        if target_mode is ExecMode.EXECUTABLE:
-            target_name = which(target_name) or target_name
-
-        if not Path(target_name).exists():
-            raise typer.Exit(1)
-
-        runner = runpy.run_path
-
-    try:
-        _ = runner(target_name, run_name="__main__")
-    except ImportError as e:
-        rich_print(f"[red]Error importing {target_name}:[/red]\n{e}")
-        raise typer.Exit(1) from e
-    except BdbQuit:
-        rich_print("[red]Debugging session terminated by user.[/red]")
-        raise typer.Exit(0) from None
-    except KeyboardInterrupt:
-        rich_print("[red]Execution interrupted by user.[/red]")
-        raise typer.Exit(0) from None
-    except SystemExit as e:
-        if e.code:
-            rich_print(f"[red]Script exited with code {e.code}.[/red]")
-    except Exception as e:
-        rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
-        rich_print(traceback.format_exc())
-        if config.exceptions.post_mortem:
-            import ipdb  # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415, T100
-
-            rich_print("[blue]Entering post-mortem debugging session...[/blue]")
-            ipdb.post_mortem(e.__traceback__)  # pyright: ignore[reportUnknownMemberType]
-        raise typer.Exit(1) from e
 
 
 @cli.command(
@@ -178,7 +97,7 @@ def run_debug(  # noqa: PLR0913
         rich_print(f"[blue]Using debug-dojo configuration: {config} [/blue]")
 
     if target_name:
-        __execute_with_debug(
+        execute_with_debug(
             target_name=target_name,
             target_mode=mode,
             target_args=ctx.args,

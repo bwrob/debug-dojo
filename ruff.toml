@@ -12,7 +12,10 @@ target-version = "py310"
         "scripts/*.py" = ["S101", "T201", "INP001"]
         "src/debug_dojo/_installers.py" = [
             "PLC0415",
-            "T100",
+            "T100"
+        ]
+        "src/debug_dojo/_cli.py" = [
+            "TC003",
         ]
         "tests/*" = ["S101", "T201"]
         "tests/assets/*" = ["T201", "INP001", "F821"]

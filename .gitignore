@@ -207,3 +207,4 @@ __marimo__/
 .DS_Store
 junit/test-results.xml
 report.html
+.pyscn/
