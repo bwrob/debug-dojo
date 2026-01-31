@@ -26,7 +26,7 @@ def test_belt_command(runner: CliRunner) -> None:
         result: Result = runner.invoke(cli, ["belt"])
 
         assert result.exit_code == 0
-        mock_instance.display_status.assert_called_once()
+        mock_instance.display_status.assert_called_once()  # pyright: ignore[reportAny]
 
 
 def test_belt_command_integration(runner: CliRunner, tmp_path: str) -> None:

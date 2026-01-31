@@ -26,10 +26,10 @@ def test_gamification_disabled_increment(runner: CliRunner) -> None:
         mock_manager_cls.return_value = mock_instance
 
         # Run command
-        runner.invoke(cli, ["run", "script.py"])
+        _ = runner.invoke(cli, ["run", "script.py"])
 
         # Verify increment_session was NOT called
-        mock_instance.increment_session.assert_not_called()
+        mock_instance.increment_session.assert_not_called()  # pyright: ignore[reportAny]
 
 
 def test_gamification_enabled_increment(runner: CliRunner) -> None:
@@ -46,10 +46,10 @@ def test_gamification_enabled_increment(runner: CliRunner) -> None:
         mock_manager_cls.return_value = mock_instance
 
         # Run command
-        runner.invoke(cli, ["run", "script.py"])
+        _ = runner.invoke(cli, ["run", "script.py"])
 
         # Verify increment_session WAS called
-        mock_instance.increment_session.assert_called_once()
+        mock_instance.increment_session.assert_called_once()  # pyright: ignore[reportAny]
 
 
 def test_belt_command_disabled(runner: CliRunner) -> None:

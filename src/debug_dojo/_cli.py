@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import contextlib
 from pathlib import Path
 from typing import Annotated  # Removed TYPE_CHECKING here
 
@@ -118,11 +119,8 @@ def run_debug(  # noqa: PLR0913
     if target_name:
         # Gamification: Increment session count if enabled
         if config.gamification:
-            try:
+            with contextlib.suppress(Exception):
                 GamificationManager().increment_session()
-            except Exception:  # noqa: BLE001
-                # Don't let stats failure break the debugger
-                pass
 
         execute_with_debug(
             target_name=target_name,

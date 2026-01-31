@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import cast
 
 from rich import print as rich_print
 from rich.panel import Panel
@@ -43,14 +44,24 @@ class DojoStats:
 class GamificationManager:
     """Manages stats loading, saving, and belt progression."""
 
+    stats_file: Path
+
+    stats: DojoStats
+
     def __init__(self, stats_path: Path | None = None) -> None:
         """Initialize the manager.
 
         Args:
-            stats_path: Path to the stats file. If None, defaults to ~/.debug_dojo/stats.json
+            stats_path: Path to the stats file. If None, defaults to
+
+
+                        ~/.debug_dojo/stats.json
+
+
         """
         if stats_path:
             self.stats_file = stats_path
+
         else:
             self.stats_file = Path.home() / ".debug_dojo" / "stats.json"
 
@@ -62,15 +73,26 @@ class GamificationManager:
             return DojoStats()
 
         try:
-            data = json.loads(self.stats_file.read_text(encoding="utf-8"))
-            return DojoStats(**data)
+            data = json.loads(self.stats_file.read_text(encoding="utf-8"))  # pyright: ignore[reportAny]
+
+            if not isinstance(data, dict):
+                return DojoStats()
+
+            data_dict = cast("dict[str, object]", data)
+
+            return DojoStats(
+                sessions=int(cast("int", data_dict.get("sessions", 0))),
+                bugs_crushed=int(cast("int", data_dict.get("bugs_crushed", 0))),
+            )
+
         except (json.JSONDecodeError, TypeError, OSError):
             return DojoStats()
 
     def _save_stats(self) -> None:
         """Save stats to disk."""
         self.stats_file.parent.mkdir(parents=True, exist_ok=True)
-        self.stats_file.write_text(json.dumps(asdict(self.stats)), encoding="utf-8")
+
+        _ = self.stats_file.write_text(json.dumps(asdict(self.stats)), encoding="utf-8")
 
     def increment_session(self) -> None:
         """Record a new debugging session."""
@@ -83,6 +105,7 @@ class GamificationManager:
 
         Returns:
             Tuple of (Belt Name, Color, Current Rank Index, Next Rank Threshold)
+
         """
         current_belt = BELTS[0]
         rank_index = 0
@@ -109,17 +132,16 @@ class GamificationManager:
         # Calculate progress to next belt
         if rank_index + 1 < len(BELTS):
             prev_threshold = BELTS[rank_index][1]
-            total_needed = next_threshold - prev_threshold
-            current_progress = self.stats.sessions - prev_threshold
-        else:
-            # Max level
-            total_needed = 1
-            current_progress = 1
+            # Used for progress calculation if needed later
+            _ = next_threshold - prev_threshold
+            _ = self.stats.sessions - prev_threshold
 
+        status_msg = (
+            f"[bold {color}]{belt_name}[/bold {color}]\nSessions: {self.stats.sessions}"
+        )
         rich_print(
             Panel(
-                f"[bold {color}]{belt_name}[/bold {color}]\n"
-                f"Sessions: {self.stats.sessions}",
+                status_msg,
                 title="🥋 Dojo Status",
                 expand=False,
             )
@@ -134,7 +156,7 @@ class GamificationManager:
                 BarColumn(style="dim", complete_style=color, finished_style=color),
                 TextColumn("{task.completed}/{task.total}"),
             ) as progress:
-                progress.add_task(
+                _ = progress.add_task(
                     "Training...", total=next_threshold, completed=self.stats.sessions
                 )
         else:

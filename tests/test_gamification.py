@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from typing import cast
 
 import pytest
 
@@ -20,7 +21,7 @@ def test_initial_stats(temp_stats_file: Path) -> None:
     assert manager.stats.sessions == 0
     assert manager.stats.bugs_crushed == 0
 
-    belt_name, color, rank, next_threshold = manager.get_current_belt()
+    belt_name, _color, rank, next_threshold = manager.get_current_belt()
     assert belt_name == "White Belt"
     assert rank == 0
     assert next_threshold == BELTS[1][1]
@@ -35,19 +36,21 @@ def test_increment_session(temp_stats_file: Path) -> None:
 
     # Verify file persistence
     assert temp_stats_file.exists()
-    data = json.loads(temp_stats_file.read_text())
+    data = cast("dict[str, object]", json.loads(temp_stats_file.read_text()))
     assert data["sessions"] == 1
 
 
 def test_load_existing_stats(temp_stats_file: Path) -> None:
     """Test loading existing stats from file."""
     # Create a fake stats file
-    data = {"sessions": 15, "bugs_crushed": 2}
-    temp_stats_file.write_text(json.dumps(data))
+    expected_sessions = 15
+    expected_bugs = 2
+    data = {"sessions": expected_sessions, "bugs_crushed": expected_bugs}
+    _ = temp_stats_file.write_text(json.dumps(data))
 
     manager = GamificationManager(stats_path=temp_stats_file)
-    assert manager.stats.sessions == 15
-    assert manager.stats.bugs_crushed == 2
+    assert manager.stats.sessions == expected_sessions
+    assert manager.stats.bugs_crushed == expected_bugs
 
 
 def test_belt_progression(temp_stats_file: Path) -> None:
@@ -69,7 +72,7 @@ def test_belt_progression(temp_stats_file: Path) -> None:
 
 def test_corrupt_stats_file(temp_stats_file: Path) -> None:
     """Test that corrupt stats file is handled gracefully."""
-    temp_stats_file.write_text("invalid json")
+    _ = temp_stats_file.write_text("invalid json")
 
     manager = GamificationManager(stats_path=temp_stats_file)
     assert manager.stats.sessions == 0
