@@ -208,3 +208,5 @@ __marimo__/
 junit/test-results.xml
 report.html
 .pyscn/
+.python-version
+.complexipy_cache/
