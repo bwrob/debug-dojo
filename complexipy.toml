@@ -1,0 +1,11 @@
+color                  = "auto"
+failed                 = true
+ignore-complexity      = false
+max-complexity-allowed = 10
+output-csv             = false
+output-json            = false
+paths                  = ["src", "tests"]
+quiet                  = false
+snapshot-create        = false
+snapshot-ignore        = false
+sort                   = "asc"

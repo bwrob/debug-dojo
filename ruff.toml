@@ -3,19 +3,17 @@ target-version = "py310"
 
 [lint]
     exclude = ["examples"]
-    ignore  = ["COM", "D203", "D211", "D213"]
+    ignore  = ["COM", "D203", "D211", "D213", "PLR0912"]
     select  = ["ALL"]
 
     [lint.per-file-ignores]
         "examples/*" = ["INP001"]
         "examples/test_target.py" = ["F821"]
         "scripts/*.py" = ["S101", "T201", "INP001"]
+        "src/debug_dojo/_cli.py" = ["TC003"]
         "src/debug_dojo/_installers.py" = [
             "PLC0415",
-            "T100"
-        ]
-        "src/debug_dojo/_cli.py" = [
-            "TC003",
+            "T100",
         ]
         "tests/*" = ["S101", "T201"]
         "tests/assets/*" = ["T201", "INP001", "F821"]

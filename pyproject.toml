@@ -19,7 +19,7 @@
         "rich>=10.0.0",
         "tomlkit>=0.7.0",
         "typer>=0.3.0",
-]
+    ]
     description = "🏣 debug dojo, a place for zen debugging"
     keywords = [
         "debugging",
@@ -55,6 +55,7 @@
 
     dev = [
         "basedpyright>=1.31.2",
+        "complexipy>=5.2.0",
         "coverage>=7.10.4",
         "debug-dojo[all-debuggers]",
         "diff-cover>=9.6.0",

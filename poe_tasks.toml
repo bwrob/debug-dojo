@@ -1,33 +1,41 @@
-[tool.poe.tasks]
+[executor]
+    type = "uv"
 
-    coverage = { cmd = "pytest --doctest-modules --verbose --cov --cov-report=xml", help = "Create test coverage report." }
-    dependencies = { cmd = "tach check", help = "Check dependency layers using tach." }
-    dependency-graph = { cmd = "tach show --mermaid -o docs/dependency_graph.mmd", help = "Generate the dependency graph." }
-    docs = { sequence = [
-        "generate-banner",
-        { cmd = "hap run mkdocs serve" },
-    ], help = "Spawn docs server." }
-    format = { cmd = "ruff format --diff", help = "Check code formatting using ruff." }
-    generate-banner = { cmd = "uv run python scripts/compile_banner.py", help = "Generate the banner image from Typst source." }
-    lint = { cmd = "uv run ruff check --config ruff.toml", help = "Check code rules using ruff." }
-    precommit = { cmd = "pre-commit run --all-files", help = "Run all code quality checks." }
-    publish-docs = { sequence = [
-        "generate-banner",
-        { cmd = "mkdocs gh-deploy --force" },
-    ], help = "Publish the docs to GitHub Pages." }
-    test = { cmd = "pytest", help = "Run tests using pytest." }
-    type-check = { cmd = "basedpyright --project pyrightconfig.json src tests", help = "Check static typing using basedpyright." }
+    # =============================================================================
+    # Git Hooks
+    # =============================================================================
 
-[tasks.code-quality]
-    help = "Run all code quality checks."
-    ignore_fail = "return_non_zero"
+[tasks.precommit]
+    cmd  = "pre-commit run --all-files"
+    help = "Run all pre-commit hooks on all files."
+
+    # =============================================================================
+    # Code Quality
+    # =============================================================================
+
+[tasks.format]
+    cmd  = "ruff format --diff"
+    help = "Check code formatting using ruff."
+
+[tasks.lint]
+    cmd  = "ruff check --config ruff.toml"
+    help = "Check code rules using ruff."
+
+[tasks.type-check]
+    cmd  = "basedpyright --project pyrightconfig.json src tests"
+    help = "Check static typing using basedpyright."
+
+[tasks.complexity]
+    default_item_type = "cmd"
+    help = "Check code complexity using complexipy."
     sequence = [
-        "fix",
-        "precommit",
-        "format",
-        "lint",
-        "type-check",
+        "complexipy .",
+        "ruff check . --select=PLR0912",
     ]
+
+[tasks.dependencies]
+    cmd  = "tach check"
+    help = "Check dependency layers using tach."
 
 [tasks.fix]
     default_item_type = "cmd"
@@ -38,7 +46,63 @@
         "ruff format",
     ]
 
+[tasks.code-quality]
+    help = "Run all code quality checks."
+    ignore_fail = "return_non_zero"
+    sequence = [
+        "fix",
+        "precommit",
+        "format",
+        "lint",
+        "type-check",
+        "complexity",
+    ]
+    verbosity = -1
+
+    # =============================================================================
+    # Testing
+    # =============================================================================
+
+[tasks.test]
+    cmd  = "pytest"
+    help = "Run tests using pytest."
+
+[tasks.coverage]
+    cmd  = "pytest --doctest-modules --verbose --cov --cov-report=xml"
+    help = "Create test coverage report."
+
+    # =============================================================================
+    # Documentation
+    # =============================================================================
+
+[tasks.generate-banner]
+    cmd  = "python scripts/compile_banner.py"
+    help = "Generate the banner image from Typst source."
+
+[tasks.dependency-graph]
+    cmd  = "tach show --mermaid -o docs/dependency_graph.mmd"
+    help = "Generate the dependency graph."
+
+[tasks.docs]
+    help = "Spawn docs server."
+    sequence = [
+        "generate-banner",
+        { cmd = "hap run mkdocs serve" },
+    ]
+
+[tasks.publish-docs]
+    help = "Publish the docs to GitHub Pages."
+    sequence = [
+        "generate-banner",
+        { cmd = "mkdocs gh-deploy --force" },
+    ]
+
+    # =============================================================================
+    # Release
+    # =============================================================================
+
 [tasks.publish]
+    help = "Build and publish the package."
     sequence = [
         "code-quality",
         { cmd = "rm -rf dist" },

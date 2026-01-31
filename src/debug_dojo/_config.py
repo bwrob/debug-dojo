@@ -107,6 +107,43 @@ def load_raw_config(config_path: Path) -> JSON:
         return dojo_config
 
 
+def _try_validate_config(
+    raw_config: JSON,
+    *,
+    verbose: bool,
+) -> DebugDojoConfigV1 | DebugDojoConfigV2 | None:
+    """Try to validate the raw configuration against known configuration models.
+
+    Args:
+        raw_config (JSON): The raw configuration data.
+        verbose (bool): If True, print verbose messages during validation.
+
+    Returns:
+        DebugDojoConfigV1 | DebugDojoConfigV2 | None: The validated configuration
+            model, or None if validation fails for all models.
+
+    """
+    for model in (DebugDojoConfigV2, DebugDojoConfigV1):
+        model_name = model.__name__
+        try:
+            config = _validate_model(model, raw_config)
+        except (DaciteError, TypeError, ValueError) as e:
+            if verbose:
+                msg = (
+                    f"[yellow]Configuration validation error for {model_name}:\n{e}\n\n"
+                )
+                rich_print(msg)
+        else:
+            if verbose or model_name != DebugDojoConfig.__name__:
+                msg = (
+                    f"[blue]Using configuration model: {model_name}.\n"
+                    f"Current configuration model {DebugDojoConfig.__name__}. [/blue]"
+                )
+                rich_print(msg)
+            return config
+    return None
+
+
 def validated_and_updated_config(
     raw_config: JSON,
     *,
@@ -125,26 +162,7 @@ def validated_and_updated_config(
         typer.Exit: If the configuration cannot be validated against any known version.
 
     """
-    config: DebugDojoConfigV1 | DebugDojoConfigV2 | None = None
-
-    for model in (DebugDojoConfigV2, DebugDojoConfigV1):
-        model_name = model.__name__
-        try:
-            config = _validate_model(model, raw_config)
-        except (DaciteError, TypeError, ValueError) as e:
-            if verbose:
-                msg = (
-                    f"[yellow]Configuration validation error for {model_name}:\n{e}\n\n"
-                )
-                rich_print(msg)
-        else:
-            if verbose or model_name != DebugDojoConfig.__name__:
-                msg = (
-                    f"[blue]Using configuration model: {model_name}.\n"
-                    f"Current configuration model {DebugDojoConfig.__name__}. [/blue]"
-                )
-                rich_print(msg)
-            break
+    config = _try_validate_config(raw_config, verbose=verbose)
 
     if not config:
         msg = "[red]Unsupported configuration version or error.[/red]"
