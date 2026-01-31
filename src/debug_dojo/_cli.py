@@ -11,6 +11,7 @@ from rich import print as rich_print
 from debug_dojo._config import load_config
 from debug_dojo._config_models import DebuggerType  # noqa: TC001
 from debug_dojo._execution import ExecMode, execute_with_debug
+from debug_dojo._gamification import GamificationManager
 
 cli = typer.Typer(
     name="debug_dojo",
@@ -19,7 +20,25 @@ cli = typer.Typer(
 )
 
 
+@cli.command(help="Show your current Dojo Belt and stats.")
+def belt(
+    config_path: Annotated[
+        Path | None, typer.Option("--config", "-c", help="Show configuration")
+    ] = None,
+) -> None:
+    """Display the current user's Dojo Belt status."""
+    config = load_config(config_path)
+
+    if not config.gamification:
+        rich_print("[yellow]Gamification is disabled in your configuration.[/yellow]")
+        return
+
+    manager = GamificationManager()
+    manager.display_status()
+
+
 @cli.command(
+    name="run",
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
@@ -97,6 +116,14 @@ def run_debug(  # noqa: PLR0913
         rich_print(f"[blue]Using debug-dojo configuration: {config} [/blue]")
 
     if target_name:
+        # Gamification: Increment session count if enabled
+        if config.gamification:
+            try:
+                GamificationManager().increment_session()
+            except Exception:  # noqa: BLE001
+                # Don't let stats failure break the debugger
+                pass
+
         execute_with_debug(
             target_name=target_name,
             target_mode=mode,
