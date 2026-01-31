@@ -31,8 +31,9 @@
 ## ✨ Features
 
 *   **Unified Debugging Interface:** Easily launch your scripts or modules with your preferred debugger (`debugpy`, `pudb`, `pdb`, `ipdb`).
+*   **Dojo Belts Gamification:** Earn belts based on your debugging experience and track your progress.
 *   **Enhanced Output with Rich:** Leverages [`rich`](https://github.com/Textualize/rich) for stunning, syntax-highlighted code, pretty-printed objects, and improved tracebacks.
-*   **Side-by-Side Object Comparison:** Quickly identify differences between two Python objects.
+*   **Side-by-side Object Comparison:** Quickly identify differences between two Python objects.
 *   **Interactive Object Inspection:** Dive deep into object structures with a powerful `inspect` utility.
 *   **Simplified Breakpoints:** Set breakpoints effortlessly with a concise helper function.
 
@@ -52,22 +53,28 @@ pip install "debug-dojo[all-debuggers]"
 
 ## 💻 CLI Usage
 
-Run your Python script or module with `debug-dojo`:
+Run your Python script or module with `dojo run`:
 
 ```console
-dojo my_script.py
+dojo run my_script.py
+```
+
+Check your progress and current belt with:
+
+```console
+dojo belt
 ```
 
 Specify a debugger, configuration file, or enable verbose output:
 
 ```console
-dojo --debugger ipdb --config dojo.toml --verbose --module my_module
+dojo run --debugger ipdb --config dojo.toml --verbose --module my_module
 ```
 
 Run an executable command with debugging tools:
 
 ```console
-dojo --exec pytest
+dojo run --exec pytest
 ```
 
 ## 🐍 Usage in Code

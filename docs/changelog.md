@@ -1,6 +1,21 @@
 # Changelog
 
 
+## v0.8.0 (2026-01-31)
+
+### Features
+
+*   **Dojo Belts Gamification**: Track your debugging experience and earn belts!
+*   **Restructured CLI**: New `run` and `belt` subcommands for better organization.
+*   **Minutes-based Progression**: Belt progression is now based on total debugging time (in minutes) and session count.
+*   Added `gamification` toggle in configuration.
+
+### Improvements
+
+*   Lowered belt thresholds for better early-game feel.
+*   Improved CLI help and documentation.
+*   Refined code quality (linting, types, formatting).
+
 ## v0.7.0 (2025-11-27)
 
 *release tag*: [v0.5.0](https://github.com/bwrob/debug-dojo/releases/tag/v0.7.0)

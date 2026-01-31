@@ -11,7 +11,7 @@ The development roadmap is driven by GitHub issues. Below is the prioritized lis
 ### Features & Enhancements
 
 - **[#89] Zen Notifications**: System notifications for breakpoints and long-running tasks.
-- **[#92] Dojo Belts (Gamification)**: Local stats tracking for usage (bugs crushed).
+- **[x] [#92] Dojo Belts (Gamification)**: Local stats tracking for usage (bugs crushed).
 - **[#2] Specialized Comparers**: Improve the `c()` helper to provide clearer, structural diffs for `list` and `dict` types.
 - **[#88] Specialized Object Inspectors**: Extend inspection tools for specialized objects (Pandas, NumPy, Pydantic).
 - **[#90] Mini-Profiler**: Lightweight profiling option wrapping `cProfile`.
