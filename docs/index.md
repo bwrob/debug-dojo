@@ -24,6 +24,8 @@ from `rich`, and easy integration with different debuggers -- `debugpy`,
 
 - **Convenient CLI** Quickly run your code with debugging tools
     enabled.
+- **Dojo Belts Gamification:** Earn belts based on your debugging
+    experience.
 - **Simple API:** Install all tools or only what you need.
 - **Debugger integration:** Quickly enable Debugpy, PuDB, PDB, or IPDB
     as your default pre-configured debugger.
@@ -39,24 +41,30 @@ from `rich`, and easy integration with different debuggers -- `debugpy`,
 ### CLI
 
 Run your Python script with debugging tools enabled using the
-`debug-dojo` command:
+`dojo run` command:
 
 ``` console
-dojo my_script.py
+dojo run my_script.py
+```
+
+Check your progress and current belt with:
+
+``` console
+dojo belt
 ```
 
 You can optionally set configuration, verbose mode, and specify the
 debugger type. Both script files and modules are supported:
 
 ``` console
-dojo --debugger ipdb --config dojo.toml --verbose --module my_module
+dojo run --debugger ipdb --config dojo.toml --verbose --module my_module
 ```
 
 dojo can let you debug into:
 
-- any Python script -- `dojo my_script.py`
-- any runnable module -- `dojo -m my_module`
-- or even an executable, `dojo -e my_executable` (like `pytest`)
+- any Python script -- `dojo run my_script.py`
+- any runnable module -- `dojo run -m my_module`
+- or even an executable, `dojo run -e my_executable` (like `pytest`)
 
 ### From the code
 

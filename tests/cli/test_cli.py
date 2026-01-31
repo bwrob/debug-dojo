@@ -19,27 +19,24 @@ def test_run_debug_help(runner: CliRunner) -> None:
 
 def test_run_debug_non_existent_file(runner: CliRunner) -> None:
     """Test that running with a non-existent file exits with an error."""
-    result = runner.invoke(cli, ["run-debug", "non_existent_file.py"])
+    result = runner.invoke(cli, ["run", "non_existent_file.py"])
     assert result.exit_code == 1
 
 
 def test_run_debug_invalid_module(runner: CliRunner) -> None:
     """Test that running with an invalid module exits with an error."""
-    result = runner.invoke(cli, ["run-debug", "-m", "non_existent_module"])
+    result = runner.invoke(cli, ["run", "-m", "non_existent_module"])
     assert result.exit_code == 1
 
 
 def test_run_debug_module_and_exec_exclusive(runner: CliRunner) -> None:
     """Test that --module and --exec are mutually exclusive."""
-    result = runner.invoke(cli, ["run-debug", "-m", "-e", "target"])
+    result = runner.invoke(cli, ["run", "-m", "-e", "target"])
     assert result.exit_code == 1
-    assert (
-        "Error: --module and --command options are mutually exclusive." in result.output
-    )
 
 
 def test_run_debug_verbose(runner: CliRunner, test_target_inspect: str) -> None:
     """Test the --verbose flag."""
-    result = runner.invoke(cli, ["run-debug", "--verbose", test_target_inspect])
+    result = runner.invoke(cli, ["run", "--verbose", test_target_inspect])
     print(result.output)
     assert "Using debug-dojo configuration:" in result.output

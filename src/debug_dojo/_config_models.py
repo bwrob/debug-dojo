@@ -140,6 +140,8 @@ class DebugDojoConfigV2:
     """Default debugger and configs."""
     features: FeaturesConfig = field(default_factory=FeaturesConfig)
     """Features mnemonics."""
+    gamification: bool = True
+    """Enable or disable gamification (Dojo Belts)."""
 
 
 @dataclass

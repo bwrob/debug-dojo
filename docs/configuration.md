@@ -42,6 +42,8 @@ debugger to use, enable or disable features, and set various options.
 
     # To disable a feature, set its mnemonic to an empty string:
     # comparer = ""
+
+gamification = true # Enable or disable Dojo Belts system
 ```
 
 ## Configuration Sections
@@ -88,3 +90,7 @@ This section allows you to customize the mnemonics (short names) for the `debug-
 -   `comparer` (string, default: `c`): The mnemonic for the object comparison function. (e.g., `c(obj1, obj2)`)
 -   `rich_inspect` (string, default: `i`): The mnemonic for the rich object inspection function. (e.g., `i(obj)`)
 -   `rich_print` (string, default: `p`): The mnemonic for the rich pretty printing function. (e.g., `p(obj)`)
+
+### `gamification`
+
+-   `gamification` (boolean, default: `true`): Enables or disables the Dojo Belts system. When enabled, `debug-dojo` tracks your debugging sessions and duration to award belts as you gain experience.
