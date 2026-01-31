@@ -38,7 +38,9 @@ def test_belt_command_integration(runner: CliRunner, tmp_path: str) -> None:
 
         # Initialize stats
         manager = GamificationManager()
-        manager.increment_session()  # 1 session
+        manager.increment_session(
+            duration_seconds=1.0, command="dojo run script.py"
+        )  # 1 session
 
         result: Result = runner.invoke(cli, ["belt"])
 

@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import contextlib
+import sys
+import time
 from pathlib import Path
 from typing import Annotated  # Removed TYPE_CHECKING here
 
@@ -117,10 +119,7 @@ def run_debug(  # noqa: PLR0913
         rich_print(f"[blue]Using debug-dojo configuration: {config} [/blue]")
 
     if target_name:
-        # Gamification: Increment session count if enabled
-        if config.gamification:
-            with contextlib.suppress(Exception):
-                GamificationManager().increment_session()
+        start_time = time.perf_counter()
 
         execute_with_debug(
             target_name=target_name,
@@ -129,6 +128,17 @@ def run_debug(  # noqa: PLR0913
             verbose=verbose,
             config=config,
         )
+
+        duration = time.perf_counter() - start_time
+
+        # Gamification: Increment session count if enabled
+        if config.gamification:
+            with contextlib.suppress(Exception):
+                command = " ".join(sys.argv)
+                GamificationManager().increment_session(
+                    duration_seconds=duration,
+                    command=command,
+                )
 
 
 def main() -> None:

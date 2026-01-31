@@ -21,6 +21,7 @@ def test_gamification_disabled_increment(runner: CliRunner) -> None:
         patch("debug_dojo._cli.load_config", return_value=mock_config),
         patch("debug_dojo._cli.GamificationManager") as mock_manager_cls,
         patch("debug_dojo._cli.execute_with_debug"),
+        patch("debug_dojo._cli.time.perf_counter", side_effect=[0.0, 1.0]),
     ):
         mock_instance = MagicMock()
         mock_manager_cls.return_value = mock_instance
@@ -41,6 +42,7 @@ def test_gamification_enabled_increment(runner: CliRunner) -> None:
         patch("debug_dojo._cli.load_config", return_value=mock_config),
         patch("debug_dojo._cli.GamificationManager") as mock_manager_cls,
         patch("debug_dojo._cli.execute_with_debug"),
+        patch("debug_dojo._cli.time.perf_counter", side_effect=[0.0, 1.0]),
     ):
         mock_instance = MagicMock()
         mock_manager_cls.return_value = mock_instance
