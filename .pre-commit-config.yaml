@@ -2,7 +2,7 @@
 fail_fast: false
 repos:
   - repo: https://github.com/pre-commit/pre-commit
-    rev: v4.5.0
+    rev: v4.5.1
     hooks:
       - id: validate_manifest
         name: 🛠️ pre-commit · Validate pre-commit configuration
@@ -57,11 +57,11 @@ repos:
       - id: ruff-format
         name: 🐍 ruff · Format Python code
     repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.6
+    rev: v0.14.14
   - hooks:
       - id: uv-lock
         name: 🐍 uv · Lock dependencies
       - id: uv-export
         name: 🐍 uv · Export dependencies to pip format
     repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.13
+    rev: 0.9.28
