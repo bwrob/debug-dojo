@@ -7,6 +7,7 @@
 ## Phase 2: Core Notification Engine
 - [ ] Task: Write Tests for core notification logic.
 - [ ] Task: Implement notification wrapper with platform detection.
+- [ ] Task: Implement "Zen" chime audio feedback logic.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Notification Engine' (Protocol in workflow.md)
 
 ## Phase 3: Breakpoint Integration

@@ -8,6 +8,7 @@
 ## Phase 2: Core Inspector Implementation
 - [ ] Task: Write Tests for categorization logic and privacy filtering.
 - [ ] Task: Implement the core `InspectorEngine` that processes extracted data into a renderable structure.
+- [ ] Task: Implement Safety Cutoffs (max member count and string length limits).
 - [ ] Task: Implement MRO and Type identity display.
 - [ ] Task: Conductor - User Manual Verification 'Phase 2: Core Inspector Implementation' (Protocol in workflow.md)
 

@@ -7,4 +7,5 @@ Extend the inspection tools (`i()` helper) to recognize and beautifully format s
 - Detect if an object is a Pandas DataFrame/Series and render a summary/head.
 - Detect if an object is a NumPy array and render shape/dtype/preview.
 - Detect if an object is a Pydantic model and render the schema/fields.
-- Fallback gracefully if libraries are not installed.
+- **Dependency Handling:** Use a detector-based pattern. Only attempt specialized rendering if the library is already present in the user's environment; do not add them as hard dependencies.
+- Fallback gracefully to the standard custom inspector if libraries are not installed.

@@ -1,9 +1,9 @@
 # Specification: Direct IPython Integration
 
 ## Overview
-Refactor the `ipdb` backend execution logic. Currently, it might be relying on subprocess calls that limit interactivity or control. The goal is to integrate directly with `IPython`'s embedding and debugging APIs to provide a smoother experience.
+Refactor the `ipdb` backend execution logic to use the direct `IPython` API. The primary driver is to remove the dependency on the poorly-maintained `ipdb` wrapper while gaining better control over how `debug-dojo` helpers are injected into the REPL.
 
 ## Requirements
 - Research IPython's embedding API.
-- Replace subprocess call with direct python API usage where feasible.
+- Replace `ipdb` dependency with direct python API usage.
 - Ensure `debug-dojo` helpers are still injected correctly.

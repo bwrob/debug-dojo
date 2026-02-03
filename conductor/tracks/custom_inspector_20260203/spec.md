@@ -21,6 +21,7 @@ Develop a custom object inspection engine for the `i` helper, replacing the depe
 ## Non-Functional Requirements
 -   **Aesthetics:** Use `rich` for formatting, ensuring colors and layout match the "Dojo" theme (readability first).
 -   **Performance:** The inspection logic must be efficient and handle large objects without significant delay.
+-   **Safety Cutoffs:** Implement hard limits for string representation length and member count per section to prevent terminal hanging on extremely large or circular objects.
 -   **Robustness:** Gracefully handle objects that raise exceptions during attribute access.
 
 ## Out of Scope

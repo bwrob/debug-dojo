@@ -1,7 +1,9 @@
 # Specification: Migrate CLI to Textual App
 
 ## Overview
-Migrate the core `debug-dojo` CLI from a standard `Typer` application to a full `Textual` TUI. This provides a unified "Zen" environment where users can manage their progress, review history, and launch debugging sessions within a consistent, responsive interface.
+Migrate the core `debug-dojo` CLI from a standard `Typer` application to a full `Textual` TUI. This provides a unified "Zen" environment where users can manage their progress, review history, and launch debugging sessions.
+
+**Architectural Note:** This follows a "Shell Wrapper" approach. While the Dashboard and Crash screens are full TUI applications, the target scripts will continue to run in the standard terminal environment to ensure 100% compatibility with interactive debuggers like IPython.
 
 ## Functional Requirements
 1.  **Textual Application Foundation:**
