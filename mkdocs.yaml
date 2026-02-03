@@ -51,6 +51,8 @@ site_author: bwrob
 site_description: debug dojo, a place for zen debugging
 site_name: debug dojo
 site_url: https://bwrob.github.io/debug-dojo/
+exclude_docs: |
+  fonts/README.md
 theme:
   color_mode: dark
   favicon: logo/logo_white.png

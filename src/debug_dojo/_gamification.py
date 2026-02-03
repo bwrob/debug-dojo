@@ -32,7 +32,14 @@ BELTS = [
 
 @dataclass
 class SessionInfo:
-    """Information about a single debugging session."""
+    """Information about a single debugging session.
+
+    Attributes:
+        timestamp: ISO 8601 formatted string of the session start time.
+        duration_minutes: Duration of the session in minutes.
+        command: The command used to start the session.
+
+    """
 
     timestamp: str  # ISO 8601 string
     duration_minutes: float
@@ -41,7 +48,14 @@ class SessionInfo:
 
 @dataclass
 class DojoStats:
-    """User statistics model."""
+    """User statistics model.
+
+    Attributes:
+        sessions: Total number of debugging sessions.
+        bugs_crushed: Placeholder for future feature (bugs fixed count).
+        history: List of past debugging sessions.
+
+    """
 
     sessions: int = 0
     bugs_crushed: int = 0  # Placeholder for future feature

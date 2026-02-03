@@ -43,6 +43,10 @@ def use_pdb(config: PdbConfig) -> None:
 
     Configures `sys.breakpointhook` to use `pdb.set_trace` and sets the
     `PYTHONBREAKPOINT` environment variable.
+
+    Args:
+        config (PdbConfig): Configuration for PDB.
+
     """
     import pdb
 
@@ -55,6 +59,10 @@ def use_pudb(config: PudbConfig) -> None:
 
     Configures `sys.breakpointhook` to use `pudb.set_trace` and sets the
     `PYTHONBREAKPOINT` environment variable.
+
+    Args:
+        config (PudbConfig): Configuration for PuDB.
+
     """
     try:
         import pudb  # pyright: ignore[reportMissingTypeStubs]
@@ -71,6 +79,10 @@ def use_ipdb(config: IpdbConfig) -> None:
 
     Configures `sys.breakpointhook` to use `ipdb.set_trace`, sets the
     `PYTHONBREAKPOINT` environment variable, and configures `IPDB_CONTEXT_SIZE`.
+
+    Args:
+        config (IpdbConfig): Configuration for IPDB.
+
     """
     try:
         import ipdb  # pyright: ignore[reportMissingTypeStubs]
@@ -89,6 +101,10 @@ def use_debugpy(config: DebugpyConfig) -> None:
     Configures `sys.breakpointhook` to use `debugpy.breakpoint`, sets the
     `PYTHONBREAKPOINT` environment variable, and starts a debugpy server
     waiting for a client connection.
+
+    Args:
+        config (DebugpyConfig): Configuration for debugpy.
+
     """
     try:
         import debugpy

@@ -33,6 +33,20 @@ def _validate_model(
     model: type[DebugDojoConfigV1 | DebugDojoConfigV2],
     raw_config: JSON,
 ) -> DebugDojoConfigV1 | DebugDojoConfigV2:
+    """Validate the raw configuration against a specific model.
+
+    Args:
+        model (type[DebugDojoConfigV1 | DebugDojoConfigV2]): The model class to use
+            for validation.
+        raw_config (JSON): The raw configuration data.
+
+    Returns:
+        DebugDojoConfigV1 | DebugDojoConfigV2: The validated configuration object.
+
+    Raises:
+        DaciteError: If the configuration does not match the model.
+
+    """
     if not isinstance(raw_config, dict):
         msg = "Configuration must be a dictionary."
         raise DaciteError(msg)

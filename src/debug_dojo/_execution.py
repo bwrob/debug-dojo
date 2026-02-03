@@ -34,6 +34,13 @@ class ExecMode(Enum):
 
 
 def _configure_sys_argv(target_name: str, target_args: list[str]) -> None:
+    """Configure sys.argv for the target script.
+
+    Args:
+        target_name (str): The name of the target script.
+        target_args (list[str]): The arguments to pass to the target.
+
+    """
     sys.argv = [target_name, *target_args]
 
 
@@ -44,6 +51,15 @@ def _install_debug_tools(
     verbose: bool,
     config: DebugDojoConfig,
 ) -> None:
+    """Install debugging tools based on configuration.
+
+    Args:
+        target_name (str): The name of the target script.
+        target_args (list[str]): The arguments passed to the target.
+        verbose (bool): Whether to print verbose output.
+        config (DebugDojoConfig): The configuration object.
+
+    """
     if verbose:
         rich_print(f"[blue]Installing debugging tools for {target_name}.[/blue]")
         rich_print(f"[blue]Arguments for target: {target_args}[/blue]")
@@ -54,6 +70,20 @@ def _install_debug_tools(
 def _get_runner_and_target(
     target_name: str, target_mode: ExecMode
 ) -> tuple[Runner, str]:
+    """Determine the runner function and resolved target path.
+
+    Args:
+        target_name (str): The name of the target.
+        target_mode (ExecMode): The execution mode (FILE, MODULE, EXECUTABLE).
+
+    Returns:
+        tuple[Runner, str]: A tuple containing the runner function and the resolved
+            target name.
+
+    Raises:
+        typer.Exit: If the target does not exist.
+
+    """
     if target_mode is ExecMode.MODULE:
         return runpy.run_module, target_name
 
@@ -68,6 +98,17 @@ def _get_runner_and_target(
 
 
 def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -> None:
+    """Handle exceptions during execution, optionally entering post-mortem.
+
+    Args:
+        e (Exception): The exception that occurred.
+        target_name (str): The name of the target being executed.
+        config (DebugDojoConfig): The configuration object.
+
+    Raises:
+        typer.Exit: Always raises Exit(1) after handling.
+
+    """
     rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
     rich_print(traceback.format_exc())
     if config.exceptions.post_mortem:
@@ -83,6 +124,14 @@ def _safe_execute(
     target_name: str,
     config: DebugDojoConfig,
 ) -> None:
+    """Execute the target safely, handling specific exceptions.
+
+    Args:
+        runner (Runner): The function to run the target.
+        target_name (str): The name of the target.
+        config (DebugDojoConfig): The configuration object.
+
+    """
     try:
         _ = runner(target_name, run_name="__main__")
     except ImportError as e:
