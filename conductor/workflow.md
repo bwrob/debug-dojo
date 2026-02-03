@@ -8,14 +8,15 @@
 - **Atomic Commits:** Commit changes after every successful task.
 
 ## 2. Process
-1.  **Understand:** Analyze requirements and existing code.
-2.  **Plan:** Break down the track into small, manageable tasks in `plan.md`.
-3.  **Implement (Iterative):**
+1.  **Branching:** Ensure you are on a dedicated feature branch for the track (e.g., `feat/track-name` or `fix/issue-id`). Create one if necessary.
+2.  **Understand:** Analyze requirements and existing code.
+3.  **Plan:** Break down the track into small, manageable tasks in `plan.md`.
+4.  **Implement (Iterative):**
     -   Write failing tests.
     -   Implement the feature/fix.
     -   Refactor and verify (tests, linting, typing).
     -   Commit the task and record the summary.
-4.  **Verify:** Ensure the entire track meets the specification and quality standards.
+5.  **Verify:** Ensure the entire track meets the specification and quality standards.
 
 ## 3. Tooling
 - **Dependency Management:** `uv`
