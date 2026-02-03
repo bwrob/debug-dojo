@@ -24,3 +24,13 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/remote_debugging_20260203/](./tracks/remote_debugging_20260203/)*
 - [ ] **Track: Plugin System**
   *Link: [./tracks/plugin_system_20260203/](./tracks/plugin_system_20260203/)*
+- [ ] **Track: Maintenance & Dependency Updates**
+  *Link: [./tracks/maintenance_dependency_updates_20260203/](./tracks/maintenance_dependency_updates_20260203/)*
+- [ ] **Track: Stability - Environment Injection Tests**
+  *Link: [./tracks/stability_environment_injection_tests_20260203/](./tracks/stability_environment_injection_tests_20260203/)*
+- [ ] **Track: Coverage Enforcement**
+  *Link: [./tracks/coverage_enforcement_20260203/](./tracks/coverage_enforcement_20260203/)*
+- [ ] **Track: Documentation - Advanced Usage**
+  *Link: [./tracks/documentation_advanced_usage_20260203/](./tracks/documentation_advanced_usage_20260203/)*
+- [ ] **Track: Automated Publishing Workflow**
+  *Link: [./tracks/automated_publishing_workflow_20260203/](./tracks/automated_publishing_workflow_20260203/)*
