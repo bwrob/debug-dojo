@@ -1,0 +1,8 @@
+{
+    "created_at": "2026-02-03T12:10:00Z",
+    "description": "Add functionality to manage pudb's saved breakpoints via tool configuration (#4)",
+    "status": "new",
+    "track_id": "pudb_breakpoint_management_20260203",
+    "type": "feature",
+    "updated_at": "2026-02-03T12:10:00Z"
+}

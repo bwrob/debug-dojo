@@ -1,0 +1,5 @@
+# Track enhanced_ui_with_rich_20260203 Context
+
+- [Specification](./spec.md)
+- [Implementation Plan](./plan.md)
+- [Metadata](./metadata.json)

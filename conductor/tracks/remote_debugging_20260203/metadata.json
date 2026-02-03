@@ -1,0 +1,8 @@
+{
+    "created_at": "2026-02-03T12:15:00Z",
+    "description": "Simplify the setup for remote debugging scenarios using debugpy (#87)",
+    "status": "new",
+    "track_id": "remote_debugging_20260203",
+    "type": "feature",
+    "updated_at": "2026-02-03T12:15:00Z"
+}
