@@ -1,0 +1,8 @@
+{
+    "created_at": "2026-02-03T12:15:00Z",
+    "description": "Refactor the ipdb backend to potentially use IPython's debugger directly (#33)",
+    "status": "new",
+    "track_id": "direct_ipython_integration_20260203",
+    "type": "refactor",
+    "updated_at": "2026-02-03T12:15:00Z"
+}

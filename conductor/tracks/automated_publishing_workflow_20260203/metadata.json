@@ -1,0 +1,8 @@
+{
+    "created_at": "2026-02-03T13:00:00Z",
+    "description": "Verify and refine the GitHub Actions for publishing to PyPI and deploying GitHub Pages (#19)",
+    "status": "new",
+    "track_id": "automated_publishing_workflow_20260203",
+    "type": "maintenance",
+    "updated_at": "2026-02-03T13:00:00Z"
+}
