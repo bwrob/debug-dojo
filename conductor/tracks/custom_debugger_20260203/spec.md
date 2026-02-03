@@ -1,7 +1,9 @@
 # Specification: Custom Responsive Internal Debugger
 
 ## Overview
-Implement a custom, responsive TUI (Terminal User Interface) debugger for `debug-dojo`, built upon the foundation of Python's `pdb`. The primary goal is to provide a "Zen" debugging experience that remains functional and aesthetic across all screen sizes, including mobile devices and narrow vertical terminal splits.
+Implement a custom, responsive TUI (Terminal User Interface) debugger for `debug-dojo`, built upon the foundation of Python's `pdb`. The primary goal is to provide a "Zen" debugging experience that remains functional and aesthetic across all screen sizes.
+
+**Architectural Note:** This debugger will be implemented as a specialized `Textual` screen that takes control of the terminal only when a breakpoint is hit, maintaining the "Shell Wrapper" philosophy.
 
 ## Functional Requirements
 1.  **Core Debugging Engine:** Extend `pdb.Pdb` to handle execution control while providing a hook for the custom TUI.

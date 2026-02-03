@@ -5,6 +5,7 @@ Design and implement a plugin architecture. Users should be able to define custo
 
 ## Requirements
 - Define a plugin interface/structure (entry points or file-based).
+- Support for injecting custom backend debuggers via plugins.
 - specific directory for user plugins (e.g., `~/.debug-dojo/plugins`).
 - Load and validate plugins at startup.
 - Inject plugin callables into the debug context.
