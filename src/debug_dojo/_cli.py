@@ -6,7 +6,7 @@ import contextlib
 import sys
 import time
 from pathlib import Path
-from typing import Annotated  # Removed TYPE_CHECKING here
+from typing import Annotated
 
 import typer
 from rich import print as rich_print
