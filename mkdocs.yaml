@@ -26,7 +26,6 @@ nav:
   - Dojo: index.md
   - Configuration: configuration.md
   - CLI Usage: cli-reference.md
-  - Development:
   - Changelog: changelog.md
   - API Reference: api-reference.md
 plugins:

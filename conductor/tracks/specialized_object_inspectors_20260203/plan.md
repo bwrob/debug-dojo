@@ -1,5 +1,8 @@
 # Implementation Plan: Specialized Object Inspectors
 
+## Phase 0: Integration
+- [ ] Task: Integrate with the new Custom Object Inspector engine (Track: custom_inspector_20260203).
+
 ## Phase 1: Pydantic Support
 - [ ] Task: Write Tests for Pydantic model inspection.
 - [ ] Task: Implement Pydantic model inspector.

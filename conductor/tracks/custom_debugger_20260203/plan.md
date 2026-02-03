@@ -1,7 +1,7 @@
 # Implementation Plan: Custom Responsive Internal Debugger
 
 ## Phase 1: Core Engine and Research
-- [ ] Task: Research `pdb.Pdb` extension patterns and `Textual` layout responsiveness.
+- [ ] Task: Research `pdb.Pdb` extension patterns and how to integrate a new `Screen` into the existing `Textual` App (Track: textual_migration_20260203).
 - [ ] Task: Create a prototype that wraps `pdb` and captures execution state without a UI.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Core Engine and Research' (Protocol in workflow.md)
 
