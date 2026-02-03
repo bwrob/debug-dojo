@@ -58,6 +58,20 @@ repos:
         name: 🐍 ruff · Format Python code
     repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.6
+  - repo: local
+    hooks:
+      - id: basedpyright
+        name: 🐍 basedpyright · Check static typing
+        entry: uv run basedpyright --project pyrightconfig.json
+        language: system
+        types: [python]
+        pass_filenames: false
+      - id: complexipy
+        name: 🐍 complexipy · Check code complexity
+        entry: uv run complexipy .
+        language: system
+        types: [python]
+        pass_filenames: false
   - hooks:
       - id: uv-lock
         name: 🐍 uv · Lock dependencies
