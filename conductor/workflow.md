@@ -14,13 +14,14 @@
 4.  **Implement (Iterative):**
     -   Write failing tests.
     -   Implement the feature/fix.
-    -   Refactor and verify (tests, linting, typing).
-    -   Commit the task and record the summary.
-5.  **Verify:** Ensure the entire track meets the specification and quality standards.
+    -   **Verify Quality:** Run `poe fix` (format/lint) and `poe type-check`.
+    -   **Verify Tests:** Run `poe test` and ensure 100% coverage.
+    -   Commit the task and record the summary via Git Notes.
+5.  **Verify Track:** Ensure the entire track meets the specification and all quality standards.
 
 ## 3. Tooling
 - **Dependency Management:** `uv`
-- **Task Automation:** `poethepoet` (`poe precommit`, `poe fix`, etc.)
+- **Task Automation:** `poethepoet` (`poe code-quality` is the master check).
 - **Testing:** `pytest`
 - **Linting/Formatting:** `ruff`
 - **Type Checking:** `basedpyright`
@@ -30,8 +31,9 @@
 - Use **Git Notes** to record detailed summaries for each completed task.
 
 ## 5. Phase Completion Verification and Checkpointing Protocol
-At the end of each phase, a mandatory verification task must be performed:
-1.  **Run All Tests:** Ensure 100% coverage and all tests pass (`poe test` / `poe coverage`).
-2.  **Lint & Format:** Ensure zero `ruff` violations (`poe lint`, `poe format`).
-3.  **Type Check:** Ensure zero `basedpyright` errors in strict mode (`poe type-check`).
-4.  **Checkpoint:** If all checks pass, the phase is considered complete and ready for the next.
+At the end of each phase, a mandatory verification task must be performed to ensure the codebase remains in a 'green' state:
+1.  **Code Quality:** Run `poe fix` to ensure perfect formatting and no auto-fixable lint issues.
+2.  **Static Typing:** Run `poe type-check` and ensure zero errors in strict mode.
+3.  **Linting:** Run `poe lint` to catch any remaining issues.
+4.  **Tests:** Run `poe coverage` to ensure all tests pass and 100% coverage is maintained.
+5.  **Checkpoint:** If and only if ALL checks pass, the phase is considered complete.
