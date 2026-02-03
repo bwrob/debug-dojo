@@ -34,3 +34,23 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/documentation_advanced_usage_20260203/](./tracks/documentation_advanced_usage_20260203/)*
 - [ ] **Track: Automated Publishing Workflow**
   *Link: [./tracks/automated_publishing_workflow_20260203/](./tracks/automated_publishing_workflow_20260203/)*
+
+---
+
+- [ ] **Track: Improve Documentation**
+  *Link: [./tracks/improve_documentation_20260203/](./tracks/improve_documentation_20260203/)*
+
+---
+
+- [ ] **Track: Custom Responsive Internal Debugger**
+  *Link: [./tracks/custom_debugger_20260203/](./tracks/custom_debugger_20260203/)*
+
+---
+
+- [ ] **Track: Operator-Based Inspection and Comparison**
+  *Link: [./tracks/operator_helpers_20260203/](./tracks/operator_helpers_20260203/)*
+
+---
+
+- [ ] **Track: Custom Object Inspector (i)**
+  *Link: [./tracks/custom_inspector_20260203/](./tracks/custom_inspector_20260203/)*
