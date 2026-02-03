@@ -2,7 +2,7 @@
 fail_fast: false
 repos:
   - repo: https://github.com/pre-commit/pre-commit
-    rev: v4.5.0
+    rev: v4.5.1
     hooks:
       - id: validate_manifest
         name: 🛠️ pre-commit · Validate pre-commit configuration
@@ -43,7 +43,7 @@ repos:
         id: validate-pyproject
         name: 🐍 validate-pyproject · Validate pyproject.toml
     repo: https://github.com/abravalheri/validate-pyproject
-    rev: v0.24.1
+    rev: v0.25
   - repo: https://github.com/myint/eradicate
     rev: 3.0.1
     hooks:
@@ -57,7 +57,7 @@ repos:
       - id: ruff-format
         name: 🐍 ruff · Format Python code
     repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.6
+    rev: v0.15.0
   - repo: local
     hooks:
       - id: basedpyright
@@ -78,4 +78,4 @@ repos:
       - id: uv-export
         name: 🐍 uv · Export dependencies to pip format
     repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.13
+    rev: 0.9.28
