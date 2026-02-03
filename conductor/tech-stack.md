@@ -18,3 +18,9 @@
 - **Linting and Formatting:** [Ruff](https://beta.ruff.rs/) - For high-performance linting and code formatting.
 - **Static Analysis:** [basedpyright](https://github.com/DetachHead/basedpyright) - For enhanced static type checking and LSP support.
 - **Documentation:** [MkDocs](https://www.mkdocs.org/) - For project documentation.
+
+## Documentation & Build Tools
+- **Typst:** Used for generating high-quality banner images.
+- **MkDocs Plugins:**
+    - `mkdocs-typer2`: For automatic CLI documentation.
+    - `mkdocs-material`: The documentation theme.
