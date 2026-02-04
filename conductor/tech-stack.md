@@ -10,7 +10,7 @@
 - **Terminal UI & Formatting:**
   - [Rich](https://rich.readthedocs.io/) - For terminal formatting, syntax highlighting, and inspection.
   - [pyscn](https://github.com/bwrob/pyscn) - For visual scan/inspection utilities.
-  - [Textual](https://textual.textualize.io/) - (Planned) For TUI components.
+  - [Textual](https://textual.textualize.io/) - For TUI components and the interactive dashboard.
 
 ## Debugging Ecosystem
 
