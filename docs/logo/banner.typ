@@ -1,4 +1,4 @@
-#set page(width: auto, height: auto, margin: 40pt)
+#set page(width: auto, height: auto, margin: 40pt, fill: none)
 #set text(font: "Zen Kaku Gothic Antique")
 
 #stack(
