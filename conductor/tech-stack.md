@@ -1,26 +1,35 @@
 # Technology Stack
 
 ## Core Language and Frameworks
-- **Primary Language:** Python
+
+- **Primary Language:** Python 3.10+
 - **CLI Framework:** [Typer](https://typer.tiangolo.com/) - For building the command-line interface.
-- **Data Validation:** [Pydantic](https://docs.pydantic.dev/) - For configuration and internal data models.
+- **Data Modeling:**
+  - [Pydantic](https://docs.pydantic.dev/) & [Dacite](https://github.com/konradhalas/dacite) - For configuration and internal data models.
+  - [tomlkit](https://github.com/sdispater/tomlkit) - For style-preserving TOML parsing/editing.
 - **Terminal UI & Formatting:**
-    - [Rich](https://rich.readthedocs.io/) - For beautiful terminal formatting, syntax highlighting, and object inspection.
-    - [Textual](https://textual.textualize.io/) - (Planned) For building sophisticated TUI (Terminal User Interface) components.
+  - [Rich](https://rich.readthedocs.io/) - For terminal formatting, syntax highlighting, and inspection.
+  - [pyscn](https://github.com/bwrob/pyscn) - For visual scan/inspection utilities.
+  - [Textual](https://textual.textualize.io/) - (Planned) For TUI components.
 
 ## Debugging Ecosystem
-- **Backends:** Supports integration with `debugpy`, `pudb`, `ipdb`, and the built-in `pdb`.
 
-## Development and Quality Assurance
-- **Package Management:** [uv](https://github.com/astral-sh/uv) - For fast dependency management and execution.
-- **Task Runner:** [Poe the Poet](https://poethepoet.natn.io/) - For managing development tasks.
-- **Testing:** [pytest](https://docs.pytest.org/) - For unit and integration testing.
-- **Linting and Formatting:** [Ruff](https://beta.ruff.rs/) - For high-performance linting and code formatting.
-- **Static Analysis:** [basedpyright](https://github.com/DetachHead/basedpyright) - For enhanced static type checking and LSP support.
-- **Documentation:** [MkDocs](https://www.mkdocs.org/) - For project documentation.
+- **Backends:** Native integration with `debugpy`, `pudb`, `ipdb`, and standard `pdb`.
+- **Instrumentation:** Custom wrappers for environment injection and execution control.
 
-## Documentation & Build Tools
-- **Typst:** Used for generating high-quality banner images.
-- **MkDocs Plugins:**
-    - `mkdocs-typer2`: For automatic CLI documentation.
-    - `mkdocs-material`: The documentation theme.
+## Development & Quality Gate
+
+- **Package Management:** [uv](https://github.com/astral-sh/uv) - Fast dependency management and workspace support.
+- **Task Runner:** [Poe the Poet](https://poethepoet.natn.io/) - Centralized task management (`poe fix`, `poe type-check`).
+- **Testing:** [pytest](https://docs.pytest.org/) with `pytest-cov` - High-coverage unit and integration testing.
+- **Linting & Formatting:** [Ruff](https://beta.ruff.rs/) - Unified linter and formatter.
+- **Static Analysis:** [basedpyright](https://github.com/DetachHead/basedpyright) - Strict type checking.
+- **Architectural Guardrails:**
+  - [tach](https://github.com/gauge-sh/tach) - Enforcing module boundaries and dependency rules.
+  - [complexipy](https://github.com/pomponchic/complexipy) - Monitoring cognitive complexity.
+
+## Documentation & Assets
+
+- **Documentation:** [MkDocs](https://www.mkdocs.org/) with `mkdocs-material`.
+- **CLI Docs:** `mkdocs-typer2` - Automatic reference generation.
+- **Visuals:** [Typst](https://typst.app/) - For banner and asset generation.

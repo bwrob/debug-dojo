@@ -1,39 +1,68 @@
-# Development Workflow
+# Development Workflow (Gemini Conductor)
 
-## 1. Principles
-- **Test-Driven Development (TDD):** Write tests before implementing features.
-- **100% Test Coverage:** All new code must be covered by tests.
-- **Strict Static Typing:** Full adherence to `basedpyright` in strict mode.
-- **Full Linting Adherence:** No `ruff` violations allowed (enforcing ALL rule set).
-- **Atomic Commits:** Commit changes after every successful task.
+## 1. Core Principles
 
-## 2. Process
-1.  **Branching:** Ensure you are on a dedicated feature branch for the track (e.g., `feat/track-name` or `fix/issue-id`). Create one if necessary.
-2.  **Understand:** Analyze requirements and existing code.
-3.  **Plan:** Break down the track into small, manageable tasks in `plan.md`.
-4.  **Implement (Iterative):**
-    -   Write failing tests.
-    -   Implement the feature/fix.
-    -   **Verify Quality:** Run `poe fix` (format/lint) and `poe type-check`.
-    -   **Verify Tests:** Run `poe test` and ensure 100% coverage.
-    -   Commit the task and record the summary via Git Notes.
-5.  **Verify Track:** Ensure the entire track meets the specification and all quality standards.
+- **Context First:** Before writing code, READ the `tech-stack.md` and related files in `src/`. Do not guess APIs.
+- **Strict TDD:** Tests are the specification. Write the test -> Watch it fail -> Write code -> Watch it pass.
+- **Type-Safety First:** Define data structures (Pydantic/DataClasses) and Type hints before writing logic.
+- **Zero Tolerance:** No linting warnings (`ruff`), no type errors (`basedpyright`), no skipped tests.
+- **Conventional Commits:** Use Angular convention (e.g., `feat:`, `fix:`, `test:`, `refactor:`).
+- **Atomic Operations:** Keep changes small and focused on a single task.
 
-## 3. Tooling
-- **Dependency Management:** `uv`
-- **Task Automation:** `poethepoet` (`poe code-quality` is the master check).
-- **Testing:** `pytest`
-- **Linting/Formatting:** `ruff`
-- **Type Checking:** `basedpyright`
+## 2. The Development Loop (Per Task)
 
-## 4. Documentation
-- Keep `plan.md` updated with task statuses (`[ ]`, `[/]`, `[x]`).
-- Use **Git Notes** to record detailed summaries for each completed task.
+For every item in `plan.md`, execute this exact cycle:
 
-## 5. Phase Completion Verification and Checkpointing Protocol
-At the end of each phase, a mandatory verification task must be performed to ensure the codebase remains in a 'green' state:
-1.  **Code Quality:** Run `poe fix` to ensure perfect formatting and no auto-fixable lint issues.
-2.  **Static Typing:** Run `poe type-check` and ensure zero errors in strict mode.
-3.  **Linting:** Run `poe lint` to catch any remaining issues.
-4.  **Tests:** Run `poe coverage` to ensure all tests pass and 100% coverage is maintained.
-5.  **Checkpoint:** If and only if ALL checks pass, the phase is considered complete.
+### Phase A: Design & Specification
+
+1. **Check Out:** Ensure you are on the correct feature branch.
+2. **Dependency Audit:** Check `pyproject.toml` and existing modules. Leverage existing utilities before adding new ones.
+3. **Define Interface:** Write/Update Type definitions and function signatures.
+4. **Write Test:** Create a specific `pytest` case in `tests/` that reproduces the requirement.
+5. **Verify Failure:** Run `uv run pytest path/to/test.py` and confirm it fails (Red state).
+
+### Phase B: Implementation
+
+1. **Implement:** Write the minimum code necessary to pass the test.
+2. **Verify Pass:** Run the test again. If it fails, analyze the stack trace and iterate.
+3. **Internal Consistency:** Ensure new code matches the project's architectural patterns (e.g., configuration handling, error patterns).
+
+### Phase C: Polish & Verify (The "Green" Gate)
+
+1. **Format & Lint:** Run `uv run poe fix`.
+2. **Type Check:** Run `uv run poe type-check`.
+3. **Coverage:** Run `uv run poe coverage`.
+4. **Refactor:** If the code is messy, refactor now. **Mandatory:** Re-run tests after any refactor.
+5. **Documentation:** Update docstrings or `docs/` if public APIs changed. Ensure no comments are outdated.
+
+### Phase D: Commit
+
+1. **Update Plan:** Mark the task in `plan.md` as `[x]`.
+2. **Git Commit:** Commit with a conventional message describing the *why*, not just the *what*.
+   - *Example:* `feat(auth): implement JWT validation logic`
+
+## 3. Tooling Reference
+
+- **Command Runner:** Always use `uv run poe <command>` to ensure virtualenv context.
+- **Testing:** `uv run pytest` (or `poe test`).
+- **Linting:** `ruff check --fix` (via `poe fix`).
+- **Type Checking:** `basedpyright` (via `poe type-check`).
+- **Full Suite:** `uv run poe code-quality` (runs all checks).
+
+## 4. Error Handling Protocol
+
+If a verification step fails:
+
+1. **Read the Error:** Analyze the `stdout`/`stderr` carefully.
+2. **Attempt Fix:** Try to fix the code (up to 3 attempts).
+3. **Stop & Ask:** If you are stuck after 3 attempts, stop and present the error to the user with a suggested path forward.
+4. **Never Force:** Do not use `# type: ignore` or `# noqa` unless explicitly authorized.
+
+## 5. Final Track Verification
+
+When all tasks in `plan.md` are `[x]`:
+
+1. **Full Suite:** Run `uv run poe code-quality`.
+2. **AI Review:** Run `/conductor:review`. This compares implementation against `spec.md`.
+3. **Cleanup:** Ensure no temporary files or debug prints remain.
+4. **Completion:** Announce: "Track complete. All checks passed. Ready for human review."

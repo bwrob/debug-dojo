@@ -1,61 +1,38 @@
 ---
 copyright: Copyright &copy; 2025 bwrob
 edit_uri: edit/main/docs/
-extra:
-  generator: false
-  social:
-    - icon: fontawesome/brands/github
-      link: https://github.com/bwrob/
-markdown_extensions:
-  - smarty
-  - toc:
-      permalink: true
-  - sane_lists
-  - pymdownx.highlight:
-      anchor_linenums: true
-      line_spans: __span
-      linenums: true
-      use_pygments: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: pymdownx.superfences.fence_code_format
-  - pymdownx.snippets
-nav:
-  - Dojo: index.md
-  - Configuration: configuration.md
-  - CLI Usage: cli-reference.md
-  - Changelog: changelog.md
-  - API Reference: api-reference.md
-plugins:
-  - search
-  - git-authors
-  - mkdocstrings:
-      default_handler: python
-      handlers:
-        python:
-          options:
-            show_symbol_type_toc: true
-  - mkdocs-typer2
-  - git-revision-date-localized:
-      enable_creation_date: true
-  - git-committers:
-      branch: main
-      repository: bwrob/debug-dojo
-# repo
+
 repo_name: bwrob/debug-dojo
 repo_url: https://github.com/bwrob/debug-dojo
-# site
 site_author: bwrob
 site_description: debug dojo, a place for zen debugging
 site_name: debug dojo
 site_url: https://bwrob.github.io/debug-dojo/
-exclude_docs: |
-  fonts/README.md
+
 theme:
-  color_mode: dark
+  name: material
+  logo: logo/logo_white.png
   favicon: logo/logo_white.png
+  palette:
+    # Light mode
+    - scheme: default
+      primary: black
+      accent: indigo
+      media: "(prefers-color-scheme: light)"
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: black
+      accent: indigo
+      media: "(prefers-color-scheme: dark)"
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: Roboto
+    code: JetBrains Mono
   features:
     - announce.dismiss
     - content.action.edit
@@ -72,6 +49,7 @@ theme:
     - navigation.instant
     - navigation.instant.prefetch
     - navigation.instant.progress
+    - navigation.path
     - navigation.prune
     - navigation.sections
     - navigation.tabs
@@ -83,30 +61,59 @@ theme:
     - search.suggest
     - toc.follow
     - toc.integrate
-  icon:
-    edit: material/pencil
-    repo: fontawesome/brands/git-alt
-    view: material/eye
-  logo: logo/logo_white.png
-  name: material
-  palette:
-    - accent: yellow
-      media: (prefers-color-scheme)
-      primary: blue
-      toggle:
-        icon: material/brightness-auto
-        name: Switch to light mode
-    - accent: yellow
-      media: '(prefers-color-scheme: light)'
-      primary: blue
-      scheme: default
-      toggle:
-        icon: material/brightness-7
-        name: Switch to dark mode
-    - accent: yellow
-      media: '(prefers-color-scheme: dark)'
-      primary: blue
-      scheme: slate
-      toggle:
-        icon: material/brightness-4
-        name: Switch to system preference
+
+markdown_extensions:
+  - smarty
+  - toc:
+      permalink: true
+  - sane_lists
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      linenums: true
+      use_pygments: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: pymdownx.superfences.fence_code_format
+  - pymdownx.snippets
+  - pymdownx.magiclink
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+plugins:
+  - search
+  - git-authors
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_symbol_type_toc: true
+            show_source: true
+            members_order: alphabetical
+  - mkdocs-typer2
+  - git-revision-date-localized:
+      enable_creation_date: true
+
+nav:
+  - Dojo: index.md
+  - Configuration: configuration.md
+  - CLI Usage: cli-reference.md
+  - Changelog: changelog.md
+  - API Reference: api-reference.md
+
+extra:
+  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/bwrob/
+
+exclude_docs: |
+  fonts/README.md

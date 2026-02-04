@@ -87,6 +87,7 @@
     help = "Spawn docs server."
     sequence = [
         "generate-banner",
+        { cmd = "echo 'Docs server starting at http://127.0.0.1:8000/'" },
         { cmd = "hap run mkdocs serve" },
     ]
 

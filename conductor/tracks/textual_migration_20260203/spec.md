@@ -10,9 +10,12 @@ Migrate the core `debug-dojo` CLI from a standard `Typer` application to a full 
     -   Implement the main `Textual` App class.
     -   Support command-line arguments via `Typer` to decide whether to launch the Dashboard or jump straight to a session.
 2.  **Dojo Dashboard Screen:**
-    -   **Belt Progress:** Display current belt and stats (bugs crushed, sessions).
-    -   **Session History:** Interactive list of past debugging runs.
-    -   **Quick Launch:** Ability to select a past run and "Re-practice" (re-run) it seamlessly.
+    -   **Two-Section Layout:**
+        -   **History Section (Left/Top):** An interactive list of previous debugging runs. The most recent run must be selected by default upon launch.
+        -   **Configuration Section (Right/Bottom):** Displays the full configuration of the selected history item (e.g., target file, debugger backend, execution mode, environment variables).
+    -   **Seamless Tweaking:** Users can modify settings in the Configuration Section before launching.
+    -   **Quick Re-run:** A prominent "Practice Again" (Launch) action that executes the selected/tweaked configuration.
+    -   **Belt Progress:** Integrated display of current belt and stats (bugs crushed, sessions).
 3.  **Screen Management:**
     -   Implement a `Screen` stack to transition between the Dashboard and future features (like the Custom Debugger).
 4.  **Responsive Layout:**
