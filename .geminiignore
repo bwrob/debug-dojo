@@ -1,0 +1,45 @@
+# Standard Python ignores
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+
+# Cache and temporary files
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.complexipy_cache/
+.pyscn/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+junit/
+report.html
+
+# Documentation builds
+/site
+docs/_build/
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+.python-version
+.env
+.envrc
+
+# Git
+.git/

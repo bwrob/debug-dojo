@@ -1,8 +1,8 @@
 # Implementation Plan: Migrate CLI to Textual App
 
 ## Phase 1: Textual Foundation
-- [ ] Task: Research Textual's app lifecycle and Typer integration patterns.
-- [ ] Task: Create the base `Textual` App class and a placeholder "Main" screen.
+- [x] Task: Research Textual's app lifecycle and Typer integration patterns.
+- [x] Task: Create the base `Textual` App class and a placeholder "Main" screen.
 - [ ] Task: Conductor - User Manual Verification 'Phase 1: Textual Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Dojo Dashboard UI
