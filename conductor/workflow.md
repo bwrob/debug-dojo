@@ -33,7 +33,7 @@ For every item in `plan.md`, execute this exact cycle:
 2. **Type Check:** Run `uv run poe type-check`.
 3. **Coverage:** Run `uv run poe coverage`.
 4. **Refactor:** If the code is messy, refactor now. **Mandatory:** Re-run tests after any refactor.
-5. **Documentation:** Update docstrings or `docs/` if public APIs changed.
+5. **Documentation:** Update docstrings or `docs/` if public APIs changed. Ensure no comments are outdated.
 
 ### Phase D: Commit
 
