@@ -21,7 +21,7 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 3: History and Launch Logic' (Protocol in workflow.md)
 
 ## Phase 4: CLI Handoff & Integration
-- [ ] Task: Write Tests for CLI argument parsing and app routing.
-- [ ] Task: Refactor the main entry point to launch the Textual App.
-- [ ] Task: Implement "Direct Launch" mode (bypassing dashboard via CLI args).
-- [ ] Task: Conductor - User Manual Verification 'Phase 4: CLI Handoff & Integration' (Protocol in workflow.md)
+- [x] Task: Write Tests for CLI argument parsing and app routing.
+- [x] Task: Refactor the main entry point to launch the Textual App.
+- [x] Task: Implement "Direct Launch" mode (bypassing dashboard via CLI args).
+- [x] Task: Conductor - User Manual Verification 'Phase 4: CLI Handoff & Integration' (Protocol in workflow.md)

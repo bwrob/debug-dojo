@@ -5,12 +5,6 @@ from typer.testing import CliRunner
 from debug_dojo._cli import cli
 
 
-def test_no_args_prints_help(runner: CliRunner) -> None:
-    """Test that running with no arguments prints help."""
-    result = runner.invoke(cli, [])
-    assert "Usage:" in result.output
-
-
 def test_run_debug_help(runner: CliRunner) -> None:
     """Test the help message for the run-debug command."""
     result = runner.invoke(cli, ["run-debug", "--help"])
