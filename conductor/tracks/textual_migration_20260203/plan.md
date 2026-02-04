@@ -14,11 +14,11 @@
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Dojo Dashboard UI' (Protocol in workflow.md)
 
 ## Phase 3: History and Launch Logic
-- [ ] Task: Write Tests for history loading and session launching logic.
-- [ ] Task: Integrate existing history persistence into the Textual components.
-- [ ] Task: Implement the logic to populate the Config widget based on History selection.
-- [ ] Task: Implement the "Quick Launch/Re-practice" feature with support for tweaked settings.
-- [ ] Task: Conductor - User Manual Verification 'Phase 3: History and Launch Logic' (Protocol in workflow.md)
+- [x] Task: Write Tests for history loading and session launching logic.
+- [x] Task: Integrate existing history persistence into the Textual components.
+- [x] Task: Implement the logic to populate the Config widget based on History selection.
+- [x] Task: Implement the "Quick Launch/Re-practice" feature with support for tweaked settings.
+- [x] Task: Conductor - User Manual Verification 'Phase 3: History and Launch Logic' (Protocol in workflow.md)
 
 ## Phase 4: CLI Handoff & Integration
 - [ ] Task: Write Tests for CLI argument parsing and app routing.
