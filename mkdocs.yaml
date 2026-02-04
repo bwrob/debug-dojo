@@ -101,9 +101,6 @@ plugins:
   - mkdocs-typer2
   - git-revision-date-localized:
       enable_creation_date: true
-  - git-committers:
-      branch: main
-      repository: bwrob/debug-dojo
 
 nav:
   - Dojo: index.md
