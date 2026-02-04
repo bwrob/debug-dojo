@@ -4,8 +4,6 @@ This file tracks all major tracks for the project. Each track has its own detail
 
 ---
 
-- [x] **Track: Migrate CLI to Textual App**
-  *Link: [./tracks/textual_migration_20260203/](./tracks/textual_migration_20260203/)*
 - [ ] **Track: Custom Responsive Internal Debugger**
   *Link: [./tracks/custom_debugger_20260203/](./tracks/custom_debugger_20260203/)*
 - [ ] **Track: Operator-Based Inspection and Comparison**
