@@ -2,38 +2,22 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://bwrob.github.io/debug-dojo/</loc>
-         <lastmod>2025-11-29</lastmod>
+         <lastmod>2026-02-04</lastmod>
     </url>
     <url>
          <loc>https://bwrob.github.io/debug-dojo/api-reference/</loc>
-         <lastmod>2025-11-29</lastmod>
+         <lastmod>2026-02-04</lastmod>
     </url>
     <url>
          <loc>https://bwrob.github.io/debug-dojo/changelog/</loc>
-         <lastmod>2025-11-29</lastmod>
+         <lastmod>2026-02-04</lastmod>
     </url>
     <url>
          <loc>https://bwrob.github.io/debug-dojo/cli-reference/</loc>
-         <lastmod>2025-11-29</lastmod>
+         <lastmod>2026-02-04</lastmod>
     </url>
     <url>
          <loc>https://bwrob.github.io/debug-dojo/configuration/</loc>
-         <lastmod>2025-11-29</lastmod>
-    </url>
-    <url>
-         <loc>https://bwrob.github.io/debug-dojo/development-plan/</loc>
-         <lastmod>2025-11-29</lastmod>
-    </url>
-    <url>
-         <loc>https://bwrob.github.io/debug-dojo/development/</loc>
-         <lastmod>2025-11-29</lastmod>
-    </url>
-    <url>
-         <loc>https://bwrob.github.io/debug-dojo/style-guide/</loc>
-         <lastmod>2025-11-29</lastmod>
-    </url>
-    <url>
-         <loc>https://bwrob.github.io/debug-dojo/fonts/</loc>
-         <lastmod>2025-11-29</lastmod>
+         <lastmod>2026-02-04</lastmod>
     </url>
 </urlset>

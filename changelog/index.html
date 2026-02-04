@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://bwrob.github.io/debug-dojo/changelog/">
       
       
-        <link rel="prev" href="../development-plan/">
+        <link rel="prev" href="../cli-reference/">
       
       
         <link rel="next" href="../api-reference/">
@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../logo/logo_white.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -33,7 +33,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -50,8 +50,8 @@
         
         
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
-        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"JetBrains Mono"}</style>
       
     
     
@@ -73,7 +73,7 @@
     
     
     
-    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="yellow">
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -130,19 +130,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="yellow"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
     
-      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9zM20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12zm-9.15 3.96h2.3L12 9z"/></svg>
-      </label>
-    
-  
-    
-    
-    
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="yellow"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
-    
-      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
@@ -150,9 +140,9 @@
     
     
     
-    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="yellow"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
     
-      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
       </label>
     
@@ -287,28 +277,6 @@
 
       </a>
     </li>
-  
-
-      
-        
-  
-  
-  
-  
-    
-    
-      <li class="md-tabs__item">
-        <a href="../development/" class="md-tabs__link">
-          
-  
-  
-    
-  
-  Development
-
-        </a>
-      </li>
-    
   
 
       
@@ -489,67 +457,6 @@
       
   
   
-  
-  
-    
-    
-      
-        
-      
-        
-      
-        
-      
-    
-    
-    
-      
-      
-        
-      
-    
-    
-      
-        
-        
-      
-    
-    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
-      
-        
-  
-  
-  
-    <a href="../development/" class="md-nav__link">
-      
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Development
-  
-
-    
-  </span>
-  
-  
-
-      
-        <span class="md-nav__icon md-icon"></span>
-      
-    </a>
-  
-
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
     
   
   
@@ -613,15 +520,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#v070-2025-11-27" class="md-nav__link">
+  <a href="#v080-2026-01-31" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v0.7.0 (2025-11-27)
+        v0.8.0 (2026-01-31)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="v0.7.0 (2025-11-27)">
+    <nav class="md-nav" aria-label="v0.8.0 (2026-01-31)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -652,15 +559,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#v060-2025-10-20" class="md-nav__link">
+  <a href="#v070-2025-11-27" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v0.6.0 (2025-10-20)
+        v0.7.0 (2025-11-27)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="v0.6.0 (2025-10-20)">
+    <nav class="md-nav" aria-label="v0.7.0 (2025-11-27)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -691,15 +598,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#v050-2025-08-23" class="md-nav__link">
+  <a href="#v060-2025-10-20" class="md-nav__link">
     <span class="md-ellipsis">
       
-        v0.5.0 (2025-08-23)
+        v0.6.0 (2025-10-20)
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="v0.5.0 (2025-08-23)">
+    <nav class="md-nav" aria-label="v0.6.0 (2025-10-20)">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -730,6 +637,45 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#v050-2025-08-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        v0.5.0 (2025-08-23)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="v0.5.0 (2025-08-23)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#features_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Features
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#improvements_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Improvements
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#v041-2025-08-10" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -742,7 +688,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#improvements_3" class="md-nav__link">
+  <a href="#improvements_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Improvements
@@ -770,7 +716,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#features_3" class="md-nav__link">
+  <a href="#features_4" class="md-nav__link">
     <span class="md-ellipsis">
       
         Features
@@ -781,7 +727,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#improvements_4" class="md-nav__link">
+  <a href="#improvements_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Improvements
@@ -809,7 +755,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#features_4" class="md-nav__link">
+  <a href="#features_5" class="md-nav__link">
     <span class="md-ellipsis">
       
         Features
@@ -848,7 +794,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#features_5" class="md-nav__link">
+  <a href="#features_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Features
@@ -859,7 +805,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#improvements_5" class="md-nav__link">
+  <a href="#improvements_6" class="md-nav__link">
     <span class="md-ellipsis">
       
         Improvements
@@ -887,7 +833,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#features_6" class="md-nav__link">
+  <a href="#features_7" class="md-nav__link">
     <span class="md-ellipsis">
       
         Features
@@ -948,6 +894,14 @@
           
             <div class="md-content" data-md-component="content">
               
+                
+
+
+
+  
+
+
+              
               <article class="md-content__inner md-typeset">
                 
                   
@@ -956,7 +910,7 @@
   
     <a href="https://github.com/bwrob/debug-dojo/edit/main/docs/changelog.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75z"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
   
   
@@ -965,32 +919,46 @@
     
     <a href="https://github.com/bwrob/debug-dojo/raw/main/docs/changelog.md" title="View source of this page" class="md-content__button md-icon">
       
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
+<h2 id="v080-2026-01-31">v0.8.0 (2026-01-31)<a class="headerlink" href="#v080-2026-01-31" title="Permanent link">&para;</a></h2>
+<h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Dojo Belts Gamification</strong>: Track your debugging experience and earn belts!</li>
+<li><strong>Restructured CLI</strong>: New <code>run</code> and <code>belt</code> subcommands for better organization.</li>
+<li><strong>Minutes-based Progression</strong>: Belt progression is now based on total debugging time (in minutes) and session count.</li>
+<li>Added <code>gamification</code> toggle in configuration.</li>
+</ul>
+<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Lowered belt thresholds for better early-game feel.</li>
+<li>Improved CLI help and documentation.</li>
+<li>Refined code quality (linting, types, formatting).</li>
+</ul>
 <h2 id="v070-2025-11-27">v0.7.0 (2025-11-27)<a class="headerlink" href="#v070-2025-11-27" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.7.0">v0.5.0</a></p>
-<h3 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h3>
+<h3 id="features_1">Features<a class="headerlink" href="#features_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added &lsquo;all-debuggers&rsquo; optional dependency.</li>
 </ul>
-<h3 id="improvements">Improvements<a class="headerlink" href="#improvements" title="Permanent link">&para;</a></h3>
+<h3 id="improvements_1">Improvements<a class="headerlink" href="#improvements_1" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added banner.</li>
 </ul>
 <h2 id="v060-2025-10-20">v0.6.0 (2025-10-20)<a class="headerlink" href="#v060-2025-10-20" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.7.0">v0.5.0</a></p>
-<h3 id="features_1">Features<a class="headerlink" href="#features_1" title="Permanent link">&para;</a></h3>
+<h3 id="features_2">Features<a class="headerlink" href="#features_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Integrate tach for architecture management.</li>
 <li>Widen dependency version ranges.</li>
 <li>Add 3.14 to supported Python versions.</li>
 <li>Switching to dacite for config loading.</li>
 </ul>
-<h3 id="improvements_1">Improvements<a class="headerlink" href="#improvements_1" title="Permanent link">&para;</a></h3>
+<h3 id="improvements_2">Improvements<a class="headerlink" href="#improvements_2" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Gemini generated docs improvements.</li>
 <li>Project has 90% coverage.</li>
@@ -998,14 +966,14 @@
 </ul>
 <h2 id="v050-2025-08-23">v0.5.0 (2025-08-23)<a class="headerlink" href="#v050-2025-08-23" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.5.0">v0.5.0</a></p>
-<h3 id="features_2">Features<a class="headerlink" href="#features_2" title="Permanent link">&para;</a></h3>
+<h3 id="features_3">Features<a class="headerlink" href="#features_3" title="Permanent link">&para;</a></h3>
 <ul>
 <li>CLI tests.</li>
 <li>Fixes to configuration reading.</li>
 <li>Post-mortem debugging support with <code>ipdb</code>.</li>
 <li>Added <code>--exec</code> option to <code>dojo</code> command &ndash; debug dojo can now run arbitrary commands.</li>
 </ul>
-<h3 id="improvements_2">Improvements<a class="headerlink" href="#improvements_2" title="Permanent link">&para;</a></h3>
+<h3 id="improvements_3">Improvements<a class="headerlink" href="#improvements_3" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Project and docs cleanup.</li>
 <li>UV build.</li>
@@ -1018,27 +986,27 @@
 </ul>
 <h2 id="v041-2025-08-10">v0.4.1 (2025-08-10)<a class="headerlink" href="#v041-2025-08-10" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.4.1">v0.4.1</a></p>
-<h3 id="improvements_3">Improvements<a class="headerlink" href="#improvements_3" title="Permanent link">&para;</a></h3>
+<h3 id="improvements_4">Improvements<a class="headerlink" href="#improvements_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Mkdocs documentation at <a href="https://bwrob.github.io/debug-dojo">debug dojo</a>.</li>
 </ul>
 <h2 id="v040-2025-08-10">v0.4.0 (2025-08-10)<a class="headerlink" href="#v040-2025-08-10" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.4.0">v0.4.0</a></p>
-<h3 id="features_3">Features<a class="headerlink" href="#features_3" title="Permanent link">&para;</a></h3>
+<h3 id="features_4">Features<a class="headerlink" href="#features_4" title="Permanent link">&para;</a></h3>
 <ul>
 <li>New configuration model <code>DebugDojoConfig</code> for better structure.</li>
 <li>Added support for <code>debugger</code> configuration in <code>dojo.toml</code>.</li>
 <li>Updated <code>dojo</code> command to include debugger type in command call.</li>
 <li>Configuration versioning allows for in-flight migration of old configurations.</li>
 </ul>
-<h3 id="improvements_4">Improvements<a class="headerlink" href="#improvements_4" title="Permanent link">&para;</a></h3>
+<h3 id="improvements_5">Improvements<a class="headerlink" href="#improvements_5" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Improved error handling in configuration loading.</li>
 <li>Improved catching errors from target execution.</li>
 </ul>
 <h2 id="v032-2025-07-28">v0.3.2 (2025-07-28)<a class="headerlink" href="#v032-2025-07-28" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.3.2">v0.3.2</a></p>
-<h3 id="features_4">Features<a class="headerlink" href="#features_4" title="Permanent link">&para;</a></h3>
+<h3 id="features_5">Features<a class="headerlink" href="#features_5" title="Permanent link">&para;</a></h3>
 <ul>
 <li>New logo for the project.</li>
 <li>Typer used for CLI implementation.</li>
@@ -1051,20 +1019,20 @@
 </ul>
 <h2 id="v020-2025-07-20">v0.2.0 (2025-07-20)<a class="headerlink" href="#v020-2025-07-20" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.2.0">v0.2.0</a></p>
-<h3 id="features_5">Features<a class="headerlink" href="#features_5" title="Permanent link">&para;</a></h3>
+<h3 id="features_6">Features<a class="headerlink" href="#features_6" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Added <code>dojo</code> command for easy debugging setup.</li>
 <li>Added <code>p()</code> function for rich printing.</li>
 <li>Added history file for tracking changes.</li>
 </ul>
-<h3 id="improvements_5">Improvements<a class="headerlink" href="#improvements_5" title="Permanent link">&para;</a></h3>
+<h3 id="improvements_6">Improvements<a class="headerlink" href="#improvements_6" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Moved to <code>hatch</code> for building and packaging.</li>
 <li>Fixed <code>pyproject.toml</code> to point to GitHub repository as the homepage.</li>
 </ul>
 <h2 id="v010-2025-07-19">v0.1.0 (2025-07-19)<a class="headerlink" href="#v010-2025-07-19" title="Permanent link">&para;</a></h2>
 <p><em>release tag</em>: <a href="https://github.com/bwrob/debug-dojo/releases/tag/v0.1.0">v0.1.0</a></p>
-<h3 id="features_6">Features<a class="headerlink" href="#features_6" title="Permanent link">&para;</a></h3>
+<h3 id="features_7">Features<a class="headerlink" href="#features_7" title="Permanent link">&para;</a></h3>
 <ul>
 <li>Initial module to install debugging tools.</li>
 <li>Debug mode utilities for PuDB, rich tracebacks, and object inspection.</li>
@@ -1091,7 +1059,7 @@
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="November 29, 2025 12:36:46 UTC">November 29, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="January 31, 2026 22:59:36 UTC">January 31, 2026</span>
   </span>
 
     
@@ -1121,34 +1089,6 @@
   </span>
 
     
-    
-      
-  <span class="md-source-file__fact">
-    
-      
-  <span class="md-icon" title="Contributors">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33s1.71.11 2.5.33c1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2"/></svg>
-  </span>
-  <span>GitHub</span>
-
-    
-    <nav>
-      
-        <a href="https://github.com/bwrob" class="md-author" title="@bwrob">
-          
-          <img src="https://avatars.githubusercontent.com/u/43605200?v=4&size=72" alt="bwrob">
-        </a>
-      
-        <a href="https://github.com/web-flow" class="md-author" title="@web-flow">
-          
-          <img src="https://avatars.githubusercontent.com/u/19864447?v=4&size=72" alt="web-flow">
-        </a>
-      
-      
-      
-    </nav>
-  </span>
-
     
   </aside>
 
@@ -1181,7 +1121,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../development-plan/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Plan">
+          <a href="../cli-reference/" class="md-footer__link md-footer__link--prev" aria-label="Previous: CLI Usage">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -1191,7 +1131,7 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Plan
+                CLI Usage
               </div>
             </div>
           </a>
@@ -1258,10 +1198,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.prune", "navigation.sections", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.code.select", "content.footnote.tooltips", "content.tabs.link", "content.tooltips", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.instant", "navigation.instant.prefetch", "navigation.instant.progress", "navigation.path", "navigation.prune", "navigation.sections", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow", "toc.integrate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
