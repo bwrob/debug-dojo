@@ -26,3 +26,5 @@ dojo run --debugger ipdb --config dojo.toml --verbose --module my_module
     :module: debug_dojo._cli
     :name: dojo
     :pretty: true
+
+[target]: #

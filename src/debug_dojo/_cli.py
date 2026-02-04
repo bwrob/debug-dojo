@@ -49,7 +49,8 @@ def belt(
 def run_debug(  # noqa: PLR0913
     ctx: typer.Context,
     target_name: Annotated[
-        str | None, typer.Argument(help="The target script or module to debug.")
+        str | None,
+        typer.Argument(help="The target script or module to debug.", metavar="target"),
     ] = None,
     *,
     config_path: Annotated[
