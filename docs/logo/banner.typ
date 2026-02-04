@@ -6,7 +6,7 @@
   spacing: 40pt,
   align(horizon, image("logo_python.png", width: 240pt)),
   align(horizon)[
-    #text(size: 200pt, fill: rgb("#FFD700"), weight: "bold")[debug]
-    #text(size: 200pt, fill: rgb("#FFFFFF"), weight: "bold")[dojo]
+    #text(size: 200pt, fill: rgb("#FFD700"), weight: "bold", stroke: 2pt + black)[debug]
+    #text(size: 200pt, fill: rgb("#FFFFFF"), weight: "bold", stroke: 2pt + black)[dojo]
   ],
 )
