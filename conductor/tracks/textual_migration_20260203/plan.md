@@ -3,15 +3,15 @@
 ## Phase 1: Textual Foundation
 - [x] Task: Research Textual's app lifecycle and Typer integration patterns.
 - [x] Task: Create the base `Textual` App class and a placeholder "Main" screen.
-- [ ] Task: Conductor - User Manual Verification 'Phase 1: Textual Foundation' (Protocol in workflow.md)
+- [x] Task: Conductor - User Manual Verification 'Phase 1: Textual Foundation' (Protocol in workflow.md)
 
 ## Phase 2: Dojo Dashboard UI
-- [ ] Task: Write Tests for Dashboard UI components (mocking state).
-- [ ] Task: Implement the Two-Section layout (History on one side, Config on the other).
-- [ ] Task: Implement the "Session History" list widget with auto-selection of the last run.
-- [ ] Task: Implement the "Run Configuration" widget for viewing and editing settings.
-- [ ] Task: Implement the "Belt Progress" widget (stats display).
-- [ ] Task: Conductor - User Manual Verification 'Phase 2: Dojo Dashboard UI' (Protocol in workflow.md)
+- [x] Task: Write Tests for Dashboard UI components (mocking state).
+- [x] Task: Implement the Two-Section layout (History on one side, Config on the other).
+- [x] Task: Implement the "Session History" list widget with auto-selection of the last run.
+- [x] Task: Implement the "Run Configuration" widget for viewing and editing settings.
+- [x] Task: Implement the "Belt Progress" widget (stats display).
+- [x] Task: Conductor - User Manual Verification 'Phase 2: Dojo Dashboard UI' (Protocol in workflow.md)
 
 ## Phase 3: History and Launch Logic
 - [ ] Task: Write Tests for history loading and session launching logic.
