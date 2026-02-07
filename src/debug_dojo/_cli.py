@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import contextlib
-import subprocess
 import sys
 import time
 from pathlib import Path
@@ -16,26 +15,12 @@ from debug_dojo._config import load_config
 from debug_dojo._config_models import DebuggerType  # noqa: TC001
 from debug_dojo._execution import ExecMode, execute_with_debug
 from debug_dojo._gamification import GamificationManager
-from debug_dojo._tui import DojoApp
 
 cli = typer.Typer(
     name="debug_dojo",
     help="Run a Python script or module with debugging tools installed.",
-    no_args_is_help=False,
+    no_args_is_help=True,
 )
-
-
-@cli.callback(invoke_without_command=True)
-def main_callback(ctx: typer.Context) -> None:
-    """Entry point callback to handle TUI launch if no command provided."""
-    if ctx.invoked_subcommand is None:
-        # Launch TUI
-        app = DojoApp()
-        result = app.run()
-        if result:
-            # If TUI returns a command, execute it
-            # We use shell=True to allow complex commands
-            _ = subprocess.run(result, shell=True, check=False)  # noqa: S602
 
 
 @cli.command(help="Show your current Dojo Belt and stats.")

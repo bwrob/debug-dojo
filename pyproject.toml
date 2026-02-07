@@ -17,10 +17,9 @@
         "dacite>=1.0.0",
         "pyscn>=1.5.2",
         "rich>=10.0.0",
-        "textual>=7.5.0",
         "tomlkit>=0.7.0",
         "typer>=0.3.0",
-]
+    ]
     description = "🏣 debug dojo, a place for zen debugging"
     keywords = [
         "debugging",
@@ -62,11 +61,10 @@
         "diff-cover>=9.6.0",
         "poethepoet>=0.37.0",
         "pytest>=8.4.1",
-        "pytest-asyncio>=1.3.0",
         "pytest-cov>=6.2.1",
         "ruff>=0.12.9",
         "tach>=0.29.0",
-]
+    ]
     docs = [
         "mkdocs>=1.6.1",
         "mkdocs-git-authors-plugin>=0.10.0",

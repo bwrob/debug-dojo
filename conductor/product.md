@@ -17,7 +17,6 @@ The primary users are **Python developers** who prefer or require terminal-based
 
 ## 4. Key Features
 
-- **Interactive Dashboard:** A TUI-based "Dojo" environment to manage sessions, review history, and track progress.
 - **Debugger Unification:** Launch scripts seamlessly with different debuggers via simple CLI flags.
 - **Visual Inspection:** High-fidelity capabilities for displaying complex data structures and code.
 - **Gamified Progression:** A system of "belts" that rewards usage and mastery of debugging tools.
