@@ -12,6 +12,7 @@ import builtins
 import json
 import os
 import sys
+from typing import Any, cast
 
 from rich import print as rich_print
 
@@ -51,7 +52,7 @@ def use_pdb(config: PdbConfig) -> None:
     import pdb
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
-    sys.breakpointhook = pdb.set_trace
+    sys.breakpointhook = cast("Any", pdb.set_trace)  # pyright: ignore[reportExplicitAny]
 
 
 def use_pudb(config: PudbConfig) -> None:
@@ -71,7 +72,7 @@ def use_pudb(config: PudbConfig) -> None:
         return
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
-    sys.breakpointhook = pudb.set_trace
+    sys.breakpointhook = cast("Any", pudb.set_trace)  # pyright: ignore[reportExplicitAny]
 
 
 def use_ipdb(config: IpdbConfig) -> None:
@@ -92,7 +93,7 @@ def use_ipdb(config: IpdbConfig) -> None:
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
     os.environ[IPDB_CONTEXT_SIZE] = str(config.context_lines)
-    sys.breakpointhook = ipdb.set_trace  # pyright: ignore[reportUnknownMemberType]
+    sys.breakpointhook = cast("Any", ipdb.set_trace)  # pyright: ignore[reportExplicitAny]
 
 
 def use_debugpy(config: DebugpyConfig) -> None:

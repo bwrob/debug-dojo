@@ -25,6 +25,10 @@
     cmd  = "basedpyright --project pyrightconfig.json src tests"
     help = "Check static typing using basedpyright."
 
+[tasks.type-check-ty]
+    cmd  = "ty check ."
+    help = "Check static typing using ty."
+
 [tasks.complexity]
     default_item_type = "cmd"
     help = "Check code complexity using complexipy."
@@ -55,6 +59,7 @@
         "format",
         "lint",
         "type-check",
+        "type-check-ty",
         "complexity",
     ]
     verbosity = -1

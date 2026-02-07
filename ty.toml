@@ -1,0 +1,5 @@
+[rules]
+    all = "error"
+
+[environment]
+    python-version = "3.10"
