@@ -71,14 +71,24 @@ def get_object_methods(obj: object) -> list[str]:
 
 
 def _is_basic_type(obj: object) -> bool:
-    """Check if the object is a basic Python type."""
+    """Check if the object is a basic Python type.
+
+    Returns:
+        bool: True if the object is a basic Python type, False otherwise.
+
+    """
     return (
         isinstance(obj, (str, int, float, list, dict, tuple, set, bool)) or obj is None
     )
 
 
 def _get_basic_info(obj: object) -> list[Text]:
-    """Get information for basic types."""
+    """Get information for basic types.
+
+    Returns:
+        list[Text]: A list of Rich Text objects representing the basic info.
+
+    """
     return [
         Text("Value:", style="bold"),
         Text(f"  {obj!r}", style="yellow"),
@@ -88,7 +98,12 @@ def _get_basic_info(obj: object) -> list[Text]:
 
 
 def _format_section(title: str, items: list[str], empty_message: str) -> list[Text]:
-    """Format a section of the inspection output."""
+    """Format a section of the inspection output.
+
+    Returns:
+        list[Text]: A list of Rich Text objects for the formatted section.
+
+    """
     lines: list[Text] = []
     if items:
         lines.append(Text(title, style="bold"))
@@ -100,7 +115,12 @@ def _format_section(title: str, items: list[str], empty_message: str) -> list[Te
 
 
 def _get_attributes_section(obj: object) -> list[Text]:
-    """Get the attributes section for the object info."""
+    """Get the attributes section for the object info.
+
+    Returns:
+        list[Text]: A list of Rich Text objects for the attributes section.
+
+    """
     return _format_section(
         "Attributes:",
         get_object_attributes(obj),
@@ -109,7 +129,12 @@ def _get_attributes_section(obj: object) -> list[Text]:
 
 
 def _get_methods_section(obj: object) -> list[Text]:
-    """Get the methods section for the object info."""
+    """Get the methods section for the object info.
+
+    Returns:
+        list[Text]: A list of Rich Text objects for the methods section.
+
+    """
     return _format_section(
         "Methods:",
         [f"{method}()" for method in get_object_methods(obj)],
@@ -132,8 +157,7 @@ def get_simplified_object_info(obj: object) -> list[Text]:
     """
     info_lines: list[Text] = []
     obj_type: str = type(obj).__name__
-    info_lines.append(Text(f"<class '{obj_type}'>", style="cyan bold"))
-    info_lines.append(Text(""))
+    info_lines.extend((Text(f"<class '{obj_type}'>", style="cyan bold"), Text("")))
 
     if _is_basic_type(obj):
         info_lines.extend(_get_basic_info(obj))

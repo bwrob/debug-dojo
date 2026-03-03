@@ -2,7 +2,12 @@
 
 
 def main() -> None:
-    """Run the command-line interface."""
+    """Run the command-line interface.
+
+    Raises:
+        ValueError: Always raised to test post-mortem debugging.
+
+    """
     msg = "This is a test exception for post-mortem debugging."
     raise ValueError(msg)
 

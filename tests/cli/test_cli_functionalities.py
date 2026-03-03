@@ -5,7 +5,7 @@ from typer.testing import CliRunner
 from debug_dojo._cli import cli
 
 
-def _breakpoint_ipdb(  # noqa: PLR0913 # pyright: ignore[reportUnusedFunction]
+def _breakpoint_ipdb(  # noqa: PLR0913, PLR0917 # pyright: ignore[reportUnusedFunction]
     runner: CliRunner,
     test_config_path: str,
     test_target_breakpoint: str,

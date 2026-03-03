@@ -94,7 +94,12 @@ class GamificationManager:
         self.stats = self._load_stats()
 
     def _load_stats(self) -> DojoStats:
-        """Load stats from disk."""
+        """Load stats from disk.
+
+        Returns:
+            DojoStats: The loaded user statistics.
+
+        """
         if not self.stats_file.exists():
             return DojoStats()
 
@@ -104,17 +109,15 @@ class GamificationManager:
             if not isinstance(data, dict):
                 return DojoStats()
 
-            data_dict = cast("dict[str, object]", data)
+            data_dict = cast(dict[str, object], data)
 
-            history_raw = cast("list[dict[str, object]]", data_dict.get("history", []))
+            history_raw = cast(list[dict[str, object]], data_dict.get("history", []))
             history: list[SessionInfo] = []
             for s in history_raw:
                 # Support migration from duration_seconds
-                duration = float(cast("float", s.get("duration_minutes", 0.0)))
+                duration = float(cast(float, s.get("duration_minutes", 0.0)))
                 if "duration_seconds" in s and duration == 0:
-                    duration = (
-                        float(cast("float", s.get("duration_seconds", 0.0))) / 60.0
-                    )
+                    duration = float(cast(float, s.get("duration_seconds", 0.0))) / 60.0
 
                 history.append(
                     SessionInfo(
@@ -125,8 +128,8 @@ class GamificationManager:
                 )
 
             return DojoStats(
-                sessions=int(cast("int", data_dict.get("sessions", 0))),
-                bugs_crushed=int(cast("int", data_dict.get("bugs_crushed", 0))),
+                sessions=int(cast(int, data_dict.get("sessions", 0))),
+                bugs_crushed=int(cast(int, data_dict.get("bugs_crushed", 0))),
                 history=history,
             )
 

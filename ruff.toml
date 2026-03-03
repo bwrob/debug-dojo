@@ -1,10 +1,23 @@
 line-length    = 88
 target-version = "py310"
 
+
 [lint]
     exclude = ["examples"]
-    ignore  = ["COM", "D203", "D211", "D213", "PLR0912"]
-    select  = ["ALL"]
+
+    explicit-preview-rules = false
+    ignore = [
+        "COM812",  # missing-trailing-comma: Incompatible with formatter.
+        "COM819",  # prohibited-trailing-comma: Incompatible with formatter.
+        "D203",    # one-blank-line-before-class: Incompatible with D211.
+        "D213",    # multi-line-summary-second-line: Incompatible with D212.
+        "TC006",   # runtime-cast-value: Prone to typos in string casts.
+        "PLC2701", # unnecessary-literal-comprehension: Incompatible with formatter.
+        "CPY001",
+    ]
+    preview = true
+    select = ["ALL"]
+
 
     [lint.per-file-ignores]
         "examples/*" = ["INP001"]
@@ -15,7 +28,7 @@ target-version = "py310"
             "PLC0415",
             "T100",
         ]
-        "tests/*" = ["S101", "T201"]
+        "tests/*" = ["S101", "T201", "DOC201"]
         "tests/assets/*" = ["T201", "INP001", "F821"]
 
 [format]
