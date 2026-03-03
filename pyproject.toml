@@ -74,7 +74,8 @@
         "mkdocstrings-python>=1.17.0",
         "pymdown-extensions>=10.16.1",
         "typst>=0.14.2",
-    ]
+        "refurb>=2.3.0",
+]
 
 
 [tool.uv]

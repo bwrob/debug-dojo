@@ -131,6 +131,9 @@ def _safe_execute(
         target_name (str): The name of the target.
         config (DebugDojoConfig): The configuration object.
 
+    Raises:
+        Exit: If an error occurs or the user interrupts the execution.
+
     """
     try:
         _ = runner(target_name, run_name="__main__")
@@ -166,10 +169,6 @@ def execute_with_debug(
         target_mode (ExecMode): The execution mode (FILE, MODULE, or EXECUTABLE).
         verbose (bool): If True, print verbose output.
         config (DebugDojoConfig): The debug-dojo configuration.
-
-    Raises:
-        typer.Exit: If the target file is not found, or if an import error occurs,
-                    or if the script exits with a non-zero code.
 
     """
     _configure_sys_argv(target_name, target_args)

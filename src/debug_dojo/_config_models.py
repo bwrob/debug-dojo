@@ -154,7 +154,12 @@ class DebugDojoConfigV1:
     """Features to install for debugging."""
 
     def update(self) -> DebugDojoConfigV2:
-        """Update the configuration to the latest version."""
+        """Update the configuration to the latest version.
+
+        Returns:
+            DebugDojoConfigV2: The updated configuration object.
+
+        """
         v2_exceptions = ExceptionsConfig(
             rich_traceback=self.features.rich_traceback,
         )
