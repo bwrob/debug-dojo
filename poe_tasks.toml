@@ -31,11 +31,8 @@
 
 [tasks.complexity]
     default_item_type = "cmd"
-    help = "Check code complexity using complexipy."
-    sequence = [
-        "complexipy .",
-        "ruff check . --select=PLR0912",
-    ]
+    help              = "Check code complexity using complexipy."
+    sequence          = ["complexipy .", "ruff check . --select=PLR0912"]
 
 [tasks.dependencies]
     cmd  = "tach check"
@@ -43,12 +40,9 @@
 
 [tasks.fix]
     default_item_type = "cmd"
-    help = "Code quality fixes using ruff."
-    ignore_fail = "return_non_zero"
-    sequence = [
-        "ruff check --fix --unsafe-fixes",
-        "ruff format",
-    ]
+    help              = "Code quality fixes using ruff."
+    ignore_fail       = "return_non_zero"
+    sequence          = ["ruff check --fix --unsafe-fixes", "ruff format"]
 
 [tasks.code-quality]
     help = "Run all code quality checks."
@@ -94,13 +88,36 @@
         { cmd = "echo 'Docs server starting at http://127.0.0.1:8000/'" },
         { cmd = "hap run mkdocs serve" },
     ]
-
-[tasks.publish-docs]
-    help = "Publish the docs to GitHub Pages."
+[tasks.build]
+    help = "Build the documentation site using Zensical."
     sequence = [
         "generate-banner",
-        { cmd = "mkdocs gh-deploy --force" },
+        "dependency-graph",
+        { cmd = "echo 'Building Zensical site...'" },
+        { cmd = "zensical build" },
     ]
+
+[tool.poe.tasks.gh-deploy]
+    help = "Build and deploy Zensical to GitHub Pages"
+    sequence = ["build", { shell = """
+    # 1. Initialize a temp git repo in the output folder
+    cd out
+    git init
+    git add .
+    git commit -m "Deploy: $(date)"
+
+    # 2. Get the remote URL from the parent directory
+    REMOTE_URL=$(git -C .. remote get-url origin)
+
+    # 3. Force push the 'out' contents to the gh-pages branch
+    git push --force $REMOTE_URL main:gh-pages
+
+    # 4. Clean up the temporary git folder
+    rm -rf .git
+    cd ..
+
+    echo "Successfully deployed to gh-pages!"
+  """ }]
 
     # =============================================================================
     # Release
