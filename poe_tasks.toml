@@ -81,43 +81,24 @@
     cmd  = "tach show --mermaid -o docs/dependency_graph.mmd"
     help = "Generate the dependency graph."
 
-[tasks.docs]
-    help = "Spawn docs server."
-    sequence = [
-        "generate-banner",
-        { cmd = "echo 'Docs server starting at http://127.0.0.1:8000/'" },
-        { cmd = "hap run mkdocs serve" },
-    ]
-[tasks.build]
+[tasks.build-docs]
     help = "Build the documentation site using Zensical."
     sequence = [
         "generate-banner",
         "dependency-graph",
-        { cmd = "echo 'Building Zensical site...'" },
-        { cmd = "zensical build" },
+        { cmd = "uv run zensical build" },
     ]
 
-[tool.poe.tasks.gh-deploy]
+[tasks.publish-docs]
+    default_item_type = "cmd"
     help = "Build and deploy Zensical to GitHub Pages"
-    sequence = ["build", { shell = """
-    # 1. Initialize a temp git repo in the output folder
-    cd out
-    git init
-    git add .
-    git commit -m "Deploy: $(date)"
+    sequence = [
+        { ref = "build-docs" },
+        "git add -f out",
+        "git commit -m 'Deploying Zensical to GitHub Pages' || true",
+        "git subtree push --prefix out origin gh-pages",
+    ]
 
-    # 2. Get the remote URL from the parent directory
-    REMOTE_URL=$(git -C .. remote get-url origin)
-
-    # 3. Force push the 'out' contents to the gh-pages branch
-    git push --force $REMOTE_URL main:gh-pages
-
-    # 4. Clean up the temporary git folder
-    rm -rf .git
-    cd ..
-
-    echo "Successfully deployed to gh-pages!"
-  """ }]
 
     # =============================================================================
     # Release
