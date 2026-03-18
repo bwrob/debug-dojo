@@ -94,9 +94,9 @@
     help = "Build and deploy Zensical to GitHub Pages"
     sequence = [
         { ref = "build-docs" },
-        "git add -f out",
-        "git commit -m 'Deploying Zensical to GitHub Pages' || true",
-        "git subtree push --prefix out origin gh-pages",
+        "git add -f site",
+        "git commit -m 'Deploying Zensical to GitHub Pages'",
+        "git subtree push --prefix site origin gh-pages",
     ]
 
 

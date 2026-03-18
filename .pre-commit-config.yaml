@@ -1,5 +1,7 @@
 ---
 fail_fast: false
+exclude: 'site/'
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit
     rev: v4.5.1
