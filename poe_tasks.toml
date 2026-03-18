@@ -92,18 +92,25 @@
 [tasks.publish-docs]
     default_item_type = "cmd"
     help = "Build and deploy Zensical to GitHub Pages"
-    sequence = [
-        { ref = "build-docs" },
-        "git checkout --orphan temp-deploy",
-        "git add -f site",
-        # Allow empty commits or "no changes" to prevent sequence breakage
-        "git commit -m 'Deploying Zensical to GitHub Pages' --no-verify || git commit --allow-empty -m 'Empty Deploy'",
-        # Direct push the split result (most reliable for orphan branches)
-        "git push origin $(git subtree split --prefix site temp-deploy):gh-pages --force",
-        "git checkout -",
-        "git branch -D temp-deploy",
-    ]
+    sequence = [{ ref = "build-docs" }, { shell = """
+      # 1. Capture the current branch name
+      CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
+      # 2. Create the orphan branch
+      git checkout --orphan temp-deploy
+
+      # 3. Clear the index and add the site
+      git rm -rf . --cached > /dev/null
+      git add -f site
+      git commit -m "Deploying Zensical to GitHub Pages" --no-verify || true
+
+      # 4. Push the site contents to gh-pages
+      git push origin $(git subtree split --prefix site temp-deploy):gh-pages --force
+
+      # 5. Explicitly go back to the captured branch and cleanup
+      git checkout "$CURRENT_BRANCH"
+      git branch -D temp-deploy
+    """ }]
 
     # =============================================================================
     # Release
