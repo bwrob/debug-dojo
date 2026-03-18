@@ -94,9 +94,14 @@
     help = "Build and deploy Zensical to GitHub Pages"
     sequence = [
         { ref = "build-docs" },
+        "git checkout --orphan temp-deploy",
         "git add -f site",
-        "git commit -m 'Deploying Zensical to GitHub Pages' --no-verify",
-        "git subtree push --prefix site origin gh-pages",
+        # Allow empty commits or "no changes" to prevent sequence breakage
+        "git commit -m 'Deploying Zensical to GitHub Pages' --no-verify || git commit --allow-empty -m 'Empty Deploy'",
+        # Direct push the split result (most reliable for orphan branches)
+        "git push origin $(git subtree split --prefix site temp-deploy):gh-pages --force",
+        "git checkout -",
+        "git branch -D temp-deploy",
     ]
 
 
