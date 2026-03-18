@@ -21,9 +21,6 @@ htmlcov/
 junit/
 report.html
 
-/site
-docs/_build/
-
 .vscode/
 .idea/
 .DS_Store
