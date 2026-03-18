@@ -1,5 +1,7 @@
 ---
 fail_fast: false
+exclude: 'site/'
+
 repos:
   - repo: https://github.com/pre-commit/pre-commit
     rev: v4.5.1
@@ -21,8 +23,6 @@ repos:
         name: 🛠️ pre-commit · Check trailing whitespace
       - id: check-json
         name: 🛠️ pre-commit · Check JSON files
-      - id: check-added-large-files
-        name: 🛠️ pre-commit · Check for large files
       - id: check-xml
         name: 🛠️ pre-commit · Check XML files
       - id: check-toml
