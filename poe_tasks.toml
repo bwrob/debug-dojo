@@ -95,7 +95,7 @@
     sequence = [
         { ref = "build-docs" },
         "git add -f site",
-        "git commit -m 'Deploying Zensical to GitHub Pages'",
+        "git commit -m 'Deploying Zensical to GitHub Pages' --no-verify",
         "git subtree push --prefix site origin gh-pages",
     ]
 

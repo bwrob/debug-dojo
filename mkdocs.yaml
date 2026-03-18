@@ -1,5 +1,5 @@
 ---
-copyright: Copyright &copy; 2025 bwrob
+copyright: Copyright &copy; 2026 bwrob
 edit_uri: edit/main/docs/
 
 repo_name: bwrob/debug-dojo
@@ -16,7 +16,7 @@ theme:
   palette:
     # Light mode
     - scheme: default
-      primary: black
+      primary: white
       accent: indigo
       media: "(prefers-color-scheme: light)"
       toggle:
