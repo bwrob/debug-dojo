@@ -1,0 +1,8 @@
+{
+    "created_at": "2026-02-03T13:20:00Z",
+    "description": "Implement custom internal debugger based on pdb with responsive resizing.",
+    "status": "new",
+    "track_id": "custom_debugger_20260203",
+    "type": "feature",
+    "updated_at": "2026-02-03T13:20:00Z"
+}

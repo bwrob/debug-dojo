@@ -1,0 +1,8 @@
+{
+    "created_at": "2026-02-03T14:00:00Z",
+    "description": "Migrate the core CLI to a Textual TUI with a Dojo Dashboard.",
+    "status": "new",
+    "track_id": "textual_migration_20260203",
+    "type": "feature",
+    "updated_at": "2026-02-03T14:00:00Z"
+}

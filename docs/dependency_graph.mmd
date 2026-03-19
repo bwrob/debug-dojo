@@ -1,0 +1,11 @@
+graph TD
+    src.debug_dojo._installers --> src.debug_dojo._compare
+    src.debug_dojo._installers --> src.debug_dojo._config_models
+    src.debug_dojo._cli --> src.debug_dojo._installers
+    src.debug_dojo._cli --> src.debug_dojo._config
+    src.debug_dojo._cli --> src.debug_dojo._config_models
+    src.debug_dojo._config --> src.debug_dojo._config_models
+    src.debug_dojo.install --> src.debug_dojo._config
+    src.debug_dojo.install --> src.debug_dojo._installers
+    src.debug_dojo._config_models
+    src.debug_dojo._compare

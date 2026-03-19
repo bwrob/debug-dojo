@@ -1,0 +1,89 @@
+[project]
+    authors = [
+        { name = "bwrob", email = "bartosz.marcin.wroblewski@gmail.com" },
+    ]
+    classifiers = [
+        "Intended Audience :: Developers",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
+        "Topic :: Software Development :: Debuggers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ]
+    dependencies = [
+        "dacite>=1.0.0",
+        "pyscn>=1.5.2",
+        "rich>=10.0.0",
+        "tomlkit>=0.7.0",
+        "typer>=0.3.0",
+    ]
+    description = "🏣 debug dojo, a place for zen debugging"
+    keywords = [
+        "debugging",
+        "inspection",
+        "tools",
+        "development",
+    ]
+    license = 'MIT'
+    license-files = ['LICENSE']
+    name = "debug-dojo"
+    readme = "README.md"
+    requires-python = ">=3.10,<3.15"
+    version = "0.8.0"
+
+    [project.urls]
+        Changelog     = "https://bwrob.github.io/debug-dojo/changelog/"
+        Documentation = "https://bwrob.github.io/debug-dojo/"
+        Homepage      = "https://bwrob.github.io/debug-dojo/"
+        Source        = "https://github.com/bwrob/debug-dojo/"
+
+    [project.scripts]
+        "dojo" = "debug_dojo._cli:main"
+
+    [project.optional-dependencies]
+        all-debuggers = [
+            "debugpy>=1.0.0",
+            "ipdb>=0.12.0",
+            "pudb>=2020.1",
+        ]
+
+
+[dependency-groups]
+
+    dev = [
+        "basedpyright>=1.31.2",
+        "complexipy>=5.2.0",
+        "coverage>=7.10.4",
+        "debug-dojo[all-debuggers]",
+        "diff-cover>=9.6.0",
+        "poethepoet>=0.37.0",
+        "pytest>=8.4.1",
+        "pytest-cov>=6.2.1",
+        "ruff>=0.12.9",
+        "tach>=0.29.0",
+        "ty>=0.0.15",
+        "mkdocs>=1.6.1",
+        "mkdocs-git-authors-plugin>=0.10.0",
+        "mkdocs-git-committers-plugin-2>=2.5.0",
+        "mkdocs-git-revision-date-localized-plugin>=1.4.7",
+        "mkdocs-material>=9.6.17",
+        "mkdocs-typer2>=0.1.5",
+        "mkdocstrings-python>=1.17.0",
+        "pymdown-extensions>=10.16.1",
+        "typst>=0.14.2",
+        "zensical>=0.0.27",
+]
+
+
+[tool.uv]
+    package          = true
+    required-version = ">=0.10.0,<0.11.0"
+
+    [tool.uv.workspace]
+        members = ["."]
+
+    [tool.uv.sources]
+        debug-dojo = { workspace = true }

@@ -1,0 +1,11 @@
+{
+    "ignore": [
+        "examples",
+        "tests/assets"
+    ],
+    "pythonVersion": "3.10",
+    "strict": [
+        "src/debug_dojo/*"
+    ],
+    "typeCheckingMode": "all"
+}

@@ -1,0 +1,42 @@
+exclude      = [ "**/*__pycache__", "**/*egg-info", "**/docs", "**/tests", "**/venv" ]
+interfaces   = [  ]
+source_roots = [ ".", "src" ]
+
+forbid_circular_dependencies = true
+ignore_type_checking_imports = false
+layers                       = [ "usage", "core", "tools" ]
+respect_gitignore            = true
+
+[[modules]]
+    depends_on = [  ]
+    layer      = "core"
+    path       = "src.debug_dojo._config_models"
+
+[[modules]]
+    depends_on = [ "src.debug_dojo._compare", "src.debug_dojo._config_models" ]
+    layer      = "core"
+    path       = "src.debug_dojo._installers"
+
+[[modules]]
+    depends_on = [
+        "src.debug_dojo._installers",
+        "src.debug_dojo._config",
+        "src.debug_dojo._config_models",
+    ]
+    layer = "usage"
+    path = "src.debug_dojo._cli"
+
+[[modules]]
+    depends_on = [ "src.debug_dojo._config_models" ]
+    layer      = "core"
+    path       = "src.debug_dojo._config"
+
+[[modules]]
+    depends_on = [ "src.debug_dojo._config", "src.debug_dojo._installers" ]
+    layer      = "usage"
+    path       = "src.debug_dojo.install"
+
+[[modules]]
+    depends_on = [  ]
+    layer      = "tools"
+    path       = "src.debug_dojo._compare"

@@ -1,0 +1,8 @@
+{
+    "created_at": "2026-02-03T13:00:00Z",
+    "description": "Improve test coverage for edge cases in environment injection logic (_installers.py) (#83)",
+    "status": "new",
+    "track_id": "stability_environment_injection_tests_20260203",
+    "type": "maintenance",
+    "updated_at": "2026-02-03T13:00:00Z"
+}
