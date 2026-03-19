@@ -1,17 +1,9 @@
 [executor]
     type = "uv"
 
-    # =============================================================================
-    # Git Hooks
-    # =============================================================================
-
 [tasks.precommit]
     help  = "Run all pre-commit hooks on all files."
     shell = "pre-commit run --all-files > /dev/null || pre-commit run --all-files"
-
-    # =============================================================================
-    # Code Quality
-    # =============================================================================
 
 [tasks.format]
     cmd  = "ruff format --diff"
@@ -57,10 +49,6 @@
         "complexity",
     ]
 
-    # =============================================================================
-    # Testing
-    # =============================================================================
-
 [tasks.test]
     cmd  = "pytest"
     help = "Run tests using pytest."
@@ -68,10 +56,6 @@
 [tasks.coverage]
     cmd  = "pytest --doctest-modules --verbose --cov --cov-report=xml"
     help = "Create test coverage report."
-
-    # =============================================================================
-    # Documentation
-    # =============================================================================
 
 [tasks.generate-banner]
     cmd  = "python scripts/compile_banner.py"
@@ -88,33 +72,39 @@
         "dependency-graph",
         { cmd = "uv run zensical build" },
     ]
+[tool.poe.tasks.publish-docs]
+    help = "Build and deploy Zensical using a protected-branch-safe orphan"
+    shell = """
+  # 1. Capture the branch you are on RIGHT NOW
+  START_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-[tasks.publish-docs]
-    default_item_type = "cmd"
-    help = "Build and deploy Zensical to GitHub Pages"
-    sequence = [{ ref = "build-docs" }, { shell = """
-      # 1. Capture the current branch name
-      CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  # 2. Set up a 'trap' to ensure we ALWAYS return to the start branch
+  # even if the script crashes or you Ctrl+C
+  cleanup() {
+    echo "Cleaning up..."
+    git checkout -f "$START_BRANCH"
+    git branch -D temp-deploy-docs 2>/dev/null || true
+  }
+  trap cleanup EXIT
 
-      # 2. Create the orphan branch
-      git checkout --orphan temp-deploy
+  # 3. Build the site (do this on your source branch)
+  zensical build
 
-      # 3. Clear the index and add the site
-      git rm -rf . --cached > /dev/null
-      git add -f site
-      git commit -m "Deploying Zensical to GitHub Pages" --no-verify || true
+  # 4. Jump to the orphan branch
+  git checkout --orphan temp-deploy-docs
 
-      # 4. Push the site contents to gh-pages
-      git push origin $(git subtree split --prefix site temp-deploy):gh-pages --force
+  # 5. Clear the index (so gh-pages only gets the 'site' folder)
+  git rm -rf . --cached --quiet
 
-      # 5. Explicitly go back to the captured branch and cleanup
-      git checkout "$CURRENT_BRANCH"
-      git branch -D temp-deploy
-    """ }]
+  # 6. Add and commit the build
+  git add -f site
+  git commit -m "Deploy Zensical: $(date)" --no-verify
 
-    # =============================================================================
-    # Release
-    # =============================================================================
+  # 7. Push the contents of the 'site' folder to gh-pages
+  git push origin $(git subtree split --prefix site temp-deploy-docs):gh-pages --force
+
+  echo "Deployment successful! Returning to $START_BRANCH."
+"""
 
 [tasks.publish]
     help = "Build and publish the package."
