@@ -12,9 +12,9 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    # Recommended for OIDC:
-    # permissions:
-    #   id-token: write
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
