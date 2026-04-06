@@ -615,6 +615,7 @@ wheels = [
 name = "griffelib"
 version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/06/eccbd311c9e2b3ca45dbc063b93134c57a1ccc7607c5e545264ad092c4a9/griffelib-2.0.0.tar.gz", hash = "sha256:e504d637a089f5cab9b5daf18f7645970509bf4f53eda8d79ed71cce8bd97934", size = 166312, upload-time = "2026-03-23T21:06:55.954Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/4d/51/c936033e16d12b627ea334aaaaf42229c37620d0f15593456ab69ab48161/griffelib-2.0.0-py3-none-any.whl", hash = "sha256:01284878c966508b6d6f1dbff9b6fa607bc062d8261c5c7253cb285b06422a7f", size = 142004, upload-time = "2026-02-09T19:09:40.561Z" },
 ]
@@ -1424,12 +1425,12 @@ wheels = [
 
 [[package]]
 name = "pyscn"
-version = "1.12.0"
+version = "1.14.0"
 source = { registry = "https://pypi.org/simple" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/97/c2/769c36a1234702827f6cd8e9ac494fc6c5cc0d12754d2d46a6775e4fe7ed/pyscn-1.12.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:08a964f7dee338821ef3cac526d099c6943a17fe0e74d23a2f441528dff48d69", size = 8760517, upload-time = "2026-03-03T08:44:33.056Z" },
-    { url = "https://files.pythonhosted.org/packages/3d/f5/933428672a2cc6a728789259c811562b42d86aafa7b46a4bf6f0729d37cd/pyscn-1.12.0-py3-none-manylinux_2_17_x86_64.whl", hash = "sha256:2ae8aee81ba2134556bc77f8c63f350463cbb57cdb60901d6e730f2ab3e2d3bd", size = 9424659, upload-time = "2026-03-03T08:44:35.357Z" },
-    { url = "https://files.pythonhosted.org/packages/75/bb/3d03ba7d82ec55f6a3232602868ced2358a465f93d2671ffba2c9da464f4/pyscn-1.12.0-py3-none-win_amd64.whl", hash = "sha256:c8bc70c1437811c1bf95ce509a35f76722eeed9f8dda48091a97a6ad3f29cbfc", size = 9785196, upload-time = "2026-03-03T08:44:37.924Z" },
+    { url = "https://files.pythonhosted.org/packages/71/a6/89611028bc916f29f7369d5f5483836f3aebade3458fd2f28464f64fd15a/pyscn-1.14.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:2a34c1ed7cee17f0ace3cb1ef5e729e086a623f1cf908261948e236fb68e9322", size = 8786001, upload-time = "2026-03-31T23:59:25.006Z" },
+    { url = "https://files.pythonhosted.org/packages/c7/6f/53e99316659febff4455c03adc2ef374e88033ce639aa1ccd3b3b10945df/pyscn-1.14.0-py3-none-manylinux_2_17_x86_64.whl", hash = "sha256:fe208df0313082e8bca9dab25721a6029cdf0f7257a2c343de3a14d6891acc58", size = 9449611, upload-time = "2026-03-31T23:59:26.905Z" },
+    { url = "https://files.pythonhosted.org/packages/4f/c9/6481ee9665806397f5a704da31238cd0ed79cf4a0487be3aa1058c249e41/pyscn-1.14.0-py3-none-win_amd64.whl", hash = "sha256:df54ea1b9289bb272fbc291ea580500e3e2da78b72e19fe383fa0694fd43e0e1", size = 9985751, upload-time = "2026-03-31T23:59:30.218Z" },
 ]
 
 [[package]]
