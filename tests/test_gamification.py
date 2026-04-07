@@ -31,7 +31,7 @@ def test_initial_stats(temp_stats_file: Path) -> None:
     assert belt_name == "White Belt"
     assert rank == 0
     assert next_sessions == BELTS[1][1]
-    assert next_mins == pytest.approx(float(BELTS[1][2]))
+    assert next_mins == pytest.approx(float(BELTS[1][2]))  # pyright: ignore[reportUnknownMemberType]
 
 
 def test_increment_session(temp_stats_file: Path) -> None:
