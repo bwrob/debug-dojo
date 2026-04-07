@@ -17,7 +17,12 @@ from debug_dojo._config_models import DebugDojoConfig, DebuggerType
 
 @pytest.fixture
 def mock_config_file(tmp_path: Path) -> Path:
-    """Create a mock config file."""
+    """Create a mock config file.
+
+    Returns:
+        Path: The path to the created mock configuration file.
+
+    """
     config_content = """
 [debuggers]
 default = "pudb"

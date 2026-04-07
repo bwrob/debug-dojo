@@ -11,7 +11,12 @@ from debug_dojo._gamification import BELTS, GamificationManager, SessionInfo
 
 @pytest.fixture
 def temp_stats_file(tmp_path: Path) -> Path:
-    """Fixture providing a temporary stats file path."""
+    """Fixture providing a temporary stats file path.
+
+    Returns:
+        Path: The path to a temporary statistics file.
+
+    """
     return tmp_path / "stats.json"
 
 
@@ -26,7 +31,7 @@ def test_initial_stats(temp_stats_file: Path) -> None:
     assert belt_name == "White Belt"
     assert rank == 0
     assert next_sessions == BELTS[1][1]
-    assert next_mins == float(BELTS[1][2])
+    assert next_mins == pytest.approx(float(BELTS[1][2]))  # pyright: ignore[reportUnknownMemberType]
 
 
 def test_increment_session(temp_stats_file: Path) -> None:
@@ -34,39 +39,28 @@ def test_increment_session(temp_stats_file: Path) -> None:
     manager = GamificationManager(stats_path=temp_stats_file)
 
     duration_seconds = 120.0
-
     expected_minutes = 2.0
-
     expected_command = "dojo run script.py"
-
     manager.increment_session(
         duration_seconds=duration_seconds, command=expected_command
     )
 
     assert manager.stats.sessions == 1
-
     assert len(manager.stats.history) == 1
-
     assert manager.stats.history[0].duration_minutes == expected_minutes
-
     assert manager.stats.history[0].command == expected_command
-
     assert manager.stats.total_minutes == expected_minutes
 
     # Verify file persistence
-
     assert temp_stats_file.exists()
-
-    data = cast("dict[str, object]", json.loads(temp_stats_file.read_text()))
-
+    data: dict[str, object] = cast(
+        dict[str, object], json.loads(temp_stats_file.read_text(encoding="utf-8"))
+    )
     assert data["sessions"] == 1
 
-    history = cast("list[dict[str, object]]", data["history"])
-
+    history = cast(list[dict[str, object]], data["history"])
     assert len(history) == 1
-
     assert history[0]["duration_minutes"] == expected_minutes
-
     assert history[0]["command"] == expected_command
 
 
@@ -92,18 +86,13 @@ def test_load_existing_stats(temp_stats_file: Path) -> None:
         ],
     }
 
-    _ = temp_stats_file.write_text(json.dumps(data))
+    _ = temp_stats_file.write_text(json.dumps(data), encoding="utf-8")
 
     manager = GamificationManager(stats_path=temp_stats_file)
-
     assert manager.stats.sessions == expected_sessions
-
     assert manager.stats.bugs_crushed == expected_bugs
-
     assert len(manager.stats.history) == 1
-
     assert manager.stats.history[0].command == "dojo run test.py"
-
     assert manager.stats.total_minutes == expected_mins
 
 
@@ -122,10 +111,8 @@ def test_load_legacy_stats(temp_stats_file: Path) -> None:
         ],
     }
 
-    _ = temp_stats_file.write_text(json.dumps(data))
-
+    _ = temp_stats_file.write_text(json.dumps(data), encoding="utf-8")
     manager = GamificationManager(stats_path=temp_stats_file)
-
     assert manager.stats.total_minutes == expected_mins
 
 
@@ -153,7 +140,7 @@ def test_belt_progression(temp_stats_file: Path) -> None:
 
 def test_corrupt_stats_file(temp_stats_file: Path) -> None:
     """Test that corrupt stats file is handled gracefully."""
-    _ = temp_stats_file.write_text("invalid json")
+    _ = temp_stats_file.write_text("invalid json", encoding="utf-8")
 
     manager = GamificationManager(stats_path=temp_stats_file)
     assert manager.stats.sessions == 0
