@@ -19,7 +19,10 @@ dist/
 coverage.xml
 htmlcov/
 junit/
-report.htmlgit push origin --delete gh-pages || true
+report.html
+
+/site
+docs/_build/
 
 .vscode/
 .idea/

@@ -1,9 +1,17 @@
 [executor]
     type = "uv"
 
+    # =============================================================================
+    # Git Hooks
+    # =============================================================================
+
 [tasks.precommit]
     help  = "Run all pre-commit hooks on all files."
     shell = "pre-commit run --all-files > /dev/null || pre-commit run --all-files"
+
+    # =============================================================================
+    # Code Quality
+    # =============================================================================
 
 [tasks.format]
     cmd  = "ruff format --diff"
@@ -23,8 +31,11 @@
 
 [tasks.complexity]
     default_item_type = "cmd"
-    help              = "Check code complexity using complexipy."
-    sequence          = ["complexipy .", "ruff check . --select=PLR0912"]
+    help = "Check code complexity using complexipy."
+    sequence = [
+        "complexipy .",
+        "ruff check . --select=PLR0912",
+    ]
 
 [tasks.dependencies]
     cmd  = "tach check"
@@ -32,9 +43,12 @@
 
 [tasks.fix]
     default_item_type = "cmd"
-    help              = "Code quality fixes using ruff."
-    ignore_fail       = "return_non_zero"
-    sequence          = ["ruff check --fix --unsafe-fixes", "ruff format"]
+    help = "Code quality fixes using ruff."
+    ignore_fail = "return_non_zero"
+    sequence = [
+        "ruff check --fix --unsafe-fixes",
+        "ruff format",
+    ]
 
 [tasks.code-quality]
     help = "Run all code quality checks."
@@ -49,6 +63,10 @@
         "complexity",
     ]
 
+    # =============================================================================
+    # Testing
+    # =============================================================================
+
 [tasks.test]
     cmd  = "pytest"
     help = "Run tests using pytest."
@@ -56,6 +74,10 @@
 [tasks.coverage]
     cmd  = "pytest --doctest-modules --verbose --cov --cov-report=xml"
     help = "Create test coverage report."
+
+    # =============================================================================
+    # Documentation
+    # =============================================================================
 
 [tasks.generate-banner]
     cmd  = "python scripts/compile_banner.py"
@@ -65,46 +87,24 @@
     cmd  = "tach show --mermaid -o docs/dependency_graph.mmd"
     help = "Generate the dependency graph."
 
-[tasks.build-docs]
-    help = "Build the documentation site using Zensical."
+[tasks.docs]
+    help = "Spawn docs server."
     sequence = [
         "generate-banner",
-        "dependency-graph",
-        { cmd = "uv run zensical build" },
+        { cmd = "echo 'Docs server starting at http://127.0.0.1:8000/'" },
+        { cmd = "hap run mkdocs serve" },
     ]
-[tool.poe.tasks.publish-docs]
-    help = "Build and deploy Zensical using a protected-branch-safe orphan"
-    shell = """
-  # 1. Capture the branch you are on RIGHT NOW
-  START_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-  # 2. Set up a 'trap' to ensure we ALWAYS return to the start branch
-  # even if the script crashes or you Ctrl+C
-  cleanup() {
-    echo "Cleaning up..."
-    git checkout -f "$START_BRANCH"
-    git branch -D temp-deploy-docs 2>/dev/null || true
-  }
-  trap cleanup EXIT
+[tasks.publish-docs]
+    help = "Publish the docs to GitHub Pages."
+    sequence = [
+        "generate-banner",
+        { cmd = "mkdocs gh-deploy --force" },
+    ]
 
-  # 3. Build the site (do this on your source branch)
-  zensical build
-
-  # 4. Jump to the orphan branch
-  git checkout --orphan temp-deploy-docs
-
-  # 5. Clear the index (so gh-pages only gets the 'site' folder)
-  git rm -rf . --cached --quiet
-
-  # 6. Add and commit the build
-  git add -f site
-  git commit -m "Deploy Zensical: $(date)" --no-verify
-
-  # 7. Push the contents of the 'site' folder to gh-pages
-  git push origin $(git subtree split --prefix site temp-deploy-docs):gh-pages --force
-
-  echo "Deployment successful! Returning to $START_BRANCH."
-"""
+    # =============================================================================
+    # Release
+    # =============================================================================
 
 [tasks.publish]
     help = "Build and publish the package."
