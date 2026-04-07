@@ -9,7 +9,7 @@ def main() -> None:
         "key3": "value3",
     }
 
-    i(example_dict)  # type: ignore[unresolved-reference]
+    i(example_dict)  # ty: ignore[unresolved-reference]
 
 
 if __name__ == "__main__":
