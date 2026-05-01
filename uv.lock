@@ -1136,16 +1136,16 @@ wheels = [
 
 [[package]]
 name = "mkdocs-typer2"
-version = "0.2.1"
+version = "0.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "mkdocs" },
+    { name = "markdown" },
     { name = "pydantic" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a8/f8/7eb008232fd55d0cfa3b3ca49f15b406f7b830ef6b77c9d02582a9b37d22/mkdocs_typer2-0.2.1.tar.gz", hash = "sha256:8cf20cc9b29b9f38aeee27d273c28358658acf43b437cb191eede23b359aa966", size = 29436, upload-time = "2026-04-02T13:50:44.452Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6e/ad/07cc119225d56c0f1dd3b2a18532210d1680c4fbc6e24008944f9d5f82ff/mkdocs_typer2-0.3.0.tar.gz", hash = "sha256:49fa65a60eb35a8aca6b2004de8ea0d3240e6b7ecbdf77dcf997b5ae819072f9", size = 30753, upload-time = "2026-04-23T21:49:53.276Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f2/a3/20a5e0b9dfacdbb2663a2339dbe4484c63f3095f13a305de71aac6cf6983/mkdocs_typer2-0.2.1-py3-none-any.whl", hash = "sha256:688eedc73d3bb0da90619ad99283400df42251af4d412ed17b6bac32df141abd", size = 14642, upload-time = "2026-04-02T13:50:43.436Z" },
+    { url = "https://files.pythonhosted.org/packages/1a/55/fd49e4471a5807bc911c362107172b07a131921c3306c9504587e3ec1d1a/mkdocs_typer2-0.3.0-py3-none-any.whl", hash = "sha256:dfa12fd18a0ea902c815609affc59b2dd2e32ce28bc45fed3631da1803b21f07", size = 15657, upload-time = "2026-04-23T21:49:52.118Z" },
 ]
 
 [[package]]
