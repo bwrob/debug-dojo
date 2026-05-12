@@ -20,12 +20,11 @@ cli = typer.Typer(
 
 
 @cli.command(
-    name="run",
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
 )
-def run_debug(  # noqa: PLR0913
+def run(  # noqa: PLR0913
     ctx: typer.Context,
     target_name: Annotated[
         str | None,
@@ -106,6 +105,21 @@ def run_debug(  # noqa: PLR0913
             verbose=verbose,
             config=config,
         )
+
+
+@cli.command(
+    help="Show config.",
+    no_args_is_help=True,
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+)
+def config(
+    config_path: Annotated[
+        Path | None, typer.Option("--config", "-c", help="Show configuration")
+    ] = None,
+) -> None:
+    """Display resolved and updated config."""
+    config = load_config(config_path, verbose=True, debugger=None)
+    rich_print(f"[blue]Using debug-dojo configuration:\n{config} [/blue]")
 
 
 def main() -> None:
