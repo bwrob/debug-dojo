@@ -131,6 +131,18 @@ class FeaturesConfig:
 
 
 @dataclass
+class DebugDojoConfigV3:
+    """Configuration for Debug Dojo."""
+
+    exceptions: ExceptionsConfig = field(default_factory=ExceptionsConfig)
+    """Better exception messages."""
+    debuggers: DebuggersConfig = field(default_factory=DebuggersConfig)
+    """Default debugger and configs."""
+    features: FeaturesConfig = field(default_factory=FeaturesConfig)
+    """Features mnemonics."""
+
+
+@dataclass
 class DebugDojoConfigV2:
     """Configuration for Debug Dojo."""
 
@@ -142,6 +154,19 @@ class DebugDojoConfigV2:
     """Features mnemonics."""
     gamification: bool = True
     """Enable or disable gamification (Dojo Belts)."""
+
+    def update(self) -> DebugDojoConfigV3:
+        """Update the configuration to the latest version.
+
+        Returns:
+            DebugDojoConfigV2: The updated configuration object.
+
+        """
+        return DebugDojoConfigV3(
+            exceptions=self.exceptions,
+            debuggers=self.debuggers,
+            features=self.features,
+        )
 
 
 @dataclass
@@ -177,6 +202,6 @@ class DebugDojoConfigV1:
         )
 
 
-DebugDojoConfig = DebugDojoConfigV2
+DebugDojoConfig = DebugDojoConfigV3
 
 DACITE_CONFIG = Config(cast=[Enum], strict=True)

@@ -1,55 +1,28 @@
 """Tests for debug-dojo CLI config print command."""
 
-from typing import TYPE_CHECKING
-
+import pytest
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
 
-if TYPE_CHECKING:
-    from click.testing import Result
 
-
-def test_file_target(
-    runner: CliRunner, test_target_inspect: str, expected_dict_output: str
+@pytest.mark.parametrize(
+    "run_args",
+    [
+        pytest.param([], id="file"),
+        pytest.param(["-m", "debug_dojo", "run"], id="module"),
+        pytest.param(["-e", "dojo", "run"], id="executable"),
+    ],
+)
+def test_target(
+    run_args: list[str],
+    runner: CliRunner,
+    test_target_inspect: str,
+    expected_dict_output: str,
 ) -> None:
     """Test running a file target from CLI."""
-    args: list[str] = ["run", test_target_inspect]
-    result: Result = runner.invoke(cli, args)
-
-    print(result.output)
-
-    assert result.exit_code == 0
-    assert expected_dict_output in result.output
-
-
-def test_module_target(
-    runner: CliRunner, test_target_inspect: str, expected_dict_output: str
-) -> None:
-    """Test running a module target from CLI.
-
-    Test uses -m to run the debug_dojo module, which then runs the target script.
-    """
-    args: list[str] = ["run", "-m", "debug_dojo", "run", test_target_inspect]
-    result: Result = runner.invoke(cli, args)
-
-    print(result.output)
-
-    assert result.exit_code == 0
-    assert expected_dict_output in result.output
-
-
-def test_executable_target(
-    runner: CliRunner, test_target_inspect: str, expected_dict_output: str
-) -> None:
-    """Test running an executable target from CLI.
-
-    Test uses -e to run the debug_dojo executable, which then runs the target script.
-    """
-    args: list[str] = ["run", "-e", "dojo", "run", test_target_inspect]
-    result: Result = runner.invoke(cli, args)
-
-    print(result.output)
+    args = ["run", *run_args, test_target_inspect]
+    result = runner.invoke(cli, args)
 
     assert result.exit_code == 0
     assert expected_dict_output in result.output

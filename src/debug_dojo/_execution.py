@@ -92,6 +92,7 @@ def _get_runner_and_target(
         resolved_name = which(target_name) or target_name
 
     if not Path(resolved_name).exists():
+        rich_print(f"[red]File run mode couldn't resolve path {resolved_name}.[/red]")
         raise typer.Exit(1)
 
     return runpy.run_path, resolved_name

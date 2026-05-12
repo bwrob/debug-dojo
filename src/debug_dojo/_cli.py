@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-import contextlib
-import sys
-import time
 from pathlib import Path
 from typing import Annotated
 
@@ -14,7 +11,6 @@ from rich import print as rich_print
 from debug_dojo._config import load_config
 from debug_dojo._config_models import DebuggerType  # noqa: TC001
 from debug_dojo._execution import ExecMode, execute_with_debug
-from debug_dojo._gamification import GamificationManager
 
 cli = typer.Typer(
     name="debug_dojo",
@@ -23,30 +19,12 @@ cli = typer.Typer(
 )
 
 
-@cli.command(help="Show your current Dojo Belt and stats.")
-def belt(
-    config_path: Annotated[
-        Path | None, typer.Option("--config", "-c", help="Show configuration")
-    ] = None,
-) -> None:
-    """Display the current user's Dojo Belt status."""
-    config = load_config(config_path)
-
-    if not config.gamification:
-        rich_print("[yellow]Gamification is disabled in your configuration.[/yellow]")
-        return
-
-    manager = GamificationManager()
-    manager.display_status()
-
-
 @cli.command(
-    name="run",
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
 )
-def run_debug(  # noqa: PLR0913
+def run(  # noqa: PLR0913
     ctx: typer.Context,
     target_name: Annotated[
         str | None,
@@ -120,8 +98,6 @@ def run_debug(  # noqa: PLR0913
         rich_print(f"[blue]Using debug-dojo configuration: {config} [/blue]")
 
     if target_name:
-        start_time = time.perf_counter()
-
         execute_with_debug(
             target_name=target_name,
             target_mode=mode,
@@ -130,16 +106,20 @@ def run_debug(  # noqa: PLR0913
             config=config,
         )
 
-        duration = time.perf_counter() - start_time
 
-        # Gamification: Increment session count if enabled
-        if config.gamification:
-            with contextlib.suppress(Exception):
-                command = " ".join(sys.argv)
-                GamificationManager().increment_session(
-                    duration_seconds=duration,
-                    command=command,
-                )
+@cli.command(
+    help="Show config.",
+    no_args_is_help=True,
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+)
+def config(
+    config_path: Annotated[
+        Path | None, typer.Option("--config", "-c", help="Show configuration")
+    ] = None,
+) -> None:
+    """Display resolved and updated config."""
+    config = load_config(config_path, verbose=True, debugger=None)
+    rich_print(f"[blue]Using debug-dojo configuration:\n{config} [/blue]")
 
 
 def main() -> None:
