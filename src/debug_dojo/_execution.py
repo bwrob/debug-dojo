@@ -113,7 +113,7 @@ def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -
     rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
     rich_print(traceback.format_exc())
     if config.exceptions.post_mortem:
-        import ipdb  # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415, T100
+        import ipdb  # pyright: ignore[reportMissingTypeStubs]  # noqa: T100
 
         rich_print("[blue]Entering post-mortem debugging session...[/blue]")
         ipdb.post_mortem(e.__traceback__)  # pyright: ignore[reportUnknownMemberType]
