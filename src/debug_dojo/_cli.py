@@ -9,7 +9,7 @@ import typer
 from rich import print as rich_print
 
 from debug_dojo._config import load_config
-from debug_dojo._config_models import DebuggerType  # noqa: TC001
+from debug_dojo._config_models import DebuggerType
 from debug_dojo._execution import ExecMode, execute_with_debug
 
 cli = typer.Typer(
@@ -24,7 +24,7 @@ cli = typer.Typer(
     no_args_is_help=True,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
 )
-def run(  # noqa: PLR0913
+def run(
     ctx: typer.Context,
     target_name: Annotated[
         str | None,
