@@ -7,29 +7,28 @@ target-version = "py310"
 
     explicit-preview-rules = false
     ignore = [
-        "COM812",  # missing-trailing-comma: Incompatible with formatter.
-        "COM819",  # prohibited-trailing-comma: Incompatible with formatter.
-        "D203",    # one-blank-line-before-class: Incompatible with D211.
-        "D213",    # multi-line-summary-second-line: Incompatible with D212.
-        "TC006",   # runtime-cast-value: Prone to typos in string casts.
-        "PLC2701", # unnecessary-literal-comprehension: Incompatible with formatter.
-        "CPY001",
+        "incorrect-blank-line-before-class",
+        "multi-line-summary-second-line",
+        "runtime-cast-value",
+        "import-private-name",
+        "missing-copyright-notice",
+        "missing-trailing-comma",
     ]
     preview = true
     select = ["ALL"]
 
 
     [lint.per-file-ignores]
-        "examples/*" = ["INP001"]
-        "examples/test_target.py" = ["F821"]
-        "scripts/*.py" = ["S101", "T201", "INP001"]
-        "src/debug_dojo/_cli.py" = ["TC003"]
+        "examples/*" = ["implicit-namespace-package"]
+        "examples/test_target.py" = ["undefined-name"]
+        "scripts/*.py" = ["assert", "print", "implicit-namespace-package"]
+        "src/debug_dojo/_cli.py" = ["typing-only-standard-library-import"]
         "src/debug_dojo/_installers.py" = [
-            "PLC0415",
-            "T100",
+            "import-outside-top-level",
+            "debugger",
         ]
-        "tests/*" = ["S101", "T201", "DOC201"]
-        "tests/assets/*" = ["T201", "INP001", "F821"]
+        "tests/*" = ["assert", "print", "docstring-missing-returns", "PT"]
+        "tests/assets/*" = ["print", "implicit-namespace-package", "undefined-name"]
 
 [format]
     docstring-code-format = true

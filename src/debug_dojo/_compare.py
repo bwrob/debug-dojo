@@ -27,7 +27,7 @@ def _get_members(
     for name in sorted(dir(obj)):
         try:
             value = getattr(obj, name)  # pyright: ignore[reportAny]
-        except Exception:  # noqa: S112, BLE001
+        except Exception:  # ruff: ignore[try-except-continue, blind-except]
             continue
 
         if predicate(name, value):

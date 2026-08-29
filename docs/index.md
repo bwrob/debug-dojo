@@ -75,7 +75,9 @@ debugging mode with a single command:
 object_1 = {"foo": 1, "bar": 2}
 object_2 = [1, 2, 3]
 
-import debug_dojo.install; b()
+import debug_dojo.install
+
+b()
 p(object_1)  # Pretty print an object with Rich
 ```
 

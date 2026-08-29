@@ -33,7 +33,7 @@ from debug_dojo._installers import (
 )
 
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(autouse=True)  # ruff: ignore[pytest-fixture-autouse]
 def cleanup_builtins() -> Iterator[None]:
     """Clean up builtins after each test."""
     yield

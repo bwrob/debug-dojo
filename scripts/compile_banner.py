@@ -25,7 +25,7 @@ if __name__ == "__main__":
             font_paths=[FONTS_PATH],
         )
         rich.print("Compilation successful.")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:  # ruff: ignore[blind-except]
         rich.print(f"Compilation failed: {e}")
         import traceback
 
