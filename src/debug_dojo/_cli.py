@@ -9,7 +9,9 @@ import typer
 from rich import print as rich_print
 
 from debug_dojo._config import load_config
-from debug_dojo._config_models import DebuggerType  # noqa: TC001
+from debug_dojo._config_models import (
+    DebuggerType,  # ruff: ignore[typing-only-first-party-import]
+)
 from debug_dojo._execution import ExecMode, execute_with_debug
 
 cli = typer.Typer(
@@ -24,7 +26,7 @@ cli = typer.Typer(
     no_args_is_help=True,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
 )
-def run(  # noqa: PLR0913
+def run(  # ruff: ignore[too-many-arguments]
     ctx: typer.Context,
     target_name: Annotated[
         str | None,
@@ -32,7 +34,8 @@ def run(  # noqa: PLR0913
     ] = None,
     *,
     config_path: Annotated[
-        Path | None, typer.Option("--config", "-c", help="Show configuration")
+        Path | None,
+        typer.Option("--config", "-c", help="Show configuration"),
     ] = None,
     debugger: Annotated[
         DebuggerType | None,
@@ -80,7 +83,7 @@ def run(  # noqa: PLR0913
     """
     if module and executable:
         rich_print(
-            "[red]Error: --module and --command options are mutually exclusive.[/red]"
+            "[red]Error: --module and --command options are mutually exclusive.[/red]",
         )
         raise typer.Exit(1)
 
@@ -114,7 +117,8 @@ def run(  # noqa: PLR0913
 )
 def config(
     config_path: Annotated[
-        Path | None, typer.Option("--config", "-c", help="Show configuration")
+        Path | None,
+        typer.Option("--config", "-c", help="Show configuration"),
     ] = None,
 ) -> None:
     """Display resolved and updated config."""

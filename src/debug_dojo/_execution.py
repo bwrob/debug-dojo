@@ -68,7 +68,8 @@ def _install_debug_tools(
 
 
 def _get_runner_and_target(
-    target_name: str, target_mode: ExecMode
+    target_name: str,
+    target_mode: ExecMode,
 ) -> tuple[Runner, str]:
     """Determine the runner function and resolved target path.
 
@@ -113,7 +114,7 @@ def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -
     rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
     rich_print(traceback.format_exc())
     if config.exceptions.post_mortem:
-        import ipdb  # pyright: ignore[reportMissingTypeStubs]  # noqa: PLC0415, T100
+        import ipdb  # pyright: ignore[reportMissingTypeStubs]  # ruff: ignore[import-outside-top-level, debugger]
 
         rich_print("[blue]Entering post-mortem debugging session...[/blue]")
         ipdb.post_mortem(e.__traceback__)  # pyright: ignore[reportUnknownMemberType]
@@ -150,7 +151,7 @@ def _safe_execute(
     except SystemExit as e:
         if e.code:
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
-    except Exception as e:  # noqa: BLE001
+    except Exception as e:  # ruff: ignore[blind-except]
         _handle_exception(e, target_name, config)
 
 
