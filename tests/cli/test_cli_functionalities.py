@@ -1,65 +1,39 @@
-"""Tests for debug-dojo CLI config print command."""
+"""Tests for debug-dojo CLI functionalities."""
 
 from __future__ import annotations
+
+from unittest.mock import MagicMock, patch
 
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
 
 
-def _breakpoint_ipdb(  # ruff: ignore[too-many-arguments, too-many-positional-arguments] # pyright: ignore[reportUnusedFunction]
+@patch("ipdb.set_trace")
+def test_breakpoint_ipdb(
+    mock_set_trace: MagicMock,
     runner: CliRunner,
     test_config_path: str,
     test_target_breakpoint: str,
-    test_string: str,
-    another_test_string: str,
-    expected_dict_output: str,
 ) -> None:
-    """Test breakpoint with ipdb from CLI.
-
-    Only testing ipdb here since pdb is caught by pytest runner and does not behave as
-    expected.
-    """
-    args = ["-d", "ipdb", "-c", test_config_path, test_target_breakpoint]
-    inputs = [
-        "inspect(example_dict)",
-        f"print('{test_string}')",
-        f"compare('{test_string}','{another_test_string}')",
-        "c",
-        "\n",
-    ]
-    result = runner.invoke(cli, args, input="\n".join(inputs))
+    """Test breakpoint with ipdb from CLI."""
+    args = ["run", "-d", "ipdb", "-c", test_config_path, test_target_breakpoint]
+    result = runner.invoke(cli, args)
 
     assert result.exit_code == 0
-    # ipdb prompt
-    assert "ipdb>" in result.output
-    # breakpoint line in code context
-    assert "breakpoint" in result.output
-    # inspected dict output through prompt
-    assert expected_dict_output in result.output
-    # printed test string through prompt
-    assert test_string in result.output
-    # compare with two strings through prompt
-    assert another_test_string in result.output
+    mock_set_trace.assert_called_once()
 
 
-def _test_post_mortem(  # pyright: ignore[reportUnusedFunction]
+@patch("ipdb.post_mortem")
+def test_post_mortem(
+    mock_post_mortem: MagicMock,
     runner: CliRunner,
     test_config_path: str,
     test_target_exception: str,
 ) -> None:
-    """Test post-mortem with ipdb from CLI.
-
-    Only testing ipdb here since pdb is caught by pytest runner and does not behave as
-    expected.
-    """
-    args = ["-d", "ipdb", "-c", test_config_path, test_target_exception]
-    inputs = ["raise", "c", "\n"]
-
-    result = runner.invoke(cli, args, input="\n".join(inputs))
+    """Test post-mortem with ipdb from CLI."""
+    args = ["run", "-d", "ipdb", "-c", test_config_path, test_target_exception]
+    result = runner.invoke(cli, args)
 
     assert result.exit_code != 0
-    # ipdb prompt
-    assert "ipdb>" in result.output
-    # post-mortem line in code context
-    assert "post-mortem" in result.output
+    mock_post_mortem.assert_called_once()

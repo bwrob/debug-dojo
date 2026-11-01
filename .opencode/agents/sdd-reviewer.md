@@ -1,1 +1,0 @@
-../../.agents/subagents/sdd-reviewer.md

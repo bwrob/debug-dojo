@@ -16,7 +16,7 @@ omit =
 show_missing = true
 skip_covered = false
 skip_empty = true
-fail_under = 88
+fail_under = 100
 exclude_also =
     pragma: no cover
     def __repr__

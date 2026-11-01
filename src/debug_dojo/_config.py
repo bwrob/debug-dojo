@@ -30,18 +30,19 @@ JSON: TypeAlias = (
 
 
 def _validate_model(
-    model: type[DebugDojoConfigV1 | DebugDojoConfigV2],
+    model: type[DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1],
     raw_config: JSON,
-) -> DebugDojoConfigV1 | DebugDojoConfigV2:
+) -> DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1:
     """Validate the raw configuration against a specific model.
 
     Args:
-        model (type[DebugDojoConfigV1 | DebugDojoConfigV2]): The model class to use
-            for validation.
+        model (type[DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1]): The
+            model class to use for validation.
         raw_config (JSON): The raw configuration data.
 
     Returns:
-        DebugDojoConfigV1 | DebugDojoConfigV2: The validated configuration object.
+        DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1: The validated
+            configuration object.
 
     Raises:
         DaciteError: If the configuration does not match the model.
@@ -129,7 +130,7 @@ def _try_validate_config(
     raw_config: JSON,
     *,
     verbose: bool,
-) -> DebugDojoConfigV1 | DebugDojoConfigV2 | None:
+) -> DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1 | None:
     """Try to validate the raw configuration against known configuration models.
 
     Args:
@@ -137,11 +138,11 @@ def _try_validate_config(
         verbose (bool): If True, print verbose messages during validation.
 
     Returns:
-        DebugDojoConfigV1 | DebugDojoConfigV2 | None: The validated configuration
-            model, or None if validation fails for all models.
+        DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1 | None: The validated
+            configuration model, or None if validation fails for all models.
 
     """
-    for model in (DebugDojoConfigV2, DebugDojoConfigV1):
+    for model in (DebugDojoConfig, DebugDojoConfigV2, DebugDojoConfigV1):
         model_name = model.__name__
         try:
             config = _validate_model(model, raw_config)

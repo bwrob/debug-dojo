@@ -73,8 +73,6 @@ venv.bak/
 .tach_cache/
 .temp/
 .specs/
-.aider*
-!.aider.conf.yml
 
 # IDEs & Editors
 .idea/

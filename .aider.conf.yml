@@ -1,8 +1,0 @@
-read:
-    - AGENTS.md
-
-lint-cmd: "uv run poe fix"
-auto-lint: true
-
-test-cmd: "uv run poe test"
-auto-test: false

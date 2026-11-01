@@ -46,6 +46,28 @@ def test_target_inspect() -> str:
 
 
 @pytest.fixture
+def test_target_breakpoint() -> str:
+    """Provide a path to a test target file for breakpoint testing.
+
+    Returns:
+        str: The path to a test target script for breakpoint testing.
+
+    """
+    return str(ASSETS_DIR / "main_breakpoint.py")
+
+
+@pytest.fixture
+def test_target_exception() -> str:
+    """Provide a path to a test target file for exception testing.
+
+    Returns:
+        str: The path to a test target script for exception testing.
+
+    """
+    return str(ASSETS_DIR / "main_exception.py")
+
+
+@pytest.fixture
 def expected_dict_output() -> str:
     """Provide the expected output of the example_dict inspection.
 

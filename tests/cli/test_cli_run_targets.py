@@ -1,4 +1,4 @@
-"""Tests for debug-dojo CLI config print command."""
+"""Tests for debug-dojo CLI run targets."""
 
 from __future__ import annotations
 

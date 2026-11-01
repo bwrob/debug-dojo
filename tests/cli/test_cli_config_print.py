@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import rich
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
@@ -12,8 +11,6 @@ def test_config_print_default(runner: CliRunner) -> None:
     """Test printing config from CLI."""
     args = ["run", "--verbose"]
     result = runner.invoke(cli, args)
-
-    rich.print(result.output)
 
     assert result.exit_code == 0
     assert (
@@ -27,6 +24,13 @@ def test_config_print_file(runner: CliRunner, test_config_path: str) -> None:
     args = ["run", "--config", test_config_path, "--verbose"]
     result = runner.invoke(cli, args)
 
-    rich.print(result.output)
+    assert result.exit_code == 0
+
+
+def test_config_command(runner: CliRunner, test_config_path: str) -> None:
+    """Test running the dojo config command."""
+    args = ["config", "-c", test_config_path]
+    result = runner.invoke(cli, args)
 
     assert result.exit_code == 0
+    assert "Using debug-dojo configuration:" in result.output

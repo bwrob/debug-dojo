@@ -8,6 +8,7 @@ from debug_dojo._compare import (
     get_object_attributes,
     get_object_methods,
     get_simplified_object_info,
+    inspect_objects_side_by_side,
 )
 
 
@@ -74,3 +75,39 @@ def test_get_simplified_object_info_custom_object() -> None:
     assert any(isinstance(line, Text) and "MyClass" in line.plain for line in info)
     assert any(isinstance(line, Text) and "x=10" in line.plain for line in info)
     assert any(isinstance(line, Text) and "my_method" in line.plain for line in info)
+
+
+def test_get_object_attributes_exception() -> None:
+    """Test handling of properties raising exceptions."""
+
+    class Broken:
+        """Class with broken property for testing."""
+
+        @property
+        def boom(self) -> None:
+            """Raise error on property access.
+
+            Raises:
+                RuntimeError: Always raised for testing.
+
+            """
+            msg = "Property access failure"
+            raise RuntimeError(msg)
+
+    attributes = get_object_attributes(Broken())
+    assert isinstance(attributes, list)
+
+
+def test_get_simplified_object_info_empty_custom_object() -> None:
+    """Test simplified object info for an empty custom object."""
+
+    class EmptyClass:
+        """Empty class for testing."""
+
+    info = get_simplified_object_info(EmptyClass())
+    assert any("No attributes found." in line.plain for line in info)
+
+
+def test_inspect_objects_side_by_side() -> None:
+    """Test side-by-side inspection rendering."""
+    inspect_objects_side_by_side({"a": 1}, [1, 2, 3])
