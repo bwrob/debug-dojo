@@ -114,7 +114,7 @@ virtual environments.
 > [!TIP]
 > When browsing docs, press ++slash++ or ++cmd+k++ (or ++ctrl+k++ on Linux/Windows) to
 > instantly search documentation symbols and pages. Hovering internal links like
-> [API Reference](reference.md) activates floating link previews.
+> [API Reference](api-reference.md) activates floating link previews.
 
 ### Tested Code Snippets
 
@@ -122,7 +122,7 @@ Code snippets can be embedded directly from verified tests or source files using
 `--8<--`:
 
 ```markdown
---8<-- "tests/test_core.py:10:14"
+--8<-- "tests/test_config.py:10:15"
 ```
 
 ## Architecture & Diagrams

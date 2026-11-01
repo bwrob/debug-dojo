@@ -1,5 +1,7 @@
 """Tests for debug-dojo CLI config print command."""
 
+from __future__ import annotations
+
 import pytest
 from typer.testing import CliRunner
 

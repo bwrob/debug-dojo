@@ -26,16 +26,26 @@
   </a>
 </p>
 
-[**debug-dojo**](https://bwrob.github.io/debug-dojo/) is a powerful Python package designed to streamline your debugging workflow directly from the terminal. It integrates seamlessly with popular debuggers and enhances your inspection capabilities with beautiful, readable output.
+[**debug-dojo**](https://bwrob.github.io/debug-dojo/) is a powerful Python package
+designed to streamline your debugging workflow directly from the terminal. It integrates
+seamlessly with popular debuggers and enhances your inspection capabilities with
+beautiful, readable output.
 
 ## ✨ Features
 
-*   **Unified Debugging Interface:** Easily launch your scripts or modules with your preferred debugger (`debugpy`, `pudb`, `pdb`, `ipdb`).
-*   **Dojo Belts Gamification:** Earn belts based on your debugging experience and track your progress.
-*   **Enhanced Output with Rich:** Leverages [`rich`](https://github.com/Textualize/rich) for stunning, syntax-highlighted code, pretty-printed objects, and improved tracebacks.
-*   **Side-by-side Object Comparison:** Quickly identify differences between two Python objects.
-*   **Interactive Object Inspection:** Dive deep into object structures with a powerful `inspect` utility.
-*   **Simplified Breakpoints:** Set breakpoints effortlessly with a concise helper function.
+- **Unified Debugging Interface:** Easily launch your scripts or modules with your
+  preferred debugger (`debugpy`, `pudb`, `pdb`, `ipdb`).
+- **Dojo Belts Gamification:** Earn belts based on your debugging experience and track
+  your progress.
+- **Enhanced Output with Rich:** Leverages [`rich`](https://github.com/Textualize/rich)
+  for stunning, syntax-highlighted code, pretty-printed objects, and improved
+  tracebacks.
+- **Side-by-side Object Comparison:** Quickly identify differences between two Python
+  objects.
+- **Interactive Object Inspection:** Dive deep into object structures with a powerful
+  `inspect` utility.
+- **Simplified Breakpoints:** Set breakpoints effortlessly with a concise helper
+  function.
 
 ## 🚀 Installation
 
@@ -79,7 +89,8 @@ dojo run --exec pytest
 
 ## 🐍 Usage in Code
 
-Integrate `debug-dojo` directly into your Python code for on-demand debugging and inspection utilities:
+Integrate `debug-dojo` directly into your Python code for on-demand debugging and
+inspection utilities:
 
 ```python
 import debug_dojo.install
@@ -105,8 +116,12 @@ debug_dojo.install.c(object_1, object_2)
 
 ## 📚 Documentation
 
-For comprehensive instructions on installation, configuration, advanced usage, and API reference, please visit the [official documentation](https://bwrob.github.io/debug-dojo/).
+For comprehensive instructions on installation, configuration, advanced usage, and API
+reference, please visit the
+[official documentation](https://bwrob.github.io/debug-dojo/).
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please refer to the [development guidelines](https://bwrob.github.io/debug-dojo/development/) for details on how to set up your development environment and submit changes.
+Contributions are welcome! Please refer to the
+[development guidelines](https://bwrob.github.io/debug-dojo/development/) for details on
+how to set up your development environment and submit changes.

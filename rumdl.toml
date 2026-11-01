@@ -25,7 +25,16 @@ respect-gitignore = true
     "**/docs/adr/index.md" = ["MD060"]
 
     # Keep standard Changelog headings and allow generated compare URLs to vary.
-    "**/docs/changelog.md" = ["MD013", "MD082"]
+    "**/docs/changelog.md" = ["MD013", "MD080", "MD082"]
+
+    # Configuration docs use code in headings for TOML sections.
+    "**/docs/configuration.md" = ["MD093"]
+
+    # CLI reference uses code in headings for command names.
+    "**/docs/cli-reference.md" = ["MD093"]
+
+    # Project index contains HTML banner and badge layout.
+    "**/docs/index.md" = ["MD041", "MD082", "MD093"]
 
 # --- Code Block Tools (Format & Lint Python & JSON in Markdown) ---
 [code-block-tools]
@@ -59,7 +68,7 @@ respect-gitignore = true
             "--preview",
             "--isolated",
             "--output-format=concise",
-            "--ignore=D,T201,missing-required-import",
+            "--ignore=D,T201,F401,F821,missing-required-import",
             "-",
         ]
 
@@ -111,6 +120,7 @@ respect-gitignore = true
         "br",
         "details",
         "div",
+        "em",
         "i",
         "iframe",
         "img",

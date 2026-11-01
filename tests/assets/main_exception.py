@@ -1,5 +1,7 @@
 """Example script demonstrating cl argument printing and inspection."""
 
+from __future__ import annotations
+
 
 def main() -> None:
     """Run the command-line interface.

@@ -1,5 +1,7 @@
 """Script to compile the Typst banner into a PNG image."""
 
+from __future__ import annotations
+
 from pathlib import Path
 
 import rich

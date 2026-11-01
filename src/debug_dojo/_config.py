@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import TypeAlias, cast
+from typing import Any, TypeAlias, cast
 
 from dacite import DaciteError, from_dict
 from rich import print as rich_print
@@ -50,7 +50,11 @@ def _validate_model(
     if not isinstance(raw_config, dict):
         msg = "Configuration must be a dictionary."
         raise DaciteError(msg)
-    return from_dict(data_class=model, data=raw_config, config=DACITE_CONFIG)
+    return from_dict(
+        data_class=model,
+        data=cast(Any, raw_config),
+        config=DACITE_CONFIG,
+    )
 
 
 def resolve_config_path(config_path: Path | None) -> Path | None:
@@ -110,13 +114,13 @@ def load_raw_config(config_path: Path) -> JSON:
         raise ValueError(msg) from e
 
     if config_path.name != "pyproject.toml":
-        return cast(JSON, config_data)
+        return cast("JSON", config_data)
 
     # If config is in [tool.debug_dojo] (pyproject.toml), extract it.
     try:
-        dojo_config = cast(JSON, config_data["tool"]["debug_dojo"])
+        dojo_config = cast("JSON", config_data["tool"]["debug_dojo"])
     except KeyError:
-        return cast(JSON, {})
+        return cast("JSON", {})
     else:
         return dojo_config
 

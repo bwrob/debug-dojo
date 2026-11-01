@@ -12,7 +12,6 @@
 [![license](https://img.shields.io/github/license/bwrob/debug-dojo.svg)](https://github.com/bwrob/debug-dojo/blob/main/LICENSE)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/bwrob/debug-dojo/main.svg)](https://results.pre-commit.ci/latest/github/bwrob/debug-dojo/main)
 
-
 **debug-dojo** is a Python package providing utilities for enhanced
 debugging and inspection in the terminal. It leverages
 [`rich`](https://github.com/Textualize/rich) for beautiful output and
@@ -23,18 +22,18 @@ from `rich`, and easy integration with different debuggers -- `debugpy`,
 ## Features
 
 - **Convenient CLI** Quickly run your code with debugging tools
-    enabled.
+  enabled.
 - **Dojo Belts Gamification:** Earn belts based on your debugging
-    experience.
+  experience.
 - **Simple API:** Install all tools or only what you need.
 - **Debugger integration:** Quickly enable Debugpy, PuDB, PDB, or IPDB
-    as your default pre-configured debugger.
+  as your default pre-configured debugger.
 - **Rich tracebacks:** Get readable, colorized tracebacks for easier
-    debugging.
+  debugging.
 - **Side-by-side object inspection:** Visually compare Python objects,
-    their attributes, and methods in the terminal.
+  their attributes, and methods in the terminal.
 - **Configuration:** Easily configure the debugging tools using
-    `dojo.toml` or `pyproject.toml`.
+  `dojo.toml` or `pyproject.toml`.
 
 ## Usage
 
@@ -66,7 +65,7 @@ dojo can let you debug into:
 - any runnable module -- `dojo run -m my_module`
 - or even an executable, `dojo run -e my_executable` (like `pytest`)
 
-### From the code
+### From the Code
 
 In the `PuDB` style, you can install all debugging tools and enter the
 debugging mode with a single command:
@@ -81,14 +80,20 @@ b()
 p(object_1)  # Pretty print an object with Rich
 ```
 
-### Features in debugging mode (when `debug_dojo.install` is used)
+### Features in Debugging Mode (When `debug_dojo.install` Is Used)
 
-When you use `import debug_dojo.install; b()`, the following convenience functions are injected into Python's builtins, making them globally available within your debugging session:
+When you use `import debug_dojo.install; b()`, the following convenience functions are
+injected into Python's builtins, making them globally available within your debugging
+session:
 
-- `b()`: Sets a breakpoint using the debugger configured in `debug-dojo`. This is equivalent to calling `breakpoint()` but respects your `debug-dojo` debugger settings.
-- `p(obj)`: Pretty prints an object using `rich.print`, providing enhanced readability for complex data structures.
-- `i(obj)`: Inspects an object using `rich.inspect`, offering a detailed, colorized view of its attributes and methods.
-- `c(obj1, obj2)`: Compares two Python objects side-by-side using `debug-dojo`'s comparison utility, highlighting differences for easier debugging.
+- `b()`: Sets a breakpoint using the debugger configured in `debug-dojo`. This is
+  equivalent to calling `breakpoint()` but respects your `debug-dojo` debugger settings.
+- `p(obj)`: Pretty prints an object using `rich.print`, providing enhanced readability
+  for complex data structures.
+- `i(obj)`: Inspects an object using `rich.inspect`, offering a detailed, colorized view
+  of its attributes and methods.
+- `c(obj1, obj2)`: Compares two Python objects side-by-side using `debug-dojo`'s
+  comparison utility, highlighting differences for easier debugging.
 
 ## Installation
 

@@ -34,9 +34,9 @@ responsibly:
    - Provide a detailed summary, proof of concept (PoC), and impact assessment.
 
 2. **Direct Security Contact**:
-   - If GitHub Private Reporting is unavailable, send an email to
-     **bwrob** at [bartosz.marcin.wroblewski@gmail.com](mailto:bartosz.marcin.wroblewski@gmail.com) with the subject line
-     `[SECURITY] Debug Dojo Vulnerability Report`.
+   - If GitHub Private Reporting is unavailable, send an email to **bwrob** at
+     [bartosz.marcin.wroblewski@gmail.com](mailto:bartosz.marcin.wroblewski@gmail.com)
+     with the subject line `[SECURITY] Debug Dojo Vulnerability Report`.
    - Please include reproduction steps, affected environment/versions, and any proposed
      mitigation.
 

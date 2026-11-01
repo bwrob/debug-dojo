@@ -1,5 +1,7 @@
 """Provide constants for tests."""
 
+from __future__ import annotations
+
 import pytest
 from typer.testing import CliRunner
 

@@ -1,5 +1,7 @@
 """Test the `_config` module."""
 
+from __future__ import annotations
+
 from pathlib import Path
 from unittest.mock import patch
 
@@ -28,7 +30,7 @@ def mock_config_file(tmp_path: Path) -> Path:
 default = "pudb"
     """
     config_path = tmp_path / "dojo.toml"
-    _ = config_path.write_text(config_content)
+    _ = config_path.write_text(config_content, encoding="utf-8")
     return config_path
 
 

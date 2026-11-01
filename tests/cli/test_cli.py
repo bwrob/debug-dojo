@@ -1,5 +1,7 @@
 """Tests for the `_cli` module."""
 
+from __future__ import annotations
+
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli

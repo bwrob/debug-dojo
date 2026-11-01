@@ -1,4 +1,4 @@
-exclude     = [".venv", "site", "dist"]
+exclude     = [".venv*", "site", "dist"]
 line-length = 88
 
 [lint]
@@ -9,6 +9,7 @@ line-length = 88
         "missing-copyright-notice",
         "missing-trailing-comma",
         "multi-line-summary-second-line",
+        "runtime-cast-value",
     ]
     preview = true
     select = ["ALL"]
@@ -40,13 +41,39 @@ line-length = 88
         required-imports   = ["from __future__ import annotations"]
 
     [lint.per-file-ignores]
+        # CLI runtime annotations evaluated by Typer
+        "src/debug_dojo/_cli.py" = ["typing-only-standard-library-import"]
+
+        # Debugger installation functions need to dynamically import debugger backends
+        "src/debug_dojo/_installers.py" = [
+            "import-outside-top-level",
+            "debugger",
+        ]
+
         # pytest idioms: tests are assertion-driven and have no production
-        # assert surface to protect.
-        "tests/**/*" = ["assert"]
+        # assert surface to protect; test code imports private modules for testing.
+        "tests/**/*" = [
+            "assert",
+            "import-private-name",
+            "implicit-namespace-package",
+            "print",
+            "PT",
+            "TC",
+        ]
+        "tests/assets/*" = [
+            "print",
+            "implicit-namespace-package",
+            "undefined-name",
+        ]
 
         # Maintenance scripts: subprocess drives repo-owned tooling on
         # repo-controlled paths.
-        "scripts/*" = ["suspicious-subprocess-import"]
+        "scripts/*" = [
+            "assert",
+            "print",
+            "implicit-namespace-package",
+            "suspicious-subprocess-import",
+        ]
 
     [lint.pyupgrade]
         keep-runtime-typing = true

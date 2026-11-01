@@ -1,5 +1,7 @@
 """Example script demonstrating cl argument printing and inspection."""
 
+from __future__ import annotations
+
 
 def main() -> None:
     """Run the command-line interface."""
@@ -9,7 +11,7 @@ def main() -> None:
         "key3": "value3",
     }
 
-    i(example_dict)  # ty: ignore[unresolved-reference]
+    i(example_dict)  # pyrefly: ignore[unknown-name]
 
 
 if __name__ == "__main__":

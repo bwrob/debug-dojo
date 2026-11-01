@@ -14,7 +14,7 @@ from debug_dojo._config_models import (
 )
 from debug_dojo._execution import ExecMode, execute_with_debug
 
-cli = typer.Typer(
+cli: typer.Typer = typer.Typer(
     name="debug_dojo",
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,

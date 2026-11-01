@@ -30,11 +30,6 @@ respect_gitignore = true
 
 
 [[modules]]
-    depends_on = ["debug_dojo.cli"]
-    layer      = "cli"
-    path       = "debug_dojo.__main__"
-
-[[modules]]
     depends_on = []
     layer      = "cli"
-    path       = "debug_dojo.cli"
+    path       = "debug_dojo.__main__"

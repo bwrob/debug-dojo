@@ -1,5 +1,7 @@
 """Test the compare utilities."""
 
+from __future__ import annotations
+
 from rich.text import Text
 
 from debug_dojo._compare import (

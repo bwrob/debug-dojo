@@ -204,4 +204,4 @@ class DebugDojoConfigV1:
 
 DebugDojoConfig = DebugDojoConfigV3
 
-DACITE_CONFIG = Config(cast=[Enum], strict=True)
+DACITE_CONFIG: Config = Config(cast=[Enum], strict=True)
