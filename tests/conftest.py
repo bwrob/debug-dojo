@@ -1,9 +1,15 @@
 """Provide constants for tests."""
 
+from __future__ import annotations
+
+from pathlib import Path
+
 import pytest
 from typer.testing import CliRunner
 
 from debug_dojo._config_models import DebugDojoConfig
+
+ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
 
 @pytest.fixture
@@ -25,7 +31,7 @@ def test_config_path() -> str:
         str: The path to a test configuration file.
 
     """
-    return "tests/assets/config.toml"
+    return str(ASSETS_DIR / "config.toml")
 
 
 @pytest.fixture
@@ -36,7 +42,29 @@ def test_target_inspect() -> str:
         str: The path to a test target script for inspection.
 
     """
-    return "tests/assets/main_inspect.py"
+    return str(ASSETS_DIR / "main_inspect.py")
+
+
+@pytest.fixture
+def test_target_breakpoint() -> str:
+    """Provide a path to a test target file for breakpoint testing.
+
+    Returns:
+        str: The path to a test target script for breakpoint testing.
+
+    """
+    return str(ASSETS_DIR / "main_breakpoint.py")
+
+
+@pytest.fixture
+def test_target_exception() -> str:
+    """Provide a path to a test target file for exception testing.
+
+    Returns:
+        str: The path to a test target script for exception testing.
+
+    """
+    return str(ASSETS_DIR / "main_exception.py")
 
 
 @pytest.fixture
@@ -52,10 +80,10 @@ def expected_dict_output() -> str:
 
 @pytest.fixture
 def runner() -> CliRunner:
-    """Provide a Typer CLI runner fixture.
+    """Provide a Typer CLI runner fixture configured without ANSI color codes.
 
     Returns:
         CliRunner: A Typer CLI runner object.
 
     """
-    return CliRunner()
+    return CliRunner(env={"NO_COLOR": "1", "TERM": "dumb"})

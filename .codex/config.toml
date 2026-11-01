@@ -1,0 +1,3 @@
+approval_policy                = "on-request"
+project_doc_fallback_filenames = ["AGENTS.md", "CLAUDE.md"]
+sandbox_mode                   = "workspace-write"

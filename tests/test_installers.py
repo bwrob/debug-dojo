@@ -1,5 +1,7 @@
 """Test the `_installers` module."""
 
+from __future__ import annotations
+
 import builtins
 import os
 import sys
@@ -12,6 +14,7 @@ from debug_dojo._config_models import (
     DebugDojoConfig,
     DebuggerType,
     DebugpyConfig,
+    ExceptionsConfig,
     IpdbConfig,
     PdbConfig,
     PudbConfig,
@@ -26,6 +29,7 @@ from debug_dojo._installers import (
     install_inspect,
     install_rich_print,
     set_debugger,
+    set_exceptions,
     use_debugpy,
     use_ipdb,
     use_pdb,
@@ -33,7 +37,7 @@ from debug_dojo._installers import (
 )
 
 
-@pytest.fixture(autouse=True)  # ruff: ignore[pytest-fixture-autouse]
+@pytest.fixture(autouse=True)  # ruff: ignore[pytest-fixture-autouse] -- fixture must automatically reset Python builtins state after every installer test
 def cleanup_builtins() -> Iterator[None]:
     """Clean up builtins after each test."""
     yield
@@ -159,3 +163,59 @@ def test_install_by_config(
     mock_set_debugger.assert_called_once_with(config.debuggers)
     mock_set_exceptions.assert_called_once_with(config.exceptions)
     mock_install_features.assert_called_once_with(config.features)
+
+
+def test_use_pudb_not_installed() -> None:
+    """Test use_pudb when PuDB is not importable."""
+    with patch.dict("sys.modules", {"pudb": None}):
+        use_pudb(PudbConfig())
+
+
+def test_use_ipdb_not_installed() -> None:
+    """Test use_ipdb when IPDB is not importable."""
+    with patch.dict("sys.modules", {"ipdb": None}):
+        use_ipdb(IpdbConfig())
+
+
+def test_use_debugpy_not_installed() -> None:
+    """Test use_debugpy when Debugpy is not importable."""
+    with patch.dict("sys.modules", {"debugpy": None}):
+        use_debugpy(DebugpyConfig())
+
+
+def test_install_features_empty_mnemonics() -> None:
+    """Test install functions with empty mnemonics do nothing."""
+    install_inspect("")
+    install_compare("")
+    install_breakpoint("")
+    install_rich_print("")
+
+
+def test_inspect_with_kwargs() -> None:
+    """Test calling inspect with custom kwargs."""
+    install_inspect("i")
+    inspect_fn = getattr(builtins, "i")  # ruff: ignore[get-attr-with-constant] -- dynamically retrieve injected mnemonic from builtins module
+    inspect_fn({"foo": "bar"}, methods=False)
+
+
+@patch("debug_dojo._installers.use_pudb")
+def test_set_debugger_pudb(mock_use_pudb: MagicMock, config: DebugDojoConfig) -> None:
+    """Test set_debugger with PUDB."""
+    config.debuggers.default = DebuggerType.PUDB
+    set_debugger(config.debuggers)
+    mock_use_pudb.assert_called_once_with(config.debuggers.pudb)
+
+
+@patch("debug_dojo._installers.use_debugpy")
+def test_set_debugger_debugpy(
+    mock_use_debugpy: MagicMock, config: DebugDojoConfig
+) -> None:
+    """Test set_debugger with DEBUGPY."""
+    config.debuggers.default = DebuggerType.DEBUGPY
+    set_debugger(config.debuggers)
+    mock_use_debugpy.assert_called_once_with(config.debuggers.debugpy)
+
+
+def test_set_exceptions_disabled() -> None:
+    """Test set_exceptions when rich_traceback is disabled."""
+    set_exceptions(ExceptionsConfig(rich_traceback=False))

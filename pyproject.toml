@@ -3,87 +3,111 @@
         { name = "bwrob", email = "bartosz.marcin.wroblewski@gmail.com" },
     ]
     classifiers = [
+        "Development Status :: 4 - Beta",
         "Intended Audience :: Developers",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 3.10",
-        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3.14",
+        "Programming Language :: Python :: 3.15",
         "Topic :: Software Development :: Debuggers",
         "Topic :: Software Development :: Libraries :: Python Modules",
+        "Typing :: Typed",
     ]
     dependencies = [
-        "dacite>=1.0.0",
-        "rich>=10.0.0",
-        "tomlkit>=0.7.0",
-        "typer>=0.3.0",
+        "dacite>=1.8.0",
+        "rich>=15.0.0",
+        "tomlkit>=0.12.0",
+        "typer>=0.16.0",
     ]
     description = "🏣 debug dojo, a place for zen debugging"
-    keywords = [
-        "debugging",
-        "inspection",
-        "tools",
-        "development",
-    ]
-    license = 'MIT'
-    license-files = ['LICENSE']
+    license = "MIT"
+    license-files = ["LICENSE"]
     name = "debug-dojo"
     readme = "README.md"
-    requires-python = ">=3.10,<3.15"
+    requires-python = ">=3.12"
     version = "0.9.0"
 
     [project.urls]
-        Changelog     = "https://bwrob.github.io/debug-dojo/changelog/"
         Documentation = "https://bwrob.github.io/debug-dojo/"
-        Homepage      = "https://bwrob.github.io/debug-dojo/"
-        Source        = "https://github.com/bwrob/debug-dojo/"
+        Homepage      = "https://github.com/bwrob/debug-dojo"
+        Issues        = "https://github.com/bwrob/debug-dojo/issues"
+        Repository    = "https://github.com/bwrob/debug-dojo.git"
 
     [project.scripts]
-        "dojo" = "debug_dojo._cli:main"
+        dojo = "debug_dojo._cli:main"
 
     [project.optional-dependencies]
-        all-debuggers = [
-            "debugpy>=1.0.0",
-            "ipdb>=0.12.0",
-            "pudb>=2020.1",
-        ]
+        all-debuggers = ["debugpy>=1.0.0", "ipdb>=0.13.13", "pudb>=2020.1"]
 
+[build-system]
+    build-backend = "uv_build"
+    requires      = ["uv_build>=0.12.7,<0.14.0"]
 
 [dependency-groups]
-
     dev = [
-        "basedpyright>=1.31.2",
-        "complexipy>=5.2.0",
-        "coverage>=7.10.4",
+        "poethepoet>=0.42.0",
+        "prek>=0.5.5",
+        { include-group = "test" },
+        { include-group = "lint" },
+        { include-group = "docs" },
+        { include-group = "mutation" },
+    ]
+    docs = [
+        "griffe-warnings-deprecated>=1.1.0",
+        "markdown-exec>=1.12.0",
+        "mkdocstrings[python]>=1.0.7",
+        "termynal>=0.14.0",
+        "typst>=0.13.0",
+        "zensical>=0.0.70",
+    ]
+    lint = [
+        "complexipy>=8.0.0",
+        "deptry>=0.25.1",
+        "griffe>=1.5.0",
+        "pyrefly>=1.3.0",
+        "ruff>=0.17.0",
+        "rumdl>=0.2.75",
+        "tach>=0.35.0",
+        "taplo>=0.9.3",
+        "typos>=1.30.0",
+        "zizmor>=1.23.0",
+    ]
+    mutation = ["cosmic-ray>=8.7.0", "mutmut>=3.8.0"]
+    test = [
+        "hypothesis>=6.125.0",
+        "pytest>=9.0.0",
+        "pytest-cov>=7.0.0",
+        "pytest-randomly>=3.16.0",
+        "pytest-sugar>=1.1.1",
+        "pytest-xdist>=3.8.0",
+        "syrupy>=6.1.0",
         "debug-dojo[all-debuggers]",
-        "diff-cover>=9.6.0",
-        "poethepoet>=0.37.0",
-        "pytest>=8.4.1",
-        "pytest-cov>=6.2.1",
-        "ruff>=0.15.12",
-        "tach>=0.29.0",
-        "ty>=0.0.15",
-        "mkdocs>=1.6.1",
-        "mkdocs-git-authors-plugin>=0.10.0",
-        "mkdocs-git-committers-plugin-2>=2.5.0",
-        "mkdocs-git-revision-date-localized-plugin>=1.4.7",
-        "mkdocs-material>=9.6.17",
-        "mkdocs-typer2>=0.1.5",
-        "mkdocstrings-python>=1.17.0",
-        "pymdown-extensions>=10.16.1",
-        "typst>=0.14.2",
-        "refurb>=2.3.0",
-        "pre-commit>=4.6.2",
-]
-
+    ]
 
 [tool.uv]
-    package          = true
-    required-version = ">=0.11.0,<0.14.0"
-
-    [tool.uv.workspace]
-        members = ["."]
+    default-groups = ["dev", "test", "lint", "docs", "mutation"]
+    package        = true
 
     [tool.uv.sources]
-        debug-dojo = { workspace = true }
+        taplo = { path = "../taplo", marker = "sys_platform == 'linux' and (platform_machine == 'aarch64' or platform_machine == 'arm64')" }
+
+    [tool.uv.build-backend]
+        source-include = [
+            "tests/**",
+            "poe_tasks.toml",
+            "ruff.toml",
+            "pytest.ini",
+            ".coveragerc",
+            "tach.toml",
+            ".zizmor.yml",
+            "cosmic-ray.toml",
+        ]
+
+[tool.mutmut]
+    runner       = "pytest"
+    source_paths = ["src/"]
+
+[tool.poe]
+    include = "poe_tasks.toml"

@@ -52,7 +52,7 @@ def use_pdb(config: PdbConfig) -> None:
     import pdb
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
-    sys.breakpointhook = cast(Any, pdb.set_trace)  # pyright: ignore[reportExplicitAny]
+    sys.breakpointhook = cast("Any", pdb.set_trace)
 
 
 def use_pudb(config: PudbConfig) -> None:
@@ -66,13 +66,13 @@ def use_pudb(config: PudbConfig) -> None:
 
     """
     try:
-        import pudb  # pyright: ignore[reportMissingTypeStubs]
+        import pudb
     except ImportError:
         rich_print(_NOT_INSTALLED.format(name="PuDB"))
         return
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
-    sys.breakpointhook = cast(Any, pudb.set_trace)  # pyright: ignore[reportExplicitAny]
+    sys.breakpointhook = cast("Any", pudb.set_trace)
 
 
 def use_ipdb(config: IpdbConfig) -> None:
@@ -86,14 +86,14 @@ def use_ipdb(config: IpdbConfig) -> None:
 
     """
     try:
-        import ipdb  # pyright: ignore[reportMissingTypeStubs]
+        import ipdb
     except ImportError:
         rich_print(_NOT_INSTALLED.format(name="IPDB"))
         return
 
     os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
     os.environ[IPDB_CONTEXT_SIZE] = str(config.context_lines)
-    sys.breakpointhook = cast(Any, ipdb.set_trace)  # pyright: ignore[reportExplicitAny]
+    sys.breakpointhook = cast("Any", ipdb.set_trace)
 
 
 def use_debugpy(config: DebugpyConfig) -> None:
@@ -146,11 +146,11 @@ def rich_traceback(*, locals_in_traceback: bool) -> None:
 
 
 def install_inspect(mnemonic: str = "i") -> None:
-    """Injects `rich.inspect` into builtins under the given mnemonic.
+    """Inject `rich.inspect` into builtins under the given mnemonic.
 
     Args:
         mnemonic (str): The name to use for the inspect function in builtins.
-                        If an empty string, the feature is not installed.
+            If an empty string, the feature is not installed.
 
     """
     if not mnemonic:
@@ -168,11 +168,11 @@ def install_inspect(mnemonic: str = "i") -> None:
 
 
 def install_compare(mnemonic: str = "c") -> None:
-    """Injects the side-by-side object comparison function into builtins.
+    """Inject the side-by-side object comparison function into builtins.
 
     Args:
         mnemonic (str): The name to use for the compare function in builtins.
-                        If an empty string, the feature is not installed.
+            If an empty string, the feature is not installed.
 
     >>> install_compare()
     >>> import builtins
@@ -187,11 +187,11 @@ def install_compare(mnemonic: str = "c") -> None:
 
 
 def install_breakpoint(mnemonic: str = "b") -> None:
-    """Inject the`breakpoint()` function into builtins under the given mnemonic.
+    """Inject the `breakpoint()` function into builtins under the given mnemonic.
 
     Args:
         mnemonic (str): The name to use for the breakpoint function in builtins.
-                        If an empty string, the feature is not installed.
+            If an empty string, the feature is not installed.
 
     >>> install_breakpoint()
     >>> import builtins
@@ -206,11 +206,11 @@ def install_breakpoint(mnemonic: str = "b") -> None:
 
 
 def install_rich_print(mnemonic: str = "p") -> None:
-    """Injects `rich.print` into builtins under the given mnemonic.
+    """Inject `rich.print` into builtins under the given mnemonic.
 
     Args:
         mnemonic (str): The name to use for the print function in builtins.
-                        If an empty string, the feature is not installed.
+            If an empty string, the feature is not installed.
 
     >>> install_rich_print()
     >>> import builtins
@@ -229,11 +229,11 @@ def install_rich_print(mnemonic: str = "p") -> None:
 
 
 def install_features(features: FeaturesConfig) -> None:
-    """Installs debugging features based on the provided configuration.
+    """Install debugging features based on the provided configuration.
 
     Args:
         features (FeaturesConfig): Configuration object specifying which features
-                                   to install and their mnemonics.
+            to install and their mnemonics.
 
     """
     install_inspect(features.rich_inspect)
@@ -275,7 +275,7 @@ def set_exceptions(exceptions: ExceptionsConfig) -> None:
 
 
 def install_by_config(config: DebugDojoConfig) -> None:
-    """Installs all debugging tools and features based on the given configuration.
+    """Install all debugging tools and features based on the given configuration.
 
     This is the main entry point for applying `debug-dojo` settings.
 

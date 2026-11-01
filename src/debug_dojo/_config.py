@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import TypeAlias, cast
+from typing import Any, cast
 
 from dacite import DaciteError, from_dict
 from rich import print as rich_print
@@ -24,24 +24,23 @@ from debug_dojo._config_models import (
     DebuggerType,
 )
 
-JSON: TypeAlias = (
-    Mapping[str, "JSON"] | Sequence["JSON"] | str | int | float | bool | None
-)
+type JSON = Mapping[str, JSON] | Sequence[JSON] | str | int | float | bool | None
 
 
 def _validate_model(
-    model: type[DebugDojoConfigV1 | DebugDojoConfigV2],
+    model: type[DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1],
     raw_config: JSON,
-) -> DebugDojoConfigV1 | DebugDojoConfigV2:
+) -> DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1:
     """Validate the raw configuration against a specific model.
 
     Args:
-        model (type[DebugDojoConfigV1 | DebugDojoConfigV2]): The model class to use
-            for validation.
+        model (type[DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1]): The
+            model class to use for validation.
         raw_config (JSON): The raw configuration data.
 
     Returns:
-        DebugDojoConfigV1 | DebugDojoConfigV2: The validated configuration object.
+        DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1: The validated
+            configuration object.
 
     Raises:
         DaciteError: If the configuration does not match the model.
@@ -50,24 +49,26 @@ def _validate_model(
     if not isinstance(raw_config, dict):
         msg = "Configuration must be a dictionary."
         raise DaciteError(msg)
-    return from_dict(data_class=model, data=raw_config, config=DACITE_CONFIG)
+    return from_dict(
+        data_class=model,
+        data=cast(Any, raw_config),
+        config=DACITE_CONFIG,
+    )
 
 
 def resolve_config_path(config_path: Path | None) -> Path | None:
-    """Resolve the configuration path.
-
-    Returning a default if none is provided.
+    """Resolve the configuration path, returning a default path if none is provided.
 
     Args:
         config_path (Path | None): The explicit path to the configuration file, or None.
 
     Returns:
         Path | None: The resolved absolute path to the configuration file, or None if no
-                     configuration file is found and no explicit path was given.
+            configuration file is found and no explicit path was given.
 
     Raises:
         FileNotFoundError: If an explicit `config_path` is provided but the file
-                           does not exist.
+            does not exist.
 
     """
     if config_path:
@@ -88,7 +89,7 @@ def resolve_config_path(config_path: Path | None) -> Path | None:
 def load_raw_config(config_path: Path) -> JSON:
     """Load the Debug Dojo configuration from a file.
 
-    Currently supports 'dojo.toml' or 'pyproject.toml'. If no path is provided, it
+    Currently supports `dojo.toml` or `pyproject.toml`. If no path is provided, it
     checks the current directory for these files.
 
     Args:
@@ -125,7 +126,7 @@ def _try_validate_config(
     raw_config: JSON,
     *,
     verbose: bool,
-) -> DebugDojoConfigV1 | DebugDojoConfigV2 | None:
+) -> DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1 | None:
     """Try to validate the raw configuration against known configuration models.
 
     Args:
@@ -133,11 +134,11 @@ def _try_validate_config(
         verbose (bool): If True, print verbose messages during validation.
 
     Returns:
-        DebugDojoConfigV1 | DebugDojoConfigV2 | None: The validated configuration
-            model, or None if validation fails for all models.
+        DebugDojoConfig | DebugDojoConfigV2 | DebugDojoConfigV1 | None: The validated
+            configuration model, or None if validation fails for all models.
 
     """
-    for model in (DebugDojoConfigV2, DebugDojoConfigV1):
+    for model in (DebugDojoConfig, DebugDojoConfigV2, DebugDojoConfigV1):
         model_name = model.__name__
         try:
             config = _validate_model(model, raw_config)

@@ -1,34 +1,82 @@
-line-length    = 88
-target-version = "py310"
-
+exclude     = [".venv*", "site", "dist"]
+line-length = 88
 
 [lint]
-    exclude = ["examples"]
-
-    explicit-preview-rules = false
+    future-annotations = true
     ignore = [
+        "blank-line-before-class",
         "incorrect-blank-line-before-class",
-        "multi-line-summary-second-line",
-        "runtime-cast-value",
-        "import-private-name",
         "missing-copyright-notice",
         "missing-trailing-comma",
+        "multi-line-summary-second-line",
+        "runtime-cast-value",
     ]
     preview = true
     select = ["ALL"]
 
+    [lint.flake8-bugbear]
+        extend-immutable-calls = ["typer.Argument", "typer.Option"]
+
+    # CLI defaults are Annotated typer.Typer parameters, not raw boolean traps.
+    [lint.flake8-boolean-trap]
+        extend-allowed-calls = ["typer.Argument", "typer.Option"]
+
+    [lint.flake8-tidy-imports]
+        ban-relative-imports = "all"
+
+    [lint.flake8-type-checking]
+        exempt-modules = ["typing", "typing_extensions"]
+        runtime-evaluated-base-classes = ["pydantic.BaseModel"]
+        runtime-evaluated-decorators = [
+            "attrs.define",
+            "attrs.frozen",
+            "attrs.mutable",
+            "dataclasses.dataclass",
+            "pydantic.dataclasses.dataclass",
+            "pydantic.validate_call",
+        ]
+
+    [lint.isort]
+        combine-as-imports = true
+        required-imports   = ["from __future__ import annotations"]
 
     [lint.per-file-ignores]
-        "examples/*" = ["implicit-namespace-package"]
-        "examples/test_target.py" = ["undefined-name"]
-        "scripts/*.py" = ["assert", "print", "implicit-namespace-package"]
+        # CLI runtime annotations evaluated by Typer
         "src/debug_dojo/_cli.py" = ["typing-only-standard-library-import"]
+
+        # Debugger installation functions need to dynamically import debugger backends
         "src/debug_dojo/_installers.py" = [
             "import-outside-top-level",
             "debugger",
         ]
-        "tests/*" = ["assert", "print", "docstring-missing-returns", "PT"]
-        "tests/assets/*" = ["print", "implicit-namespace-package", "undefined-name"]
+
+        # pytest idioms: tests are assertion-driven and have no production
+        # assert surface to protect; test code imports private modules for testing.
+        "tests/**/*" = [
+            "assert",
+            "import-private-name",
+            "implicit-namespace-package",
+            "print",
+            "PT",
+            "TC",
+        ]
+        "tests/assets/*" = [
+            "print",
+            "implicit-namespace-package",
+            "undefined-name",
+        ]
+
+        # Maintenance scripts: subprocess drives repo-owned tooling on
+        # repo-controlled paths.
+        "scripts/*" = [
+            "assert",
+            "print",
+            "implicit-namespace-package",
+            "suspicious-subprocess-import",
+        ]
+
+    [lint.pyupgrade]
+        keep-runtime-typing = true
 
 [format]
     docstring-code-format = true

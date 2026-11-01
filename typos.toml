@@ -1,0 +1,13 @@
+[default]
+    extend-ignore-re = [
+        "(?Rm)^.*(#|//)\\s*(spellchecker:disable-line|codespell:ignore)\\s*$",
+    ]
+
+    [default.extend-words]
+        CPY    = "CPY"
+        Ines   = "Ines"
+        ment   = "ment"
+        utiliz = "utiliz"
+
+[files]
+    extend-exclude = ["*.ambr", "*.min.js", "*.svg", "build", "dist", "site"]

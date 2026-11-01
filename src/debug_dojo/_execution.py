@@ -22,7 +22,7 @@ if TYPE_CHECKING:
 
     from debug_dojo._config_models import DebugDojoConfig
 
-    Runner = Callable[..., dict[str, Any]]  # pyright: ignore[reportExplicitAny]
+    Runner = Callable[..., dict[str, Any]]
 
 
 class ExecMode(Enum):
@@ -100,7 +100,7 @@ def _get_runner_and_target(
 
 
 def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -> None:
-    """Handle exceptions during execution, optionally entering post-mortem.
+    """Handle exceptions during execution, optionally entering post-mortem debugging.
 
     Args:
         e (Exception): The exception that occurred.
@@ -114,10 +114,10 @@ def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -
     rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
     rich_print(traceback.format_exc())
     if config.exceptions.post_mortem:
-        import ipdb  # pyright: ignore[reportMissingTypeStubs]  # ruff: ignore[import-outside-top-level, debugger]
+        import ipdb  # ruff: ignore[import-outside-top-level, debugger] -- ipdb is an optional dependency loaded on-demand for post-mortem debugging
 
         rich_print("[blue]Entering post-mortem debugging session...[/blue]")
-        ipdb.post_mortem(e.__traceback__)  # pyright: ignore[reportUnknownMemberType]
+        ipdb.post_mortem(e.__traceback__)
     raise typer.Exit(1) from e
 
 
@@ -134,7 +134,7 @@ def _safe_execute(
         config (DebugDojoConfig): The configuration object.
 
     Raises:
-        Exit: If an error occurs or the user interrupts the execution.
+        typer.Exit: If an error occurs or the user interrupts the execution.
 
     """
     try:
@@ -151,7 +151,7 @@ def _safe_execute(
     except SystemExit as e:
         if bool(e.code):
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
-    except Exception as e:  # ruff: ignore[blind-except]
+    except Exception as e:  # ruff: ignore[blind-except] -- catch all unhandled target errors to delegate to post-mortem handler
         _handle_exception(e, target_name, config)
 
 

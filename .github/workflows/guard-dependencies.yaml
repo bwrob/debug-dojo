@@ -1,0 +1,61 @@
+name: Guard Dependencies
+
+on:
+    pull_request_target: # zizmor: ignore[dangerous-triggers] -- This workflow only reads context.payload metadata, never checks out PR code
+        branches:
+            - main
+        paths:
+            - pyproject.toml
+            - uv.lock
+
+permissions:
+    contents: read
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    guard-dependencies:
+        name: 🛡️ Verify Dependency Modification Author
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        permissions:
+            contents: read
+            issues: write # Needed to comment on unauthorized dependency pull requests
+            pull-requests: write # Needed to close unauthorized dependency pull requests
+        steps:
+            - name: Verify PR author permissions
+              uses: actions/github-script@v9
+              with:
+                  script: |
+                      const pr = context.payload.pull_request;
+                      const author = pr.user.login;
+                      const assoc = pr.author_association;
+
+                      const botAllowlist = new Set(['dependabot[bot]', 'renovate[bot]']);
+                      const orgAuthorAssociations = new Set(['MEMBER', 'OWNER', 'COLLABORATOR']);
+
+                      const allowed =
+                        botAllowlist.has(author) ||
+                        (assoc != null && orgAuthorAssociations.has(assoc));
+
+                      if (!allowed) {
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: pr.number,
+                          body: `⚠️ **Supply Chain Security Guard**: This pull request modifies dependency files (\`pyproject.toml\` or \`uv.lock\`), which is restricted to repository maintainers.\n\nIf you need to propose a dependency addition or update, please open an issue or discussion first.\n\nClosing this pull request automatically.`
+                        });
+
+                        await github.rest.pulls.update({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          pull_number: pr.number,
+                          state: 'closed'
+                        });
+
+                        core.setFailed('Dependency changes are restricted to repository maintainers.');
+                      } else {
+                        console.log(`Author ${author} (author_association=${assoc}) is authorized to make dependency changes.`);
+                      }

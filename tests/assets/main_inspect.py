@@ -1,4 +1,6 @@
-"""Example script demonstrating cl argument printing and inspection."""
+"""Example script demonstrating object inspection with injected helpers."""
+
+from __future__ import annotations
 
 
 def main() -> None:
@@ -9,7 +11,7 @@ def main() -> None:
         "key3": "value3",
     }
 
-    i(example_dict)  # ty: ignore[unresolved-reference]
+    i(example_dict)  # pyrefly: ignore[unknown-name]
 
 
 if __name__ == "__main__":
