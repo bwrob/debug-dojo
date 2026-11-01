@@ -5,6 +5,32 @@ purpose: Chronological record of user-facing changes, features, and deprecations
 
 # Changelog
 
+All notable changes to the **debug-dojo** project will be documented in this file.
+
+The format is based on [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to
+[Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
+
+## [0.9.0] - 2026-11-01
+
+### Added
+
+- Migration to modern Zenith infrastructure and toolchain (`uv`, `poethepoet`, `prek`, `rumdl`, `taplo`, `typos`, `pyrefly`, `zizmor`, `tach`, `zensical`).
+- 100% test coverage gate enforced via `fail_under = 100` and Pyrefly strict type checking.
+- Syrupy snapshot testing for CLI outputs with deterministic ANSI stripping and box corner normalization across platforms.
+- Animated terminal widgets powered by Python `termynal` package and Zensical Markdown integration with inlined assets.
+- Resilient Taplo CI fallback supporting both PyPI packages and local monorepos.
+
+### Changed
+
+- Streamlined AI coding assistant setup exclusively for Antigravity (AGY), OpenAI Codex, and Claude Code.
+- Replaced legacy JSON `TypeAlias` with modern PEP 695 `type JSON = ...`.
+- Updated minimum runtime dependency bounds: `dacite>=1.8.0`, `tomlkit>=0.12.0`, `ipdb>=0.13.13`.
+
+### Removed
+
+- Deprecated legacy gamification references and obsolete manual static terminal assets.
+
 ## V0.8.0 (2026-01-31)
 
 ### Features
