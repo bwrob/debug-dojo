@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "charliermarsh.ruff",
+        "tamasfe.even-better-toml",
+        "typos.typos-vscode",
+        "rvben.rumdl"
+    ]
+}

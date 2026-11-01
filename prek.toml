@@ -1,0 +1,132 @@
+#:schema https://www.schemastore.org/prek.json
+
+default_install_hook_types = ["pre-commit", "pre-push"]
+default_stages             = ["pre-commit"]
+fail_fast                  = false
+
+# Hooks with matching priorities run concurrently. Keep file-mutating stages
+# separate when their inputs or outputs can overlap.
+[priorities]
+    checks                 = 7
+    end_of_file            = 2
+    independent_formatters = 4
+    line_endings           = 0
+    lockfile               = 3
+    python_format          = 6
+    source_fix             = 5
+    trailing_whitespace    = 1
+
+[[repos]]
+    hooks = [
+        { id = "check-case-conflict", name = "🛠️ prek · Check for case conflicts", priority = "checks" },
+        { id = "check-merge-conflict", name = "🛠️ prek · Check for merge conflicts", priority = "checks" },
+        { id = "check-yaml", name = "🛠️ prek · Check YAML files", priority = "checks" },
+        { id = "end-of-file-fixer", name = "🛠️ prek · Fix end of file", priority = "end_of_file" },
+        { id = "mixed-line-ending", name = "🛠️ prek · Check mixed line endings", priority = "line_endings" },
+        { id = "trailing-whitespace", name = "🛠️ prek · Check trailing whitespace", priority = "trailing_whitespace" },
+        { id = "check-json", name = "🛠️ prek · Check JSON files", priority = "checks" },
+        { id = "check-added-large-files", name = "🛠️ prek · Check for large files", args = [
+            "--maxkb=2000",
+        ], priority = "checks" },
+        { id = "check-xml", name = "🛠️ prek · Check XML files", priority = "checks" },
+        { id = "check-toml", name = "🛠️ prek · Check TOML files", priority = "checks" },
+        { id = "pretty-format-json", name = "🛠️ prek · Check and fix JSON files", args = [
+            "--autofix",
+            "--indent=4",
+            "--no-sort-keys",
+        ], priority = "independent_formatters" },
+    ]
+    repo = "https://github.com/pre-commit/pre-commit-hooks"
+    rev = "v6.0.0"
+
+[[repos]]
+    hooks = [
+        { id = "gitleaks", name = "🔒 security · Detect hardcoded secrets", priority = "checks" },
+    ]
+    repo = "https://github.com/gitleaks/gitleaks"
+    rev = "v8.30.0"
+
+[[repos]]
+    hooks = [
+        { id = "validate-pyproject", name = "🐍 validate-pyproject · Validate pyproject.toml", additional_dependencies = [
+            "validate-pyproject-schema-store[all]",
+        ], priority = "checks" },
+    ]
+    repo = "https://github.com/abravalheri/validate-pyproject"
+    rev = "0.26"
+
+[[repos]]
+    hooks = [
+        { id = "ruff-check", name = "🐍 ruff · Check Python code", args = [
+            "--fix",
+            "--config",
+            "./ruff.toml",
+        ], files = '\.(py|pyi)$', priority = "source_fix" },
+        { id = "ruff-format", name = "🐍 ruff · Format Python code", args = [
+            "--config",
+            "./ruff.toml",
+        ], priority = "python_format" },
+    ]
+    repo = "https://github.com/astral-sh/ruff-pre-commit"
+    rev = "v0.17.0"
+
+[[repos]]
+    hooks = [
+        { id = "rumdl-fmt", name = "📝 rumdl · Format Markdown files", types = [
+            "text",
+        ], files = '\.md$', additional_dependencies = [
+            "ruff>=0.17.0",
+        ], priority = "source_fix" },
+    ]
+    repo = "https://github.com/rvben/rumdl-pre-commit"
+    rev = "v0.2.75"
+
+[[repos]]
+    hooks = [
+        { id = "taplo-format", name = "⚙️ taplo · Format TOML files", priority = "independent_formatters" },
+    ]
+    repo = "https://github.com/ComPWA/taplo-pre-commit"
+    rev = "v0.9.3"
+
+[[repos]]
+    hooks = [
+        { id = "typos", name = "🔤 typos · Check for typos", priority = "checks" },
+    ]
+    repo = "https://github.com/crate-ci/typos"
+    rev = "v1.51.1"
+
+[[repos]]
+    hooks = [
+        { id = "prettier", name = "🎨 prettier · Format YAML files", types = [
+            "yaml",
+        ], priority = "independent_formatters" },
+        { id = "prettier", name = "🎨 prettier · Format CSS files", alias = "prettier-css", types = [
+            "css",
+        ], priority = "independent_formatters" },
+    ]
+    repo = "https://github.com/pre-commit/mirrors-prettier"
+    rev = "v3.1.0"
+
+[[repos]]
+    hooks = [
+        { id = "pyrefly", name = "🐍 pyrefly · Type check Python code", entry = "uv run pyrefly check", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|pyrefly\.toml)$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
+        { id = "pyrefly-coverage", name = "🐍 pyrefly · Type coverage and completeness check", entry = "uv run pyrefly coverage check src --fail-under 100 --strict", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|pyrefly\.toml)$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
+        { id = "complexipy", name = "🧮 complexipy · Cognitive complexity check", entry = "uv run complexipy src tests", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)complexipy\.toml$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
+        { id = "tach", name = "📐 tach · Architecture boundaries check", entry = "uv run tach check", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|tach\.toml)$)', priority = "checks", stages = [
+            "pre-push",
+        ] },
+    ]
+    repo = "local"
+
+[[repos]]
+    hooks = [
+        { id = "uv-lock", name = "🐍 uv · Lock dependencies", priority = "lockfile" },
+    ]
+    repo = "https://github.com/astral-sh/uv-pre-commit"
+    rev = "0.12.7"

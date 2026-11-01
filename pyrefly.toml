@@ -1,0 +1,6 @@
+enabled-ignores      = ["pyrefly"]
+infer-with-first-use = false
+preset               = "strict"
+project-excludes     = ["**/.*", "**/site", "**/dist", "**/build", "**/.venv"]
+project-includes     = ["src", "tests"]
+python-version       = "3.12.0"

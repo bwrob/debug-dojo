@@ -1,0 +1,56 @@
+name: 🐛 Bug Report
+description: File a bug report to help us improve Debug Dojo
+title: "[Bug]: "
+labels: ["bug"]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for taking the time to report an issue!
+    - type: textarea
+      id: what-happened
+      attributes:
+          label: What happened?
+          description: Provide a clear and concise description of the bug.
+          placeholder: Describe the unexpected behavior...
+      validations:
+          required: true
+    - type: textarea
+      id: reproduce
+      attributes:
+          label: Steps to Reproduce
+          description: Step-by-step instructions to reproduce the issue.
+          placeholder: |
+              1. Run '...'
+              2. Execute '...'
+              3. See error
+      validations:
+          required: true
+    - type: textarea
+      id: expected
+      attributes:
+          label: Expected Behavior
+          description: What did you expect to happen instead?
+      validations:
+          required: true
+    - type: textarea
+      id: environment
+      attributes:
+          label: Environment Information
+          description: |
+              OS, Python version, Debug Dojo version, and uv version.
+          placeholder: |
+              - OS: macOS / Linux / Windows
+              - Python: 3.13.x
+              - Version: 0.9.0
+      validations:
+          required: true
+    - type: checkboxes
+      id: checks
+      attributes:
+          label: Quality Check
+          options:
+              - label: I verified that this bug is not already reported in existing issues.
+                required: true
+              - label: I tested against the latest version on the main branch.
+                required: false

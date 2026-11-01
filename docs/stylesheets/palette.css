@@ -1,0 +1,64 @@
+/**
+ * Zenith Documentation Global Color Palette (palette.css)
+ *
+ * Defines global named design tokens derived from the Zenith Star Emblem
+ * (assets/zenith-star.svg):
+ * - Radiant Zenith Cyan / Starlight Azure (guiding starbeams & apex core)
+ * - Deep Cosmic Obsidian Void (abyssal space medallion & deep surfaces)
+ * - Celestial Silver & Navigation Slate (astrolabe coordinate rings & typography)
+ * - Starlight Ice (crystalline facet highlights)
+ *
+ * Ordered strictly by hue family and tonal lightness.
+ */
+
+:root {
+    /* -------------------------------------------------------------------------
+       Zenith Cyans & Starlight Azures (#38bdf8 star bloom & #0284c7 diamond facet)
+       ------------------------------------------------------------------------- */
+    --color-cyan-900: #0c4a6e;
+    --color-cyan-800: #075985;
+    --color-cyan-700: #0369a1;
+    --color-cyan-600: #0284c7;
+    --color-cyan-500: #0ea5e9;
+    --color-cyan-400: #38bdf8;
+    --color-cyan-300: #7dd3fc;
+    --color-cyan-200: #bae6fd;
+    --color-cyan-100: #e0f2fe;
+    --color-cyan-50: #f0f9ff;
+    --color-cyan-soft: rgba(56, 189, 248, 0.12);
+    --color-cyan-glow: rgba(56, 189, 248, 0.25);
+    --color-cyan-border: rgba(56, 189, 248, 0.35);
+
+    /* -------------------------------------------------------------------------
+       Cosmic Obsidian & Space Void (#020408, #080c14, #0f172a from spaceVoid)
+       ------------------------------------------------------------------------- */
+    --color-obsidian-950: #020408;
+    --color-obsidian-900: #080c14;
+    --color-obsidian-850: #0b1120;
+    --color-obsidian-850-translucent: rgba(11, 17, 32, 0.82);
+    --color-obsidian-800: #0f172a;
+    --color-obsidian-750: #162032;
+    --color-obsidian-700: #1e293b;
+
+    /* -------------------------------------------------------------------------
+       Celestial Silver & Navigation Slates (#cbd5e1 facetSilver & rings)
+       ------------------------------------------------------------------------- */
+    --color-slate-900: #0f172a;
+    --color-slate-800: #1e293b;
+    --color-slate-700: #334155;
+    --color-slate-600: #475569;
+    --color-slate-500: #64748b;
+    --color-slate-400: #94a3b8;
+    --color-slate-300: #cbd5e1;
+    --color-slate-200: #e2e8f0;
+    --color-slate-100: #f1f5f9;
+    --color-slate-50: #f8fafc;
+    --color-slate-50-translucent: rgba(248, 250, 252, 0.85);
+
+    /* -------------------------------------------------------------------------
+       Starlight Ice & Crystalline Highlights
+       ------------------------------------------------------------------------- */
+    --color-star-white: #ffffff;
+    --color-star-ice: #f0f9ff;
+    --color-star-ice-translucent: rgba(240, 249, 255, 0.7);
+}

@@ -1,0 +1,14 @@
+[
+    {
+        "label": "Test",
+        "command": "uv run poe test"
+    },
+    {
+        "label": "Code Quality",
+        "command": "uv run poe code-quality"
+    },
+    {
+        "label": "Fix",
+        "command": "uv run poe fix"
+    }
+]

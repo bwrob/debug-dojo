@@ -1,0 +1,134 @@
+/**
+ * Termynal CSS for animated terminal windows
+ * Based on termynal.js by Ines Montani & Sebastián Ramírez
+ */
+
+:root {
+    --termynal-bg: #080c14;
+    --termynal-text: #f0f9ff;
+    --termynal-subtle: #94a3b8;
+    --termynal-accent: #38bdf8;
+    --termynal-comment: #7dd3fc;
+}
+
+[data-termynal] {
+    width: 100%;
+    max-width: 100%;
+    background: var(--termynal-bg);
+    color: var(--termynal-text);
+    font-size: 0.65rem;
+    font-family: var(--md-code-font-family, monospace);
+    border: 1px solid #1e293b;
+    border-radius: 6px;
+    padding: 42px 18px 18px;
+    position: relative;
+    box-sizing: border-box;
+    line-height: 1.45;
+    margin: 1.2em 0;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+[data-termynal]:before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    /* macOS window controls: red, yellow, green */
+    background: #ff5f56;
+    box-shadow:
+        16px 0 0 #ffbd2e,
+        32px 0 0 #27c93f;
+}
+
+[data-termynal]:after {
+    content: "terminal";
+    position: absolute;
+    color: var(--termynal-subtle);
+    top: 12px;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 0.62rem;
+    font-family: var(--md-text-font-family, sans-serif);
+    font-weight: 500;
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+button[data-terminal-control] {
+    cursor: pointer;
+    text-align: right;
+    display: block;
+    width: 100%;
+    color: var(--termynal-subtle);
+    border: 0;
+    background: transparent;
+    font-family: inherit;
+    font-size: 0.62rem;
+    padding: 4px 0;
+    transition: color 0.15s ease;
+}
+
+button[data-terminal-control]:hover {
+    color: var(--termynal-accent);
+}
+
+[data-ty] {
+    display: block;
+    line-height: 1.6;
+}
+
+[data-ty]:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+}
+
+[data-ty="input"]:before,
+[data-ty-prompt]:before {
+    margin-right: 0.75em;
+    color: var(--termynal-accent);
+    font-weight: bold;
+}
+
+[data-ty="input"]:before {
+    content: "$";
+}
+
+[data-ty][data-ty-prompt]:before {
+    content: attr(data-ty-prompt);
+}
+
+[data-ty-cursor]:after {
+    content: attr(data-ty-cursor);
+    font-family: monospace;
+    margin-left: 0.25em;
+    animation: termynal-blink 1s infinite;
+}
+
+.termynal-comment {
+    color: var(--termynal-comment);
+    font-style: italic;
+    display: block;
+    opacity: 0.85;
+}
+
+.termy [data-termynal] {
+    white-space: pre-wrap;
+}
+
+.termy .linenos {
+    display: none;
+}
+
+@keyframes termynal-blink {
+    50% {
+        opacity: 0;
+    }
+}

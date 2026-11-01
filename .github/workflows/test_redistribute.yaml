@@ -1,0 +1,62 @@
+name: Source Distribution Verification
+
+env:
+    UV_NO_SYNC: true
+    PYTHONWARNDEFAULTENCODING: "1"
+    PYTHONUTF8: "1"
+
+permissions:
+    contents: read
+
+on:
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    test-sdist:
+        name: 📦 Sdist Extraction & Redistribution Smoke Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v7
+              with:
+                  persist-credentials: false
+
+            - name: Install uv and setup Python
+              uses: astral-sh/setup-uv@v10.3.0
+              with:
+                  python-version: "3.12"
+                  enable-cache: true
+
+            - name: Set dependency resolution cutoff
+              shell: bash
+              run: echo "UV_EXCLUDE_NEWER=$(python3 -c 'import datetime; print((datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ"))')" >> "$GITHUB_ENV"
+
+            - name: 🛠️ Install project dependencies
+              run: uv sync
+
+            - name: 📦 Build source distribution
+              run: uv build --sdist
+
+            - name: 📂 Extract sdist to isolated sandbox
+              run: |
+                  mkdir -p dist/extracted
+                  tar -xzf dist/*.tar.gz -C dist/extracted
+
+            - name: 🧪 Run test suite from inside extracted distribution
+              run: |
+                  cd dist/extracted/*
+                  uv sync --group test
+                  uv run poe test
+
+            - name: 🎡 Verify wheel builds from sdist
+              run: |
+                  cd dist/extracted/*
+                  uv build --wheel
+                  python "$GITHUB_WORKSPACE/scripts/verify_wheel.py" --run-tests

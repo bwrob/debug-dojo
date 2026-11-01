@@ -1,0 +1,122 @@
+[project]
+    edit_uri         = "edit/main/docs/"
+    repo_name        = "username/my-project"
+    repo_url         = "https://github.com/username/my-project"
+    site_author      = "Jane Developer"
+    site_description = "A modern Python project"
+    site_name        = "My Project"
+    site_url         = "https://username.github.io/my-project/"
+
+    # Documentation Navigation Hierarchy
+    nav = [
+        { "Overview" = "index.md" },
+        { "Getting Started" = "getting-started.md" },
+        { "Reference" = "reference.md" },
+    ]
+
+    # Client-Side Assets
+    extra_css = ["stylesheets/palette.css", "stylesheets/custom.css"]
+    extra_javascript = [
+        "javascripts/mathjax.js",
+        "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
+    ]
+
+    # Strict Build-Time Validation
+    [project.validation]
+        invalid_link_anchors  = true
+        invalid_links         = true
+        shadowed_definitions  = true
+        shadowed_footnotes    = true
+        unresolved_footnotes  = true
+        unresolved_references = true
+        unused_definitions    = true
+        unused_footnotes      = true
+
+    # Theme & Palette Settings
+    [project.theme]
+        features = [
+            "navigation.instant",
+            "navigation.top",
+            "content.code.copy",
+            "content.code.select",
+            "search.highlight",
+        ]
+        language = "en"
+        logo = "assets/python-logo.svg"
+
+        [[project.theme.palette]]
+            media       = "(prefers-color-scheme)"
+            toggle.icon = "lucide/sun-moon"
+            toggle.name = "Switch to light mode"
+
+        [[project.theme.palette]]
+            media       = "(prefers-color-scheme: light)"
+            scheme      = "default"
+            toggle.icon = "lucide/sun"
+            toggle.name = "Switch to dark mode"
+
+        [[project.theme.palette]]
+            media       = "(prefers-color-scheme: dark)"
+            scheme      = "slate"
+            toggle.icon = "lucide/moon"
+            toggle.name = "Switch to system preference"
+
+    # Markdown Extensions & SuperFences
+    [project.markdown_extensions]
+        admonition = {}
+        pymdownx.arithmatex.generic = true
+        pymdownx.highlight.anchor_linenums = true
+        pymdownx.snippets.check_paths = true
+        pymdownx.snippets.dedent_subsections = true
+        pymdownx.superfences.custom_fences = [
+            { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+            { name = "python", class = "python", validator = "markdown_exec.validator", format = "markdown_exec.formatter" },
+        ]
+        zensical.extensions.preview.targets.include = ["*"]
+
+    # Built-in Zensical Plugins
+    [project.plugins.gh-admonitions]
+
+    [project.plugins.markdown-exec]
+
+    [project.plugins.llmstxt]
+        full_output = "llms-full.txt"
+
+        [project.plugins.llmstxt.sections]
+            "Documentation" = [
+                "index.md: Overview and quickstart",
+                "getting-started.md: Installation and development setup",
+                "reference.md: Public API reference",
+            ]
+
+    # mkdocstrings Plugin
+    [project.plugins.mkdocstrings]
+        default_handler = "python"
+
+        [project.plugins.mkdocstrings.handlers.python]
+            inventories                                   = ["https://docs.python.org/3/objects.inv"]
+            options.annotations_path                      = "brief"
+            options.backlinks                             = "tree"
+            options.docstring_options.ignore_init_summary = true
+            options.docstring_style                       = "numpy"
+            options.extensions                            = ["griffe_warnings_deprecated"]
+            options.line_length                           = 88
+            options.members_order                         = "source"
+            options.merge_init_into_class                 = true
+            options.parameter_headings                    = true
+            options.relative_crossrefs                    = true
+            options.scoped_crossrefs                      = true
+            options.separate_signature                    = true
+            options.show_bases                            = true
+            options.show_inheritance_diagram              = true
+            options.show_root_heading                     = true
+            options.show_signature_annotations            = true
+            options.show_signature_type_parameters        = true
+            options.show_source                           = true
+            options.show_symbol_type_heading              = true
+            options.show_symbol_type_toc                  = true
+            options.signature_crossrefs                   = true
+            options.summary                               = true
+            options.type_parameter_headings               = true
+            options.unwrap_annotated                      = true
+            paths                                         = ["src"]

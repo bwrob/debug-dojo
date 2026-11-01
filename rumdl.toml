@@ -1,0 +1,160 @@
+enable = ["ALL"]
+exclude = [
+    ".git",
+    ".github",
+    ".agents",
+    ".venv",
+    ".ruff_cache",
+    ".rumdl_cache",
+    ".complexipy_cache",
+    ".temp",
+    "site",
+    "dist",
+]
+extend-enable = ["MD063", "MD080", "MD083", "MD085", "MD090", "MD093"]
+flavor = "gfm"
+line-length = 88
+respect-gitignore = true
+
+[per-file-ignores]
+    # GFM treats this Zensical admonition as an indented code block.
+    "**/docs/getting-started.md" = ["MD046"]
+
+    # Cookiecutter values change table cell widths after rendering.
+    "**/SECURITY.md"       = ["MD060"]
+    "**/docs/adr/index.md" = ["MD060"]
+
+    # Keep standard Changelog headings and allow generated compare URLs to vary.
+    "**/docs/changelog.md" = ["MD013", "MD082"]
+
+# --- Code Block Tools (Format & Lint Python & JSON in Markdown) ---
+[code-block-tools]
+    enabled                = true
+    on-error               = "warn"
+    on-missing-tool-binary = "warn"
+
+    [code-block-tools.language-aliases]
+        "bash"     = "shell"
+        "py"       = "python"
+        "python3"  = "python"
+        "{bash}"   = "shell"
+        "{json}"   = "json"
+        "{python}" = "python"
+        "{py}"     = "python"
+
+    [code-block-tools.languages.python]
+        format = ["ruff:format"]
+        lint   = ["ruff:check"]
+
+    [code-block-tools.languages.json]
+        format = ["jq"]
+
+    [code-block-tools.tools."ruff:format"]
+        command = ["ruff", "format", "-"]
+
+    [code-block-tools.tools."ruff:check"]
+        command = [
+            "ruff",
+            "check",
+            "--preview",
+            "--isolated",
+            "--output-format=concise",
+            "--ignore=D,T201,missing-required-import",
+            "-",
+        ]
+
+# --- Rigid Markdown Rules ---
+[MD001]
+    front-matter-title = true
+
+[MD003]
+    style = "atx"
+
+[MD004]
+    style = "dash"
+
+[MD007]
+    indent = 2
+
+[MD009]
+    strict = true
+
+[MD010]
+    code-blocks = true
+
+[MD012]
+    maximum = 1
+
+[MD013]
+    code-block-line-length = 88
+    code-blocks            = true
+    headings               = false
+    line-length            = 88
+    math-blocks            = false
+    reflow                 = true
+    tables                 = false
+
+[MD022]
+    lines-above = 1
+    lines-below = 1
+
+[MD026]
+    punctuation = ".,;:!"
+
+[MD031]
+    list-items = true
+
+[MD033]
+    allowed-elements = [
+        "a",
+        "audio",
+        "br",
+        "details",
+        "div",
+        "i",
+        "iframe",
+        "img",
+        "kbd",
+        "p",
+        "span",
+        "sub",
+        "summary",
+        "sup",
+        "table",
+        "tbody",
+        "td",
+        "th",
+        "thead",
+        "tr",
+        "video",
+    ]
+
+[MD035]
+    style = "---"
+
+[MD046]
+    style = "fenced"
+
+[MD048]
+    style = "backtick"
+
+[MD049]
+    style = "asterisk"
+
+[MD050]
+    style = "asterisk"
+
+[MD058]
+    minimum-after  = 1
+    minimum-before = 1
+
+[MD059]
+    prohibited-texts = ["click here", "here", "link", "read more"]
+
+[MD060]
+    aligned-delimiter = false
+    column-align      = "left"
+    enabled           = true
+    loose-last-column = false
+    pad-width         = 1
+    style             = "aligned"

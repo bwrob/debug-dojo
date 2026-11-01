@@ -1,0 +1,37 @@
+{
+    "$schema": "https://json.schemastore.org/claude-code-settings.json",
+    "permissions": {
+        "allow": [
+            "Bash(uv run poe:*)",
+            "Bash(uv run poe *)",
+            "Bash(uv run pytest:*)",
+            "Bash(uv run pytest *)",
+            "Bash(uv run ruff:*)",
+            "Bash(uv run ruff *)",
+            "Bash(uv run pyrefly:*)",
+            "Bash(uv run pyrefly *)",
+            "Bash(uv run complexipy:*)",
+            "Bash(uv run complexipy *)",
+            "Bash(uv run tach:*)",
+            "Bash(uv run tach *)",
+            "Bash(uv run rumdl:*)",
+            "Bash(uv run rumdl *)",
+            "Bash(uv run typos:*)",
+            "Bash(uv run typos *)",
+            "Bash(uv run taplo:*)",
+            "Bash(uv run taplo *)",
+            "Bash(uv run zizmor:*)",
+            "Bash(uv run zizmor *)",
+            "Bash(uv run prek:*)",
+            "Bash(uv run prek *)",
+            "Bash(git status*)",
+            "Bash(git diff*)",
+            "Bash(git log*)"
+        ],
+        "deny": [
+            "Bash(rm -rf /*)",
+            "Bash(git push --force:*)",
+            "Bash(git push --force*)"
+        ]
+    }
+}

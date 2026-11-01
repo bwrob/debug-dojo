@@ -1,117 +1,433 @@
 [executor]
     type = "uv"
 
-    # =============================================================================
-    # Git Hooks
-    # =============================================================================
+[env]
+    PYTHONUTF8                = "1"
+    PYTHONWARNDEFAULTENCODING = "1"
 
-[tasks.precommit]
-    help  = "Run all pre-commit hooks on all files."
-    shell = "pre-commit run --all-files > /dev/null || pre-commit run --all-files"
+    # ------------------------------------------------------------------------------
+    # Testing & Code Coverage
+    # ------------------------------------------------------------------------------
 
-    # =============================================================================
-    # Code Quality
-    # =============================================================================
+[tasks.test]
+    cmd  = "pytest --cov --cov-report=term-missing --cov-report=xml"
+    help = "Run tests with coverage measurement (pytest + pytest-cov)."
 
-[tasks.format]
-    cmd  = "ruff format --diff"
-    help = "Check code formatting using ruff."
+[tasks.test-fast]
+    cmd  = "pytest -n auto --dist=worksteal --max-worker-restart=0 --cov --cov-report=term-missing --cov-report=xml"
+    help = "Run tests in parallel across CPU cores with pytest-xdist work-stealing."
+
+[tasks.test-snapshot-update]
+    cmd  = "pytest --snapshot-update"
+    help = "Update syrupy test snapshots."
+
+[tasks.coverage]
+    cmd  = "pytest --cov --cov-report=html --cov-report=term-missing --cov-report=xml"
+    help = "Generate interactive HTML coverage report in htmlcov/."
+
+[tasks.test-lowest]
+    help = "Verify test suite against minimum declared dependency versions (lowest-direct)."
+    sequence = [
+        { cmd = "uv sync --resolution lowest-direct" },
+        { cmd = "pytest --cov --cov-report=term-missing" },
+        { cmd = "uv sync" },
+    ]
+
+[tasks.test-dist]
+    cmd  = "python scripts/verify_wheel.py --run-tests"
+    help = "Build wheel package and run pytest suite against installed distribution in an isolated environment."
+
+[tasks.test-sdist]
+    help = "Build source distribution, extract it, and run tests from the extracted archive."
+    shell = """
+  set -euo pipefail
+  ROOT_DIR="$(pwd)"
+  uv build --sdist
+  rm -rf dist/extracted
+  mkdir -p dist/extracted
+  tar -xzf dist/*.tar.gz -C dist/extracted
+  cd dist/extracted/*
+  uv sync --group test
+  uv run poe test
+  uv build --wheel
+  python "$ROOT_DIR/scripts/verify_wheel.py"
+  echo "✅ Source distribution verified successfully!"
+"""
+
+[tasks.verify-wheel]
+    cmd  = "python scripts/verify_wheel.py"
+    help = "Build wheel and verify clean imports in an isolated virtual environment."
+
+[tasks.test-mutation]
+    cmd  = "mutmut run"
+    help = "Run fast mutation testing across package source with mutmut."
+
+[tasks.test-mutation-cosmic]
+    help = "Run distributed mutation testing with cosmic-ray."
+    sequence = [
+        "_clean-cosmic",
+        { cmd = "cosmic-ray init cosmic-ray.toml session.sqlite" },
+        { cmd = "cosmic-ray exec session.sqlite" },
+        { cmd = "cr-report session.sqlite" },
+    ]
+
+
+    # ------------------------------------------------------------------------------
+    # Quality: Formatting, Linting, & Static Typing
+    # ------------------------------------------------------------------------------
 
 [tasks.lint]
     cmd  = "ruff check --config ruff.toml"
-    help = "Check code rules using ruff."
+    help = "Lint Python source code with Ruff."
+
+[tasks.format]
+    cmd  = "ruff format"
+    help = "Format Python code with Ruff."
+
+[tasks.format-check]
+    cmd  = "ruff format --check"
+    help = "Verify Python code formatting with Ruff without modifying files."
+
+[tasks.format-toml]
+    cmd  = "taplo format"
+    help = "Format TOML configuration files with Taplo."
+
+[tasks.format-check-toml]
+    cmd  = "taplo format --check"
+    help = "Verify TOML configuration file formatting with Taplo without modifying files."
+
+[tasks.format-yaml]
+    cmd  = "prek run prettier --all-files"
+    help = "Format YAML files with Prettier via prek."
+
+[tasks.format-css]
+    cmd  = "prek run prettier-css --all-files"
+    help = "Format CSS stylesheets with Prettier via prek."
+
+[tasks.lint-md]
+    cmd  = "rumdl check"
+    help = "Lint markdown documentation with rumdl."
+
+
+[tasks.lint-ste]
+    cmd  = "python .agents/skills/guide-ste100/scripts/ste-lint.py .agents/skills"
+    help = "Lint agent skills against ASD-STE100 structural rules."
+
+
+[tasks.format-md]
+    cmd  = "rumdl fmt"
+    help = "Format markdown and embedded code snippets with rumdl."
+
+[tasks.typos]
+    cmd  = "typos"
+    help = "Check source code and documentation for typos."
+
+[tasks.typos-fix]
+    cmd  = "typos -w"
+    help = "Automatically fix typos across the codebase."
 
 [tasks.type-check]
-    cmd  = "basedpyright --project pyrightconfig.json src tests"
-    help = "Check static typing using basedpyright."
+    cmd  = "pyrefly check"
+    help = "Strict static type checking with Pyrefly."
 
-[tasks.type-check-ty]
-    cmd  = "ty check ."
-    help = "Check static typing using ty."
+[tasks.type-coverage]
+    cmd  = "pyrefly coverage check src --fail-under 100 --strict"
+    help = "Enforce 100% strict type coverage and completeness with Pyrefly."
+
+[tasks.type-coverage-report]
+    cmd  = "pyrefly coverage report src"
+    help = "Generate JSON type coverage and completeness report with Pyrefly."
 
 [tasks.complexity]
-    default_item_type = "cmd"
-    help = "Check code complexity using complexipy."
-    sequence = [
-        "complexipy .",
-        "ruff check . --select=PLR0912",
-    ]
+    cmd  = "complexipy src tests"
+    help = "Verify cognitive complexity limits with complexipy."
 
-[tasks.dependencies]
-    cmd  = "tach check"
-    help = "Check dependency layers using tach."
+
+[tasks.zizmor]
+    cmd  = "zizmor --config .zizmor.yml --pedantic --min-severity informational .github/workflows"
+    help = "Audit GitHub Actions workflows for security vulnerabilities with zizmor."
+
+
+[tasks.audit]
+    cmd  = "uv audit"
+    help = "Audit locked dependencies in uv.lock against security advisories."
+
+[tasks.check-api]
+    cmd  = "griffe check debug_dojo --search src"
+    help = "Detect breaking public API changes against the previous git tag with Griffe."
 
 [tasks.fix]
     default_item_type = "cmd"
-    help = "Code quality fixes using ruff."
-    ignore_fail = "return_non_zero"
+    help = "Auto-fix linting and formatting issues."
+    ignore_fail = "return_zero"
     sequence = [
-        "ruff check --fix --unsafe-fixes",
+        "ruff check --fix",
         "ruff format",
+        "taplo format",
+        "rumdl fmt",
+        "prek run prettier --all-files",
+        "prek run prettier-css --all-files",
+        "typos -w",
     ]
+
+
+[tasks.check-skills]
+    cmd  = "python scripts/check_skills.py .agents/skills"
+    help = "Validate structural invariants and frontmatter of agent skills in .agents/skills/."
+
 
 [tasks.code-quality]
-    help = "Run all code quality checks."
+    help = "Execute the full code quality verification pipeline."
     ignore_fail = "return_non_zero"
     sequence = [
-        "fix",
-        "precommit",
-        "format",
         "lint",
+        "format-check",
+        "format-check-toml",
+        "format-yaml",
+        "format-css",
+        "lint-md",
+        "typos",
         "type-check",
-        "type-check-ty",
+        "type-coverage",
         "complexity",
+
+        "zizmor",
+
+        "dependencies",
+
+        "check-skills",
+
     ]
 
-    # =============================================================================
-    # Testing
-    # =============================================================================
+    # ------------------------------------------------------------------------------
+    # Architecture & Modular Boundaries
+    # ------------------------------------------------------------------------------
 
-[tasks.test]
-    cmd  = "pytest"
-    help = "Run tests using pytest."
-
-[tasks.coverage]
-    cmd  = "pytest --doctest-modules --verbose --cov --cov-report=xml"
-    help = "Create test coverage report."
-
-    # =============================================================================
-    # Documentation
-    # =============================================================================
-
-[tasks.generate-banner]
-    cmd  = "python scripts/compile_banner.py"
-    help = "Generate the banner image from Typst source."
+[tasks.dependencies]
+    default_item_type = "cmd"
+    help              = "Check internal module boundaries with Tach and declared dependencies with Deptry."
+    ignore_fail       = "return_non_zero"
+    sequence          = ["tach check", "deptry src"]
 
 [tasks.dependency-graph]
     cmd  = "tach show --mermaid -o docs/dependency_graph.mmd"
-    help = "Generate the dependency graph."
+    help = "Export architecture dependency graph in Mermaid format."
 
-[tasks.docs]
-    help = "Spawn docs server."
+    # ------------------------------------------------------------------------------
+    # Project Maintenance & Cleanup
+    # ------------------------------------------------------------------------------
+
+[tasks._clean-dist]
+    script = "shutil:rmtree('dist', ignore_errors=1)"
+
+[tasks._clean-build]
+    script = "shutil:rmtree('build', ignore_errors=1)"
+
+[tasks._clean-site]
+    script = "shutil:rmtree('site', ignore_errors=1)"
+
+[tasks._clean-coverage]
+    script = "shutil:rmtree('htmlcov', ignore_errors=1)"
+
+[tasks._clean-pytest]
+    script = "shutil:rmtree('.pytest_cache', ignore_errors=1)"
+
+[tasks._clean-ruff]
+    script = "shutil:rmtree('.ruff_cache', ignore_errors=1)"
+
+[tasks._clean-temp]
+    script = "shutil:rmtree('.temp', ignore_errors=1)"
+
+[tasks._clean-mutation]
     sequence = [
-        "generate-banner",
-        { cmd = "echo 'Docs server starting at http://127.0.0.1:8000/'" },
-        { cmd = "hap run mkdocs serve" },
+        { script = "shutil:rmtree('.mutmut-cache', ignore_errors=1)" },
+        { script = "shutil:rmtree('mutants', ignore_errors=1)" },
     ]
+
+[tasks._clean-cosmic]
+    cmd = "python -c \"import pathlib; pathlib.Path('session.sqlite').unlink(missing_ok=True)\""
+
+[tasks.clean]
+    help = "Remove build artifacts, cache directories, and test coverage outputs."
+    sequence = [
+        "_clean-dist",
+        "_clean-build",
+        "_clean-site",
+        "_clean-coverage",
+        "_clean-pytest",
+        "_clean-ruff",
+        "_clean-temp",
+        "_clean-mutation",
+        "_clean-cosmic",
+    ]
+
+    # ------------------------------------------------------------------------------
+    # Interactive Development & Ergonomics
+    # ------------------------------------------------------------------------------
+
+[tasks.repl]
+    cmd  = 'python -i -c "import debug_dojo as pkg; print(f\"✨ Debug Dojo {pkg.__version__} loaded as `pkg`\")"'
+    help = "Launch interactive Python REPL with package pre-loaded."
+
+    # ------------------------------------------------------------------------------
+    # Documentation & Publishing
+    # ------------------------------------------------------------------------------
+
+[tasks.docs-serve]
+    cmd  = "zensical serve"
+    help = "Live-preview documentation with Zensical and MathJax."
+
+[tasks.docs-build]
+    cmd  = "zensical build --strict --clean"
+    help = "Build production static documentation into site/."
+
+[tasks.docs-logo]
+    cmd  = "typst compile docs/assets/python-logo.typ docs/assets/python-logo.svg"
+    help = "Compile documentation logotype SVG with Typst."
 
 [tasks.publish-docs]
-    help = "Publish the docs to GitHub Pages."
-    sequence = [
-        "generate-banner",
-        { cmd = "mkdocs gh-deploy --force" },
-    ]
+    help = "Build and deploy Zensical docs to gh-pages via clean orphan branch."
+    shell = """
+  START_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-    # =============================================================================
-    # Release
-    # =============================================================================
+  cleanup() {
+    echo "Cleaning up deployment branch..."
+    git checkout -f "$START_BRANCH"
+    git branch -D temp-deploy-docs 2>/dev/null || true
+  }
+  trap cleanup EXIT
+
+  zensical build --strict --clean
+
+  git checkout --orphan temp-deploy-docs
+  git rm -rf . --cached --quiet
+  git add -f site
+  git commit -m "Deploy Zensical: $(date)" --no-verify
+  git push origin $(git subtree split --prefix site temp-deploy-docs):gh-pages --force
+
+  echo "Deployment successful! Returned to $START_BRANCH."
+"""
 
 [tasks.publish]
-    help = "Build and publish the package."
+    help = "Build wheels with uv and publish package and docs."
     sequence = [
+        "clean",
         "code-quality",
-        { cmd = "rm -rf dist" },
+        "test",
+        { script = "shutil:rmtree('dist', ignore_errors=1)" },
         { cmd = "uv build" },
+        "test-dist",
         { cmd = "uv publish" },
         "publish-docs",
+    ]
+
+    # ------------------------------------------------------------------------------
+    # AI Coding Assistants & Agent Skills
+    # ------------------------------------------------------------------------------
+
+
+[tasks.sync-skills]
+    cmd  = "uvx library-skills --all -y"
+    help = "Synchronize agent skills from installed library dependencies via library-skills."
+
+    # ------------------------------------------------------------------------------
+    # Spec-Driven Development (SDD)
+    # ------------------------------------------------------------------------------
+
+[tasks.sdd-new]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier (e.g. user-auth)" },
+    ]
+    help = "Initialize git branch and .specs/<feature-id>/spec.md from template."
+    shell = """
+  set -euo pipefail
+  git checkout -b "feature/$feature_id" 2>/dev/null || git checkout "feature/$feature_id" 2>/dev/null || true
+  mkdir -p ".specs/$feature_id"
+  if [ ! -f ".specs/$feature_id/spec.md" ]; then
+    cp ".agents/skills/sdd-spec/templates/spec.md" ".specs/$feature_id/spec.md"
+    echo "✓ Initialized '.specs/$feature_id/spec.md'"
+  else
+    echo "ℹ '.specs/$feature_id/spec.md' already exists, preserving file."
+  fi
+  echo "✓ On branch 'feature/$feature_id'"
+"""
+
+[tasks.sdd-plan]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    help = "Initialize .specs/<feature-id>/plan.md from template."
+    shell = """
+  set -euo pipefail
+  mkdir -p ".specs/$feature_id"
+  if [ ! -f ".specs/$feature_id/plan.md" ]; then
+    cp ".agents/skills/sdd-plan/templates/plan.md" ".specs/$feature_id/plan.md"
+    echo "✓ Initialized '.specs/$feature_id/plan.md'"
+  else
+    echo "ℹ '.specs/$feature_id/plan.md' already exists, preserving file."
+  fi
+"""
+
+[tasks.sdd-review]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    help = "Initialize .specs/<feature-id>/review.md from template."
+    shell = """
+  set -euo pipefail
+  mkdir -p ".specs/$feature_id"
+  if [ ! -f ".specs/$feature_id/review.md" ]; then
+    cp ".agents/skills/sdd-review/templates/review.md" ".specs/$feature_id/review.md"
+    echo "✓ Initialized '.specs/$feature_id/review.md'"
+  else
+    echo "ℹ '.specs/$feature_id/review.md' already exists, preserving file."
+  fi
+"""
+
+[tasks.sdd-check-spec]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/sdd-spec/scripts/check_spec.py .specs/$feature_id/spec.md"
+    help = "Validate specification structural invariants against SDD rules."
+
+[tasks.sdd-check-api]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/sdd-review/scripts/check_public_api.py --plan .specs/$feature_id/plan.md"
+    help = "Check public API diffs with Griffe against the implementation plan."
+
+[tasks.sdd-check-traceability]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/sdd-review/scripts/check_traceability.py .specs/$feature_id/spec.md"
+    help = "Verify requirement-to-test traceability matrix."
+
+[tasks.sdd-archive]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    cmd = "python .agents/skills/sdd/scripts/archive_feature.py $feature_id"
+    help = "Archive approved feature specification into permanent docs/specs/."
+
+[tasks.sdd-revert]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+        { name = "sha", default = "", help = "Optional commit SHA to revert" },
+    ]
+    cmd = "python .agents/skills/sdd/scripts/revert_task.py $feature_id $sha"
+    help = "Revert a task commit and reset its status in .specs/<feature-id>/plan.md."
+
+[tasks.sdd-verify]
+    args = [
+        { name = "feature_id", positional = true, required = true, help = "Feature identifier" },
+    ]
+    help = "Run complete SDD convergence verification (spec check, API diff, traceability, tests)."
+    sequence = [
+        { ref = "sdd-check-spec $feature_id" },
+        { ref = "sdd-check-api $feature_id" },
+        { ref = "sdd-check-traceability $feature_id" },
+        { ref = "test" },
     ]

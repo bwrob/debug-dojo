@@ -1,0 +1,9 @@
+---
+description: Authoritative project conventions, typing standards, and workflows
+globs: ["*"]
+alwaysApply: true
+---
+
+# Project Guidelines
+
+Consult [AGENTS.md](../../AGENTS.md) for authoritative operational guidelines, architectural conventions, and development workflows.
