@@ -7,31 +7,20 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from debug_dojo._config_models import DebugDojoConfig
+from debug_dojo._config_models import DojoSettings
 
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
 
 @pytest.fixture
-def config() -> DebugDojoConfig:
-    """Provide a default config for tests.
+def config() -> DojoSettings:
+    """Provide a default settings object for tests.
 
     Returns:
-        DebugDojoConfig: A default configuration object.
+        DojoSettings: A default runtime configuration object.
 
     """
-    return DebugDojoConfig()
-
-
-@pytest.fixture
-def test_config_path() -> str:
-    """Provide a path to a test config file.
-
-    Returns:
-        str: The path to a test configuration file.
-
-    """
-    return str(ASSETS_DIR / "config.toml")
+    return DojoSettings()
 
 
 @pytest.fixture

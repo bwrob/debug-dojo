@@ -20,6 +20,11 @@ cli: typer.Typer = typer.Typer(
 )
 
 
+@cli.callback()
+def callback() -> None:
+    """Run a Python script or module with debugging tools installed."""
+
+
 @cli.command(
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,

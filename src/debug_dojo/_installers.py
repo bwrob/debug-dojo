@@ -259,7 +259,7 @@ def set_debugger(settings: DojoSettings) -> None:
         use_pudb(settings.debugger.set_trace_hook)
     elif debugger is DebuggerType.IPDB:
         use_ipdb(settings.debugger.set_trace_hook, settings.ipdb_context_lines)
-    elif debugger is DebuggerType.DEBUGPY:
+    else:
         use_debugpy(
             settings.debugger.set_trace_hook,
             settings.debugpy_host,
