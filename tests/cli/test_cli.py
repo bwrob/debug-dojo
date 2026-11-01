@@ -13,20 +13,22 @@ if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
 ANSI_ESCAPE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+BOX_TRANS = str.maketrans("┌┐└┘", "╭╮╰╯")
 
 
 def normalize_cli_output(text: str) -> str:
-    """Normalize ANSI escapes and whitespace in CLI output for deterministic snapshots.
+    """Normalize ANSI escapes, box corners, and whitespace in CLI output.
 
     Args:
-        text: Input string possibly containing ANSI escape sequences.
+        text: Input string possibly containing ANSI escape sequences
+            and platform differences.
 
     Returns:
-        Clean normalized string with stripped ANSI and collapsed
-        consecutive blank lines.
+        Clean normalized string with stripped ANSI, standard box corners,
+        and collapsed consecutive blank lines.
 
     """
-    clean_text = ANSI_ESCAPE.sub("", text)
+    clean_text = ANSI_ESCAPE.sub("", text).translate(BOX_TRANS)
     lines = [line.rstrip() for line in clean_text.splitlines()]
     normalized_lines: list[str] = []
     for line in lines:
@@ -78,6 +80,12 @@ def test_normalize_cli_output_consecutive_blank_lines() -> None:
     """Test that normalize_cli_output collapses consecutive blank lines."""
     raw = "\x1b[32mhello\x1b[0m\n\n\nworld\n"
     assert normalize_cli_output(raw) == "hello\n\nworld"
+
+
+def test_normalize_cli_output_box_corners() -> None:
+    """Test that normalize_cli_output normalizes Windows box corners to rounded."""
+    raw = "┌─ Options ─┐\n└───────────┘"
+    assert normalize_cli_output(raw) == "╭─ Options ─╮\n╰───────────╯"
 
 
 def test_cli_help_snapshot(runner: CliRunner, snapshot: SnapshotAssertion) -> None:
