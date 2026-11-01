@@ -12,8 +12,7 @@
   │ --help                        Show this message and exit.                    │
   ╰──────────────────────────────────────────────────────────────────────────────╯
   ╭─ Commands ───────────────────────────────────────────────────────────────────╮
-  │ run     Run a Python script or module with debugging tools installed.        │
-  │ config  Show config.                                                         │
+  │ run  Run a Python script or module with debugging tools installed.           │
   ╰──────────────────────────────────────────────────────────────────────────────╯
   '''
 # ---

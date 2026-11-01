@@ -1,4 +1,4 @@
-"""Provide constants for tests."""
+"""Provide constants and fixtures for tests."""
 
 from __future__ import annotations
 
@@ -7,31 +7,7 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from debug_dojo._config_models import DebugDojoConfig
-
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
-
-
-@pytest.fixture
-def config() -> DebugDojoConfig:
-    """Provide a default config for tests.
-
-    Returns:
-        DebugDojoConfig: A default configuration object.
-
-    """
-    return DebugDojoConfig()
-
-
-@pytest.fixture
-def test_config_path() -> str:
-    """Provide a path to a test config file.
-
-    Returns:
-        str: The path to a test configuration file.
-
-    """
-    return str(ASSETS_DIR / "config.toml")
 
 
 @pytest.fixture

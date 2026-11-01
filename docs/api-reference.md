@@ -1,6 +1,6 @@
 ---
 diataxis: reference
-purpose: Document Python APIs, installer functions, comparison utilities, and configuration models.
+purpose: Document Python APIs, installer functions, execution engine, and comparison utilities.
 ---
 
 # API Reference
@@ -24,17 +24,13 @@ Detailed API documentation for internal modules:
 
 ::: debug_dojo._installers
 
+### Execution Submodule
+
+::: debug_dojo._execution
+
 ### Comparison Submodule
 
 ::: debug_dojo._compare
-
-### Configuration Loader Submodule
-
-::: debug_dojo._config
-
-### Configuration Models Submodule
-
-::: debug_dojo._config_models
 
 ### Command Line Interface Submodule
 

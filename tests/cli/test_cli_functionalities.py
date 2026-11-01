@@ -13,11 +13,10 @@ from debug_dojo._cli import cli
 def test_breakpoint_ipdb(
     mock_set_trace: MagicMock,
     runner: CliRunner,
-    test_config_path: str,
     test_target_breakpoint: str,
 ) -> None:
     """Test breakpoint with ipdb from CLI."""
-    args = ["run", "-d", "ipdb", "-c", test_config_path, test_target_breakpoint]
+    args = ["run", "-d", "ipdb", test_target_breakpoint]
     result = runner.invoke(cli, args)
 
     assert result.exit_code == 0
@@ -28,12 +27,25 @@ def test_breakpoint_ipdb(
 def test_post_mortem(
     mock_post_mortem: MagicMock,
     runner: CliRunner,
-    test_config_path: str,
     test_target_exception: str,
 ) -> None:
     """Test post-mortem with ipdb from CLI."""
-    args = ["run", "-d", "ipdb", "-c", test_config_path, test_target_exception]
+    args = ["run", "-d", "ipdb", test_target_exception]
     result = runner.invoke(cli, args)
 
     assert result.exit_code != 0
     mock_post_mortem.assert_called_once()
+
+
+@patch("pdb.post_mortem")
+def test_post_mortem_default_pdb(
+    mock_pdb_pm: MagicMock,
+    runner: CliRunner,
+    test_target_exception: str,
+) -> None:
+    """Test post-mortem defaults to pdb when no debugger is specified."""
+    args = ["run", test_target_exception]
+    result = runner.invoke(cli, args)
+
+    assert result.exit_code != 0
+    mock_pdb_pm.assert_called_once()

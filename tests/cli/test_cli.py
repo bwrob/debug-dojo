@@ -73,7 +73,14 @@ def test_run_debug_verbose(runner: CliRunner, test_target_inspect: str) -> None:
     """Test the --verbose flag."""
     result = runner.invoke(cli, ["run", "--verbose", test_target_inspect])
     assert result.exit_code == 0
-    assert "Using debug-dojo configuration:" in result.output
+    assert "Using debugger:" in result.output
+
+
+def test_run_options_only_no_target(runner: CliRunner) -> None:
+    """Test that running with options but no target does not execute."""
+    result = runner.invoke(cli, ["run", "-v"])
+    assert result.exit_code == 0
+    assert "Using debugger:" in result.output
 
 
 def test_normalize_cli_output_consecutive_blank_lines() -> None:

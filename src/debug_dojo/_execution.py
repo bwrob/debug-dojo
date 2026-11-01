@@ -6,7 +6,7 @@ import runpy
 import sys
 import traceback
 from bdb import BdbQuit
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from shutil import which
 from typing import TYPE_CHECKING
@@ -14,18 +14,17 @@ from typing import TYPE_CHECKING
 import typer
 from rich import print as rich_print
 
-from debug_dojo._installers import install_by_config
+from debug_dojo._installers import DebuggerType, install_tools
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from types import TracebackType
     from typing import Any
-
-    from debug_dojo._config_models import DebugDojoConfig
 
     Runner = Callable[..., dict[str, Any]]
 
 
-class ExecMode(Enum):
+class ExecMode(StrEnum):
     """Execution mode for the target."""
 
     FILE = "file"
@@ -49,22 +48,22 @@ def _install_debug_tools(
     target_args: list[str],
     *,
     verbose: bool,
-    config: DebugDojoConfig,
+    debugger: DebuggerType | None = None,
 ) -> None:
-    """Install debugging tools based on configuration.
+    """Install opinionated debugging tools.
 
     Args:
         target_name (str): The name of the target script.
         target_args (list[str]): The arguments passed to the target.
         verbose (bool): Whether to print verbose output.
-        config (DebugDojoConfig): The configuration object.
+        debugger (DebuggerType | None): Optional debugger backend override.
 
     """
     if verbose:
         rich_print(f"[blue]Installing debugging tools for {target_name}.[/blue]")
         rich_print(f"[blue]Arguments for target: {target_args}[/blue]")
 
-    install_by_config(config)
+    install_tools(debugger)
 
 
 def _get_runner_and_target(
@@ -99,13 +98,50 @@ def _get_runner_and_target(
     return runpy.run_path, resolved_name
 
 
-def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -> None:
-    """Handle exceptions during execution, optionally entering post-mortem debugging.
+def _enter_post_mortem(tb: TracebackType | None, debugger: DebuggerType | None) -> None:
+    """Enter a post-mortem debugging session with the requested or fallback debugger.
+
+    Args:
+        tb (TracebackType | None): The traceback object from the unhandled exception.
+        debugger (DebuggerType | None): The selected debugger type.
+
+    """
+    rich_print("[blue]Entering post-mortem debugging session...[/blue]")
+    if debugger is DebuggerType.IPDB:
+        try:
+            import ipdb  # ruff: ignore[import-outside-top-level, debugger]
+        except ImportError:
+            rich_print(
+                "[yellow]IPDB not available, falling back to PDB post-mortem.[/yellow]",
+            )
+        else:
+            ipdb.post_mortem(tb)
+            return
+    elif debugger is DebuggerType.PUDB:
+        try:
+            import pudb  # ruff: ignore[import-outside-top-level, debugger]
+        except ImportError:
+            rich_print(
+                "[yellow]PuDB not available, falling back to PDB post-mortem.[/yellow]",
+            )
+        else:
+            pudb.post_mortem(tb)
+            return
+
+    import pdb  # ruff: ignore[import-outside-top-level, debugger]
+
+    pdb.post_mortem(tb)
+
+
+def _handle_exception(
+    e: Exception, target_name: str, debugger: DebuggerType | None = None
+) -> None:
+    """Handle exceptions during execution and enter post-mortem debugging.
 
     Args:
         e (Exception): The exception that occurred.
         target_name (str): The name of the target being executed.
-        config (DebugDojoConfig): The configuration object.
+        debugger (DebuggerType | None): The selected debugger type.
 
     Raises:
         typer.Exit: Always raises Exit(1) after handling.
@@ -113,25 +149,21 @@ def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -
     """
     rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
     rich_print(traceback.format_exc())
-    if config.exceptions.post_mortem:
-        import ipdb  # ruff: ignore[import-outside-top-level, debugger] -- ipdb is an optional dependency loaded on-demand for post-mortem debugging
-
-        rich_print("[blue]Entering post-mortem debugging session...[/blue]")
-        ipdb.post_mortem(e.__traceback__)
+    _enter_post_mortem(e.__traceback__, debugger)
     raise typer.Exit(1) from e
 
 
 def _safe_execute(
     runner: Runner,
     target_name: str,
-    config: DebugDojoConfig,
+    debugger: DebuggerType | None = None,
 ) -> None:
     """Execute the target safely, handling specific exceptions.
 
     Args:
         runner (Runner): The function to run the target.
         target_name (str): The name of the target.
-        config (DebugDojoConfig): The configuration object.
+        debugger (DebuggerType | None): The selected debugger type.
 
     Raises:
         typer.Exit: If an error occurs or the user interrupts the execution.
@@ -152,7 +184,7 @@ def _safe_execute(
         if bool(e.code):
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
     except Exception as e:  # ruff: ignore[blind-except] -- catch all unhandled target errors to delegate to post-mortem handler
-        _handle_exception(e, target_name, config)
+        _handle_exception(e, target_name, debugger)
 
 
 def execute_with_debug(
@@ -161,7 +193,7 @@ def execute_with_debug(
     *,
     target_mode: ExecMode,
     verbose: bool,
-    config: DebugDojoConfig,
+    debugger: DebuggerType | None = None,
 ) -> None:
     """Execute a target script or module with installed debugging tools.
 
@@ -170,10 +202,10 @@ def execute_with_debug(
         target_args (list[str]): Arguments to pass to the target.
         target_mode (ExecMode): The execution mode (FILE, MODULE, or EXECUTABLE).
         verbose (bool): If True, print verbose output.
-        config (DebugDojoConfig): The debug-dojo configuration.
+        debugger (DebuggerType | None): Optional debugger backend override.
 
     """
     _configure_sys_argv(target_name, target_args)
-    _install_debug_tools(target_name, target_args, verbose=verbose, config=config)
+    _install_debug_tools(target_name, target_args, verbose=verbose, debugger=debugger)
     runner, resolved_target = _get_runner_and_target(target_name, target_mode)
-    _safe_execute(runner, resolved_target, config)
+    _safe_execute(runner, resolved_target, debugger)

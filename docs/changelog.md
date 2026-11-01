@@ -11,7 +11,20 @@ The format is based on [Keep a Changelog 1.1.0](https://keepachangelog.com/en/1.
 and this project adheres to
 [Semantic Versioning 2.0.0](https://semver.org/spec/v2.0.0.html).
 
-## [0.9.0] - 2026-11-01
+## Unreleased
+
+### Added
+
+- Opinionated, plug-and-play debugging experience with zero configuration overhead.
+- Debugger-agnostic post-mortem debugging that dispatches to the active debugger (PDB, IPDB, PuDB) with safe fallback to standard `pdb.post_mortem`.
+
+### Removed
+
+- Removed file-based configuration loading and models (`dojo.toml`, `pyproject.toml`, `_config.py`, and `_config_models.py`).
+- Removed `dojo config` CLI command and `--config` option.
+- Removed `dacite` and `tomlkit` runtime dependencies.
+
+## V0.9.0 (2026-11-01)
 
 ### Added
 

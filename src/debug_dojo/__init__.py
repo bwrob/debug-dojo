@@ -16,7 +16,7 @@ This installs debugging helpers (`b()`, `p()`, `i()`, `c()`) and triggers a brea
 You can also run target scripts or modules using the `dojo` command-line interface:
 
 ```console
-$ dojo run --verbose --config dojo.toml target_script.py value1
+$ dojo run --verbose target_script.py value1
 ```
 """
 

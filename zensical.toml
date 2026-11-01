@@ -10,7 +10,6 @@
     nav = [
         { "Overview" = "index.md" },
         { "Getting Started" = "getting-started.md" },
-        { "Configuration" = "configuration.md" },
         { "CLI Reference" = "cli-reference.md" },
         { "API Reference" = "api-reference.md" },
         { "Architecture (ADRs)" = [
@@ -134,7 +133,6 @@
             "Documentation" = [
                 "index.md",
                 "getting-started.md",
-                "configuration.md",
                 "cli-reference.md",
                 "api-reference.md",
                 "adr/index.md",

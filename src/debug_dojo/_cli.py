@@ -2,23 +2,26 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Annotated
 
 import typer
 from rich import print as rich_print
 
-from debug_dojo._config import load_config
-from debug_dojo._config_models import (
+from debug_dojo._execution import ExecMode, execute_with_debug
+from debug_dojo._installers import (
     DebuggerType,  # ruff: ignore[typing-only-first-party-import] -- required at runtime by Typer for CLI argument validation
 )
-from debug_dojo._execution import ExecMode, execute_with_debug
 
 cli: typer.Typer = typer.Typer(
     name="debug_dojo",
     help="Run a Python script or module with debugging tools installed.",
     no_args_is_help=True,
 )
+
+
+@cli.callback()
+def callback() -> None:
+    """Run a Python script or module with debugging tools installed."""
 
 
 @cli.command(
@@ -33,10 +36,6 @@ def run(  # ruff: ignore[too-many-arguments] -- CLI commands map CLI options dir
         typer.Argument(help="The target script or module to debug.", metavar="target"),
     ] = None,
     *,
-    config_path: Annotated[
-        Path | None,
-        typer.Option("--config", "-c", help="Show configuration"),
-    ] = None,
     debugger: Annotated[
         DebuggerType | None,
         typer.Option("--debugger", "-d", help="Specify the debugger to use"),
@@ -57,19 +56,14 @@ def run(  # ruff: ignore[too-many-arguments] -- CLI commands map CLI options dir
     """Run a Python script, module, or executable with debug-dojo tools.
 
     This command acts as the main entry point for `debug-dojo`, allowing users to
-    execute their code while automatically installing and configuring debugging tools
-    based on the provided options or configuration file.
+    execute their code while automatically installing opinionated debugging tools.
 
     Args:
         ctx (typer.Context): The Typer context object.
         target_name (str | None): The path to the script, name of the module, or
             name of the executable to run. If not provided, the command will exit.
-        config_path (Path | None): Path to a custom configuration file
-            (for example, `dojo.toml`).
-        debugger (DebuggerType | None): Override the default debugger specified
-            in the config.
-        verbose (bool): Enable verbose output, showing loaded configuration
-            and installation steps.
+        debugger (DebuggerType | None): Optional debugger backend override.
+        verbose (bool): Enable verbose output.
         module (bool): Treat `target_name` as a Python module to run
             (for example, `dojo run -m my_package.my_module`).
         executable (bool): Treat `target_name` as an executable command to run
@@ -94,10 +88,8 @@ def run(  # ruff: ignore[too-many-arguments] -- CLI commands map CLI options dir
         else ExecMode.FILE
     )
 
-    config = load_config(config_path, verbose=verbose, debugger=debugger)
-
     if verbose:
-        rich_print(f"[blue]Using debug-dojo configuration: {config} [/blue]")
+        rich_print(f"[blue]Using debugger: {debugger or 'default'}[/blue]")
 
     if target_name is not None:
         execute_with_debug(
@@ -105,24 +97,8 @@ def run(  # ruff: ignore[too-many-arguments] -- CLI commands map CLI options dir
             target_mode=mode,
             target_args=ctx.args,
             verbose=verbose,
-            config=config,
+            debugger=debugger,
         )
-
-
-@cli.command(
-    help="Show config.",
-    no_args_is_help=True,
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
-)
-def config(
-    config_path: Annotated[
-        Path | None,
-        typer.Option("--config", "-c", help="Show configuration"),
-    ] = None,
-) -> None:
-    """Display resolved and updated configuration."""
-    config = load_config(config_path, verbose=True, debugger=None)
-    rich_print(f"[blue]Using debug-dojo configuration:\n{config} [/blue]")
 
 
 def main() -> None:
