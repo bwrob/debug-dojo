@@ -2,8 +2,7 @@
 
 This module provides functions to set up different debuggers (PDB, PuDB, IPDB,
 Debugpy) and to install enhanced debugging features like Rich Traceback, Rich
-Inspect, Rich Print, and a side-by-side object comparer. These installations
-are typically driven by the `DebugDojoConfig`.
+Inspect, Rich Print, and a side-by-side object comparer based on `DojoSettings`.
 """
 
 from __future__ import annotations
@@ -18,51 +17,44 @@ from rich import print as rich_print
 
 from debug_dojo._compare import inspect_objects_side_by_side
 from debug_dojo._config_models import (
-    DebugDojoConfig,
-    DebuggersConfig,
     DebuggerType,
-    DebugpyConfig,
-    ExceptionsConfig,
-    FeaturesConfig,
-    IpdbConfig,
-    PdbConfig,
-    PudbConfig,
+    DojoSettings,
 )
 
 BREAKPOINT_ENV_VAR = "PYTHONBREAKPOINT"
 IPDB_CONTEXT_SIZE = "IPDB_CONTEXT_SIZE"
 
 _NOT_INSTALLED = (
-    "[yellow]{name} is not installed."
-    "Please install it to use this debugger."
+    "[yellow]{name} is not installed. "
+    "Please install it to use this debugger. "
     "Defaulting to standard debugger.[/yellow]"
 )
 
 
-def use_pdb(config: PdbConfig) -> None:
+def use_pdb(hook: str = "pdb.set_trace") -> None:
     """Set PDB as the default debugger.
 
     Configures `sys.breakpointhook` to use `pdb.set_trace` and sets the
     `PYTHONBREAKPOINT` environment variable.
 
     Args:
-        config (PdbConfig): Configuration for PDB.
+        hook (str): The hook string for `PYTHONBREAKPOINT`.
 
     """
     import pdb
 
-    os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
+    os.environ[BREAKPOINT_ENV_VAR] = hook
     sys.breakpointhook = cast("Any", pdb.set_trace)
 
 
-def use_pudb(config: PudbConfig) -> None:
+def use_pudb(hook: str = "pudb.set_trace") -> None:
     """Set PuDB as the default debugger.
 
     Configures `sys.breakpointhook` to use `pudb.set_trace` and sets the
     `PYTHONBREAKPOINT` environment variable.
 
     Args:
-        config (PudbConfig): Configuration for PuDB.
+        hook (str): The hook string for `PYTHONBREAKPOINT`.
 
     """
     try:
@@ -71,18 +63,19 @@ def use_pudb(config: PudbConfig) -> None:
         rich_print(_NOT_INSTALLED.format(name="PuDB"))
         return
 
-    os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
+    os.environ[BREAKPOINT_ENV_VAR] = hook
     sys.breakpointhook = cast("Any", pudb.set_trace)
 
 
-def use_ipdb(config: IpdbConfig) -> None:
+def use_ipdb(hook: str = "ipdb.set_trace", context_lines: int = 20) -> None:
     """Set IPDB as the default debugger.
 
     Configures `sys.breakpointhook` to use `ipdb.set_trace`, sets the
     `PYTHONBREAKPOINT` environment variable, and configures `IPDB_CONTEXT_SIZE`.
 
     Args:
-        config (IpdbConfig): Configuration for IPDB.
+        hook (str): The hook string for `PYTHONBREAKPOINT`.
+        context_lines (int): Number of source code context lines to show.
 
     """
     try:
@@ -91,12 +84,18 @@ def use_ipdb(config: IpdbConfig) -> None:
         rich_print(_NOT_INSTALLED.format(name="IPDB"))
         return
 
-    os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
-    os.environ[IPDB_CONTEXT_SIZE] = str(config.context_lines)
+    os.environ[BREAKPOINT_ENV_VAR] = hook
+    os.environ[IPDB_CONTEXT_SIZE] = str(context_lines)
     sys.breakpointhook = cast("Any", ipdb.set_trace)
 
 
-def use_debugpy(config: DebugpyConfig) -> None:
+def use_debugpy(
+    hook: str = "debugpy.breakpoint",
+    host: str = "localhost",
+    port: int = 1992,
+    *,
+    wait_for_client: bool = True,
+) -> None:
     """Set Debugpy as the default debugger.
 
     Configures `sys.breakpointhook` to use `debugpy.breakpoint`, sets the
@@ -104,7 +103,10 @@ def use_debugpy(config: DebugpyConfig) -> None:
     waiting for a client connection.
 
     Args:
-        config (DebugpyConfig): Configuration for debugpy.
+        hook (str): The hook string for `PYTHONBREAKPOINT`.
+        host (str): Host address to bind debugpy server.
+        port (int): Port number to bind debugpy server.
+        wait_for_client (bool): Whether to wait for client connection.
 
     """
     try:
@@ -113,7 +115,7 @@ def use_debugpy(config: DebugpyConfig) -> None:
         rich_print(_NOT_INSTALLED.format(name="Debugpy"))
         return
 
-    os.environ[BREAKPOINT_ENV_VAR] = config.set_trace_hook
+    os.environ[BREAKPOINT_ENV_VAR] = hook
     sys.breakpointhook = debugpy.breakpoint
 
     launch_config = {
@@ -121,16 +123,17 @@ def use_debugpy(config: DebugpyConfig) -> None:
         "type": "debugpy",
         "request": "attach",
         "connect": {
-            "host": config.host,
-            "port": config.port,
+            "host": host,
+            "port": port,
         },
     }
-    rich_print(f"[blue]Connect your VSC debugger to port {config.port}.[/blue]")
+    rich_print(f"[blue]Connect your VSC debugger to port {port}.[/blue]")
     rich_print("[blue]Configuration:[/blue]")
     rich_print(json.dumps(launch_config, indent=4))
 
-    _ = debugpy.listen((config.host, config.port))
-    debugpy.wait_for_client()
+    _ = debugpy.listen((host, port))
+    if wait_for_client:
+        debugpy.wait_for_client()
 
 
 def rich_traceback(*, locals_in_traceback: bool) -> None:
@@ -228,61 +231,66 @@ def install_rich_print(mnemonic: str = "p") -> None:
     builtins.__dict__[mnemonic] = rich_print
 
 
-def install_features(features: FeaturesConfig) -> None:
-    """Install debugging features based on the provided configuration.
+def install_features(settings: DojoSettings) -> None:
+    """Install debugging features based on the provided settings.
 
     Args:
-        features (FeaturesConfig): Configuration object specifying which features
-            to install and their mnemonics.
+        settings (DojoSettings): Settings specifying mnemonics for injected helpers.
 
     """
-    install_inspect(features.rich_inspect)
-    install_rich_print(features.rich_print)
-    install_compare(features.comparer)
-    install_breakpoint(features.breakpoint)
+    install_inspect(settings.inspect_mnemonic)
+    install_rich_print(settings.print_mnemonic)
+    install_compare(settings.compare_mnemonic)
+    install_breakpoint(settings.breakpoint_mnemonic)
 
 
-def set_debugger(config: DebuggersConfig) -> None:
-    """Set the default debugger based on the provided configuration.
+def set_debugger(settings: DojoSettings) -> None:
+    """Set the default debugger based on the provided settings.
 
     Args:
-        config (DebuggersConfig): Configuration object for debuggers.
+        settings (DojoSettings): Configuration settings for debuggers.
 
     """
-    debugger = config.default
+    debugger = settings.debugger
 
-    if debugger == DebuggerType.PDB:
-        use_pdb(config.pdb)
-    if debugger == DebuggerType.PUDB:
-        use_pudb(config.pudb)
-    if debugger == DebuggerType.IPDB:
-        use_ipdb(config.ipdb)
-    if debugger == DebuggerType.DEBUGPY:
-        use_debugpy(config.debugpy)
+    if debugger is DebuggerType.PDB:
+        use_pdb(settings.debugger.set_trace_hook)
+    elif debugger is DebuggerType.PUDB:
+        use_pudb(settings.debugger.set_trace_hook)
+    elif debugger is DebuggerType.IPDB:
+        use_ipdb(settings.debugger.set_trace_hook, settings.ipdb_context_lines)
+    elif debugger is DebuggerType.DEBUGPY:
+        use_debugpy(
+            settings.debugger.set_trace_hook,
+            settings.debugpy_host,
+            settings.debugpy_port,
+            wait_for_client=settings.debugpy_wait_for_client,
+        )
 
-    sys.ps1 = config.prompt_name
+    sys.ps1 = settings.prompt_name
 
 
-def set_exceptions(exceptions: ExceptionsConfig) -> None:
-    """Configure exception handling based on the provided configuration.
+def set_exceptions(settings: DojoSettings) -> None:
+    """Configure exception handling based on the provided settings.
 
     Args:
-        exceptions (ExceptionsConfig): Configuration object for exception handling.
+        settings (DojoSettings): Configuration settings for exception handling.
 
     """
-    if exceptions.rich_traceback:
-        rich_traceback(locals_in_traceback=exceptions.locals_in_traceback)
+    if settings.rich_traceback:
+        rich_traceback(locals_in_traceback=settings.show_locals)
 
 
-def install_by_config(config: DebugDojoConfig) -> None:
-    """Install all debugging tools and features based on the given configuration.
-
-    This is the main entry point for applying `debug-dojo` settings.
+def install_tools(settings: DojoSettings) -> None:
+    """Install all debugging tools and features based on the given settings.
 
     Args:
-        config (DebugDojoConfig): The complete debug-dojo configuration object.
+        settings (DojoSettings): The runtime settings object.
 
     """
-    set_debugger(config.debuggers)
-    set_exceptions(config.exceptions)
-    install_features(config.features)
+    set_debugger(settings)
+    set_exceptions(settings)
+    install_features(settings)
+
+
+install_by_config = install_tools
