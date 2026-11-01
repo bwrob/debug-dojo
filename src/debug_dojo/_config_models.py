@@ -1,207 +1,61 @@
-"""Dataclass models for Debug Dojo's configuration.
+"""Configuration models for Debug Dojo.
 
-This module defines the data structures used to validate and manage the configuration of
-debug-dojo, including settings for debuggers, exception handling, and features.
+This module defines the runtime settings data structures for Debug Dojo,
+including debugger backend options, exception behavior, and built-in mnemonics.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from enum import Enum
-
-from dacite import Config
+from dataclasses import dataclass
+from enum import StrEnum
 
 
-class DebuggerType(Enum):
-    """Enum for different types of debuggers."""
+class DebuggerType(StrEnum):
+    """Supported debugger backends."""
 
     DEBUGPY = "debugpy"
     IPDB = "ipdb"
     PDB = "pdb"
     PUDB = "pudb"
 
-
-@dataclass
-class Features:
-    """Legacy configuration for installing debug features (used in V1 config)."""
-
-    rich_inspect: bool = True
-    """Install rich inspect as 'i' for enhanced object inspection."""
-    rich_print: bool = True
-    """Install rich print as 'p' for enhanced printing."""
-    rich_traceback: bool = True
-    """Install rich traceback for better error reporting."""
-    comparer: bool = True
-    """Install comparer as 'c' for side-by-side object comparison."""
-    breakpoint: bool = True
-    """Install breakpoint as 'b' for setting breakpoints in code."""
-
-
-@dataclass
-class DebugpyConfig:
-    """Configuration for debugpy debugger."""
-
-    host: str = "localhost"
-    """Host for debugpy debugger."""
-    log_to_file: bool = False
-    """Whether to log debugpy output to a file."""
-    port: int = 1992
-    """Port for debugpy debugger."""
-    wait_for_client: bool = True
-    """Whether to wait for the client to connect before starting debugging."""
-
     @property
     def set_trace_hook(self) -> str:
-        return "debugpy.breakpoint"
+        """Module-level hook string for PYTHONBREAKPOINT."""
+        if self is DebuggerType.DEBUGPY:
+            return "debugpy.breakpoint"
+        return f"{self.value}.set_trace"
 
 
-@dataclass
-class IpdbConfig:
-    """Configuration for ipdb debugger."""
+@dataclass(frozen=True, slots=True)
+class DojoSettings:
+    """Runtime configuration settings for Debug Dojo."""
 
-    context_lines: int = 20
-    """Number of context lines to show in ipdb."""
-
-    @property
-    def set_trace_hook(self) -> str:
-        return "ipdb.set_trace"
-
-
-@dataclass
-class PdbConfig:
-    """Configuration for pdb debugger."""
-
-    @property
-    def set_trace_hook(self) -> str:
-        return "pdb.set_trace"
-
-
-@dataclass
-class PudbConfig:
-    """Configuration for pudb debugger."""
-
-    @property
-    def set_trace_hook(self) -> str:
-        return "pudb.set_trace"
-
-
-@dataclass
-class DebuggersConfig:
-    """Configuration for debuggers."""
-
-    default: DebuggerType = DebuggerType.IPDB
-    """Default debugger to use."""
-    prompt_name: str = "debug-dojo> "
-    """Prompt name for the debugger, used in the REPL."""
-
-    debugpy: DebugpyConfig = field(default_factory=DebugpyConfig)
-    """Configuration for debugpy debugger."""
-    ipdb: IpdbConfig = field(default_factory=IpdbConfig)
-    """Configuration for ipdb debugger."""
-    pdb: PdbConfig = field(default_factory=PdbConfig)
-    """Configuration for pdb debugger."""
-    pudb: PudbConfig = field(default_factory=PudbConfig)
-    """Configuration for pudb debugger."""
-
-
-@dataclass
-class ExceptionsConfig:
-    """Configuration for exceptions handling."""
-
-    locals_in_traceback: bool = False
-    """Include local variables in traceback."""
+    debugger: DebuggerType = DebuggerType.PDB
+    """Default debugger to use for breakpoints."""
     post_mortem: bool = True
-    """Enable post-mortem debugging after an exception."""
+    """Whether to enter post-mortem debugging on unhandled exceptions."""
     rich_traceback: bool = True
-    """Enable rich traceback for better error reporting."""
+    """Whether to install Rich traceback handler for enhanced error reporting."""
+    show_locals: bool = False
+    """Whether to display local variables in exception tracebacks."""
+    debugpy_host: str = "localhost"
+    """Host address for debugpy server."""
+    debugpy_port: int = 1992
+    """Port number for debugpy server."""
+    debugpy_wait_for_client: bool = True
+    """Whether debugpy should wait for an incoming client connection."""
+    ipdb_context_lines: int = 20
+    """Number of context lines to display in IPDB."""
+    prompt_name: str = "debug-dojo> "
+    """REPL prompt string."""
+    inspect_mnemonic: str = "i"
+    """Mnemonic to expose rich.inspect in builtins (empty to disable)."""
+    print_mnemonic: str = "p"
+    """Mnemonic to expose rich.print in builtins (empty to disable)."""
+    compare_mnemonic: str = "c"
+    """Mnemonic to expose object comparison in builtins (empty to disable)."""
+    breakpoint_mnemonic: str = "b"
+    """Mnemonic to expose breakpoint() in builtins (empty to disable)."""
 
 
-@dataclass
-class FeaturesConfig:
-    """Configuration for installing debug features."""
-
-    breakpoint: str = "b"
-    """Install breakpoint as 'b' for setting breakpoints in code."""
-    comparer: str = "c"
-    """Install comparer as 'c' for side-by-side object comparison."""
-    rich_inspect: str = "i"
-    """Install rich inspect as 'i' for enhanced object inspection."""
-    rich_print: str = "p"
-    """Install rich print as 'p' for enhanced printing."""
-
-
-@dataclass
-class DebugDojoConfigV3:
-    """Configuration for Debug Dojo (version 3)."""
-
-    exceptions: ExceptionsConfig = field(default_factory=ExceptionsConfig)
-    """Exception handling and traceback formatting settings."""
-    debuggers: DebuggersConfig = field(default_factory=DebuggersConfig)
-    """Debugger backend selection and individual debugger configurations."""
-    features: FeaturesConfig = field(default_factory=FeaturesConfig)
-    """Shortcuts and mnemonics for injected debugging helpers."""
-
-
-@dataclass
-class DebugDojoConfigV2:
-    """Legacy configuration for Debug Dojo (version 2)."""
-
-    exceptions: ExceptionsConfig = field(default_factory=ExceptionsConfig)
-    """Exception handling and traceback formatting settings."""
-    debuggers: DebuggersConfig = field(default_factory=DebuggersConfig)
-    """Debugger backend selection and individual debugger configurations."""
-    features: FeaturesConfig = field(default_factory=FeaturesConfig)
-    """Shortcuts and mnemonics for injected debugging helpers."""
-    gamification: bool = True
-    """Enable or disable gamification (Dojo Belts)."""
-
-    def update(self) -> DebugDojoConfigV3:
-        """Update the configuration to the latest version.
-
-        Returns:
-            DebugDojoConfigV3: The updated configuration object.
-
-        """
-        return DebugDojoConfigV3(
-            exceptions=self.exceptions,
-            debuggers=self.debuggers,
-            features=self.features,
-        )
-
-
-@dataclass
-class DebugDojoConfigV1:
-    """Legacy configuration for Debug Dojo (version 1)."""
-
-    debugger: DebuggerType = DebuggerType.PUDB
-    """The type of debugger to use."""
-    features: Features = field(default_factory=Features)
-    """Features to install for debugging."""
-
-    def update(self) -> DebugDojoConfigV2:
-        """Update the configuration to the latest version.
-
-        Returns:
-            DebugDojoConfigV2: The updated configuration object.
-
-        """
-        v2_exceptions = ExceptionsConfig(
-            rich_traceback=self.features.rich_traceback,
-        )
-        v2_debuggers = DebuggersConfig(default=self.debugger)
-        v2_features = FeaturesConfig(
-            rich_inspect="i" if self.features.rich_inspect else "",
-            rich_print="p" if self.features.rich_print else "",
-            comparer="c" if self.features.comparer else "",
-            breakpoint="b" if self.features.breakpoint else "",
-        )
-        return DebugDojoConfigV2(
-            exceptions=v2_exceptions,
-            debuggers=v2_debuggers,
-            features=v2_features,
-        )
-
-
-DebugDojoConfig = DebugDojoConfigV3
-
-DACITE_CONFIG: Config = Config(cast=[Enum], strict=True)
+DebugDojoConfig = DojoSettings
