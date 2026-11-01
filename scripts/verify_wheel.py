@@ -202,6 +202,31 @@ def _read_dist_name(zf: zipfile.ZipFile, namelist: list[str], dist_info: str) ->
     return ""
 
 
+def _read_extras(zf: zipfile.ZipFile, namelist: list[str], dist_info: str) -> list[str]:
+    """Extract optional dependency extra names from wheel METADATA.
+
+    Args:
+        zf: Open wheel archive.
+        namelist: Zip archive member names.
+        dist_info: The dist-info directory prefix, or an empty string.
+
+    Returns:
+        List of extra names defined in METADATA.
+
+    """
+    member = f"{dist_info}/METADATA" if dist_info else ""
+    if not member or member not in namelist:
+        return []
+    metadata_content = zf.read(member).decode("utf-8", errors="replace")
+    extras: list[str] = []
+    for line in metadata_content.splitlines():
+        if line.startswith("Provides-Extra:"):
+            extra = line.split(":", 1)[1].strip()
+            if extra and extra not in extras:
+                extras.append(extra)
+    return extras
+
+
 def _discover_modules(namelist: list[str]) -> list[str]:
     """Discover Python module dotted names in the wheel archive.
 
@@ -418,14 +443,27 @@ def verify_in_venv(
     raise RuntimeError(msg)
 
 
-def _install_test_dependencies(python_exe: Path) -> None:
-    """Install the pytest toolchain into the isolated environment.
+def _install_test_dependencies(
+    python_exe: Path, wheel_path: Path | None = None
+) -> None:
+    """Install the pytest toolchain and optional extras into the isolated environment.
 
     Args:
         python_exe: Python interpreter of the isolated venv.
+        wheel_path: Optional path to the built wheel to install extras from.
 
     """
     uv_tool = shutil.which("uv")
+    target_install = list(TEST_PACKAGES)
+    if wheel_path is not None:
+        with zipfile.ZipFile(wheel_path) as zf:
+            namelist = zf.namelist()
+            dist_info = _find_dist_info(namelist)
+            extras = _read_extras(zf, namelist, dist_info)
+        if extras:
+            extras_str = ",".join(extras)
+            target_install.append(f"{wheel_path.resolve()}[{extras_str}]")
+
     if uv_tool is not None:
         # Repo-owned tooling on repo-controlled paths; no untrusted input.
         subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
@@ -436,7 +474,7 @@ def _install_test_dependencies(python_exe: Path) -> None:
                 "--python",
                 str(python_exe),
                 "--no-config",
-                *TEST_PACKAGES,
+                *target_install,
             ],
             check=True,
             **CAPTURE_KWARGS,
@@ -444,7 +482,7 @@ def _install_test_dependencies(python_exe: Path) -> None:
     else:
         # Isolated venv interpreter driven with fixed repo-owned arguments.
         subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
-            [str(python_exe), "-m", "pip", "install", *TEST_PACKAGES],
+            [str(python_exe), "-m", "pip", "install", *target_install],
             check=True,
             **CAPTURE_KWARGS,
         )
@@ -486,6 +524,7 @@ def run_distribution_tests(
     python_exe: Path,
     project_root: Path,
     temp_dir: Path,
+    wheel_path: Path | None = None,
 ) -> None:
     """Run the pytest suite against the installed wheel distribution.
 
@@ -493,13 +532,14 @@ def run_distribution_tests(
         python_exe: Python interpreter of the isolated venv.
         project_root: Generated project root containing ``tests``.
         temp_dir: Working directory for pytest execution.
+        wheel_path: Optional path to the built wheel to install extras from.
 
     Raises:
         RuntimeError: If the pytest suite exits non-zero.
 
     """
     console.print("🧪 Installing test dependencies into isolated environment...")
-    _install_test_dependencies(python_exe)
+    _install_test_dependencies(python_exe, wheel_path)
 
     tests_dir = project_root / "tests"
     if not tests_dir.is_dir():
@@ -558,7 +598,7 @@ def _run_verification(args: argparse.Namespace, temp_dir: Path) -> None:
 
     if args.run_tests:
         project_root = Path(__file__).resolve().parent.parent
-        run_distribution_tests(python_exe, project_root, temp_dir)
+        run_distribution_tests(python_exe, project_root, temp_dir, wheel_path)
 
 
 def _parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:

@@ -46,7 +46,9 @@
   rm -rf dist/extracted
   mkdir -p dist/extracted
   tar -xzf dist/*.tar.gz -C dist/extracted
-  cd dist/extracted/*
+  EXTRACTED_DIR="$(find dist/extracted -mindepth 1 -maxdepth 1 -type d | head -n 1)"
+  [ -d "$ROOT_DIR/../taplo" ] && ln -sf "$ROOT_DIR/../taplo" dist/extracted/taplo || true
+  cd "$EXTRACTED_DIR"
   uv sync --group test
   uv run poe test
   uv build --wheel
