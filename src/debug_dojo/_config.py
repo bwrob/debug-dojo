@@ -110,13 +110,13 @@ def load_raw_config(config_path: Path) -> JSON:
         raise ValueError(msg) from e
 
     if config_path.name != "pyproject.toml":
-        return config_data
+        return cast(JSON, config_data)
 
     # If config is in [tool.debug_dojo] (pyproject.toml), extract it.
     try:
         dojo_config = cast(JSON, config_data["tool"]["debug_dojo"])
     except KeyError:
-        return {}
+        return cast(JSON, {})
     else:
         return dojo_config
 

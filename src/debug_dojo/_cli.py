@@ -100,7 +100,7 @@ def run(  # ruff: ignore[too-many-arguments]
     if verbose:
         rich_print(f"[blue]Using debug-dojo configuration: {config} [/blue]")
 
-    if target_name:
+    if target_name is not None:
         execute_with_debug(
             target_name=target_name,
             target_mode=mode,

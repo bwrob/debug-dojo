@@ -149,7 +149,7 @@ def _safe_execute(
         rich_print("[red]Execution interrupted by user.[/red]")
         raise typer.Exit(0) from None
     except SystemExit as e:
-        if e.code:
+        if bool(e.code):
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
     except Exception as e:  # ruff: ignore[blind-except]
         _handle_exception(e, target_name, config)
