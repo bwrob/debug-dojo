@@ -23,7 +23,7 @@ fail_fast                  = false
         { id = "check-yaml", name = "🛠️ prek · Check YAML files", priority = "checks" },
         { id = "end-of-file-fixer", name = "🛠️ prek · Fix end of file", priority = "end_of_file" },
         { id = "mixed-line-ending", name = "🛠️ prek · Check mixed line endings", priority = "line_endings" },
-        { id = "trailing-whitespace", name = "🛠️ prek · Check trailing whitespace", priority = "trailing_whitespace" },
+        { id = "trailing-whitespace", name = "🛠️ prek · Check trailing whitespace", priority = "trailing_whitespace", exclude = '\.ambr$' },
         { id = "check-json", name = "🛠️ prek · Check JSON files", priority = "checks" },
         { id = "check-added-large-files", name = "🛠️ prek · Check for large files", args = [
             "--maxkb=2000",
@@ -83,13 +83,6 @@ fail_fast                  = false
 
 [[repos]]
     hooks = [
-        { id = "taplo-format", name = "⚙️ taplo · Format TOML files", priority = "independent_formatters" },
-    ]
-    repo = "https://github.com/ComPWA/taplo-pre-commit"
-    rev = "v0.9.3"
-
-[[repos]]
-    hooks = [
         { id = "typos", name = "🔤 typos · Check for typos", priority = "checks" },
     ]
     repo = "https://github.com/crate-ci/typos"
@@ -109,6 +102,7 @@ fail_fast                  = false
 
 [[repos]]
     hooks = [
+        { id = "taplo-format", name = "⚙️ taplo · Format TOML files", entry = "sh -c 'uv run taplo format \"$@\" 2>/dev/null || uvx --from taplo taplo format \"$@\"' --", language = "system", files = '\.toml$', priority = "independent_formatters" },
         { id = "pyrefly", name = "🐍 pyrefly · Type check Python code", entry = "uv run pyrefly check", language = "system", pass_filenames = false, files = '(\.(py|pyi)$|(^|/)(pyproject\.toml|uv\.lock|pyrefly\.toml)$)', priority = "checks", stages = [
             "pre-push",
         ] },

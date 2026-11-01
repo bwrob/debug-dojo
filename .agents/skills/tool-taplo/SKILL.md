@@ -80,10 +80,8 @@ Prek includes Taplo in `prek.toml` to prevent committing unformatted TOML files:
 
 ```toml
 [[repos]]
-repo = "https://github.com/ComPWA/taplo-pre-commit"
-rev = "v0.9.3"
 hooks = [
-    { id = "taplo-format", name = "⚙️ taplo · Format TOML files" },
+    { id = "taplo-format", name = "⚙️ taplo · Format TOML files", entry = "sh -c 'uv run taplo format \"$@\" 2>/dev/null || uvx --from taplo taplo format \"$@\"' --", language = "system", files = '\.toml$', priority = "independent_formatters" },
 ]
 ```
 

@@ -146,7 +146,7 @@ def find_wheel(dist_dir: Path, explicit_path: Path | None) -> Path:
     if not wheels:
         console.print("📦 No wheel found in dist/. Building with `uv build --wheel`...")
         # Repo-owned tooling on repo-controlled paths; no untrusted input.
-        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
             [str(shutil.which("uv")), "build", "--wheel"],
             check=True,
         )
@@ -346,7 +346,7 @@ def create_isolated_environment(tmp_dir: Path) -> Path:
     uv_tool = shutil.which("uv")
     if uv_tool is not None:
         # Repo-owned tooling on repo-controlled paths; no untrusted input.
-        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
             [uv_tool, "venv", "--no-project", str(venv_dir)],
             check=True,
             **CAPTURE_KWARGS,
@@ -377,7 +377,7 @@ def install_wheel_in_env(python_exe: Path, wheel_path: Path) -> None:
     uv_tool = shutil.which("uv")
     if uv_tool is not None:
         # Repo-owned tooling on repo-controlled paths; no untrusted input.
-        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
             [
                 uv_tool,
                 "pip",
@@ -392,7 +392,7 @@ def install_wheel_in_env(python_exe: Path, wheel_path: Path) -> None:
         )
     else:
         # Isolated venv interpreter driven with fixed repo-owned arguments.
-        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
             [str(python_exe), "-m", "pip", "install", str(wheel_path.resolve())],
             check=True,
             **CAPTURE_KWARGS,
@@ -418,7 +418,7 @@ def verify_in_venv(
 
     """
     # Hermetic interpreter running repo-owned check code; no untrusted input.
-    result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+    result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
         [
             str(python_exe),
             "-X",
@@ -466,7 +466,7 @@ def _install_test_dependencies(
 
     if uv_tool is not None:
         # Repo-owned tooling on repo-controlled paths; no untrusted input.
-        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
             [
                 uv_tool,
                 "pip",
@@ -481,7 +481,7 @@ def _install_test_dependencies(
         )
     else:
         # Isolated venv interpreter driven with fixed repo-owned arguments.
-        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+        subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
             [str(python_exe), "-m", "pip", "install", *target_install],
             check=True,
             **CAPTURE_KWARGS,
@@ -552,7 +552,7 @@ def run_distribution_tests(
     env = os.environ.copy()
     env["PYTHONWARNDEFAULTENCODING"] = "1"
     # Hermetic interpreter driven with fixed repo-owned pytest arguments.
-    result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true]
+    result = subprocess.run(  # ruff: ignore[subprocess-without-shell-equals-true] -- safe execution with literal argument list without shell interpolation
         _pytest_command(python_exe, project_root),
         cwd=temp_dir,
         env=env,

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from pathlib import Path
-from typing import Any, TypeAlias, cast
+from typing import Any, cast
 
 from dacite import DaciteError, from_dict
 from rich import print as rich_print
@@ -24,9 +24,7 @@ from debug_dojo._config_models import (
     DebuggerType,
 )
 
-JSON: TypeAlias = (
-    Mapping[str, "JSON"] | Sequence["JSON"] | str | int | float | bool | None
-)
+type JSON = Mapping[str, JSON] | Sequence[JSON] | str | int | float | bool | None
 
 
 def _validate_model(

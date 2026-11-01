@@ -4,6 +4,7 @@ env:
     UV_NO_SYNC: true
     PYTHONWARNDEFAULTENCODING: "1"
     PYTHONUTF8: "1"
+    UV_NO_SOURCES_PACKAGE: taplo
 
 permissions:
     contents: read

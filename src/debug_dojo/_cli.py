@@ -10,7 +10,7 @@ from rich import print as rich_print
 
 from debug_dojo._config import load_config
 from debug_dojo._config_models import (
-    DebuggerType,  # ruff: ignore[typing-only-first-party-import]
+    DebuggerType,  # ruff: ignore[typing-only-first-party-import] -- required at runtime by Typer for CLI argument validation
 )
 from debug_dojo._execution import ExecMode, execute_with_debug
 
@@ -26,7 +26,7 @@ cli: typer.Typer = typer.Typer(
     no_args_is_help=True,
     context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
 )
-def run(  # ruff: ignore[too-many-arguments]
+def run(  # ruff: ignore[too-many-arguments] -- CLI commands map CLI options directly to parameters
     ctx: typer.Context,
     target_name: Annotated[
         str | None,

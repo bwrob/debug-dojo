@@ -43,4 +43,3 @@ When you complete the final task in a Phase:
 4. Record the checkpoint commit hash in the phase heading in `plan.md`:
    `### Phase <N>: [Name] [checkpoint: <sha>]`.
 5. Halt for developer approval unless `--autonomous` or `/goal` is active.
-

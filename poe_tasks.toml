@@ -47,9 +47,14 @@
   mkdir -p dist/extracted
   tar -xzf dist/*.tar.gz -C dist/extracted
   EXTRACTED_DIR="$(find dist/extracted -mindepth 1 -maxdepth 1 -type d | head -n 1)"
-  [ -d "$ROOT_DIR/../taplo" ] && ln -sf "$ROOT_DIR/../taplo" dist/extracted/taplo || true
-  cd "$EXTRACTED_DIR"
-  uv sync --group test
+  if [ -d "$ROOT_DIR/../taplo" ]; then
+    ln -sf "$ROOT_DIR/../taplo" dist/extracted/taplo
+    cd "$EXTRACTED_DIR"
+    uv sync --group test
+  else
+    cd "$EXTRACTED_DIR"
+    uv sync --group test --no-sources-package taplo
+  fi
   uv run poe test
   uv build --wheel
   python "$ROOT_DIR/scripts/verify_wheel.py"

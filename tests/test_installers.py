@@ -37,7 +37,7 @@ from debug_dojo._installers import (
 )
 
 
-@pytest.fixture(autouse=True)  # ruff: ignore[pytest-fixture-autouse]
+@pytest.fixture(autouse=True)  # ruff: ignore[pytest-fixture-autouse] -- fixture must automatically reset Python builtins state after every installer test
 def cleanup_builtins() -> Iterator[None]:
     """Clean up builtins after each test."""
     yield
@@ -194,7 +194,7 @@ def test_install_features_empty_mnemonics() -> None:
 def test_inspect_with_kwargs() -> None:
     """Test calling inspect with custom kwargs."""
     install_inspect("i")
-    inspect_fn = getattr(builtins, "i")  # ruff: ignore[get-attr-with-constant]
+    inspect_fn = getattr(builtins, "i")  # ruff: ignore[get-attr-with-constant] -- dynamically retrieve injected mnemonic from builtins module
     inspect_fn({"foo": "bar"}, methods=False)
 
 

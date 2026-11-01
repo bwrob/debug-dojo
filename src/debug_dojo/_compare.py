@@ -27,7 +27,7 @@ def _get_members(
     for name in sorted(dir(obj)):
         try:
             value = getattr(obj, name)
-        except Exception:  # ruff: ignore[try-except-continue, blind-except]
+        except Exception:  # ruff: ignore[try-except-continue, blind-except] -- arbitrary third-party properties can raise on attribute access
             continue
 
         if predicate(name, value):

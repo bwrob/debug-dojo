@@ -114,7 +114,7 @@ def _handle_exception(e: Exception, target_name: str, config: DebugDojoConfig) -
     rich_print(f"[red]Error while running {target_name}:[/red]\n{e}")
     rich_print(traceback.format_exc())
     if config.exceptions.post_mortem:
-        import ipdb  # ruff: ignore[import-outside-top-level, debugger]
+        import ipdb  # ruff: ignore[import-outside-top-level, debugger] -- ipdb is an optional dependency loaded on-demand for post-mortem debugging
 
         rich_print("[blue]Entering post-mortem debugging session...[/blue]")
         ipdb.post_mortem(e.__traceback__)
@@ -151,7 +151,7 @@ def _safe_execute(
     except SystemExit as e:
         if bool(e.code):
             rich_print(f"[red]Script exited with code {e.code}.[/red]")
-    except Exception as e:  # ruff: ignore[blind-except]
+    except Exception as e:  # ruff: ignore[blind-except] -- catch all unhandled target errors to delegate to post-mortem handler
         _handle_exception(e, target_name, config)
 
 
