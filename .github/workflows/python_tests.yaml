@@ -221,7 +221,7 @@ jobs:
                   echo '```' >> "$GITHUB_STEP_SUMMARY"
 
     check:
-        name: 🛠️ All Checks Status
+        name: 🛠️ Check if all jobs succeeded
         if: always()
         needs:
             - quality
