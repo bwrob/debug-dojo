@@ -17,10 +17,9 @@ project's `pyproject.toml` under the `[tool.debug_dojo]` table.
 3. `pyproject.toml` in the current working directory (`[tool.debug_dojo]`).
 4. Default configuration values (`DebugDojoConfigV3`).
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
-// Inspect resolved configuration from a local dojo.toml
+# Inspect resolved configuration from a local dojo.toml
 $ dojo config -c dojo.toml
 
 Using configuration file: /workspace/dojo.toml.
@@ -33,8 +32,6 @@ debuggers=DebuggersConfig(default=<DebuggerType.IPDB: 'ipdb'>,
 prompt_name='debug-dojo> '), features=FeaturesConfig(breakpoint='b',
 comparer='c', rich_inspect='i', rich_print='p'))
 ```
-
-</div>
 
 ## Configuration File Examples
 

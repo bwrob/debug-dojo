@@ -139,21 +139,20 @@ When testing Typer CLI applications with pytest:
 - Use `export TERMINAL_WIDTH=3000` to prevent unpredictable word-wrapping diffs in assertions across different terminal window sizes.
 - Set `_TYPER_FORCE_DISABLE_TERMINAL=1` to ensure non-interactive, predictable outputs during automated test runs.
 
-### Documentation Terminal Visualizations with Termynal (`.termy`)
+### Documentation Terminal Visualizations with Termynal
 
-Zensical configures interactive animated terminal widgets via Termynal (`docs/javascripts/termynal.js` and `docs/stylesheets/termynal.css`).
+Zensical enables interactive animated terminal widgets via the `termynal` Python extension (`termynal.include_assets = true` in `zensical.toml`).
 
-Wrap any console code block in `<div class="termy">` in your Markdown documentation:
+Precede any console or bash code block with `<!-- termynal -->` in your Markdown documentation:
 
-```html
-<div class="termy">
-
+````markdown
+<!-- termynal -->
 ```console
 $ uv run my-app greet "World"
 
 ✨ Hello, World!
 
-// Inspect CLI options and help
+# Inspect CLI options and help
 $ uv run my-app --help
 
 <b>Usage: </b><b>my-app [OPTIONS] COMMAND [ARGS]...</b>
@@ -163,12 +162,10 @@ $ uv run my-app --help
 │ --help               Show this message and exit.  │
 ╰───────────────────────────────────────────────────╯
 ```
-
-</div>
-```
+````
 
 - Lines starting with `$ ` animate typing with a blinking cursor.
-- Lines starting with `// ` format as styled callout comments (`💬 ...`).
+- Lines starting with `# ` format as styled callout comments.
 - Supports Rich HTML colors (`<font color="...">`, `<b>`) and box-drawing characters.
 
 ---

@@ -51,15 +51,14 @@ b()
 
 Run the script using `dojo run`:
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
 $ dojo run debug_demo.py
 
-// Output formatted by Rich pretty-print
+# Output formatted by Rich pretty-print
 {'server': 'us-east-1', 'retries': 3, 'features': ['auth', 'caching', 'metrics']}
 
-// Output formatted by Rich inspect
+# Output formatted by Rich inspect
 ╭─────────────────────────────── <class 'dict'> ───────────────────────────────╮
 │ dict() -> new empty dictionary                                               │
 │                                                                              │
@@ -73,21 +72,18 @@ $ dojo run debug_demo.py
 │       keys = def keys(...) D.keys() -> a set-like object providing a view    │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-// Injected b() stops execution in your configured debugger
+# Injected b() stops execution in your configured debugger
 ipdb> p config_payload['server']
 'us-east-1'
 ipdb> c
 ```
-
-</div>
 
 ## 3. Comparing Objects Side-by-Side
 
 Use the `c(obj1, obj2)` helper to compare two dictionaries, objects, or data models.
 Differences are displayed in a formatted side-by-side terminal table.
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
 $ python -c "import debug_dojo.install; c({'a': 1, 'b': 2}, {'a': 1, 'b': 3})"
 
@@ -103,8 +99,6 @@ $ python -c "import debug_dojo.install; c({'a': 1, 'b': 2}, {'a': 1, 'b': 3})"
 │ ╰───────────────────────────────────╯ │ ╰──────────────────────────────────╯ │
 └───────────────────────────────────────┴──────────────────────────────────────┘
 ```
-
-</div>
 
 ## 4. In-Code Activation
 
@@ -127,8 +121,7 @@ When `dojo run` encounters an unhandled exception, it formats the traceback with
 syntax highlighting and enters a post-mortem debugging session at the exact frame
 where the failure occurred:
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
 $ dojo run failing_script.py
 
@@ -150,8 +143,6 @@ ipdb> p divisor
 0
 ipdb> q
 ```
-
-</div>
 
 ## Architecture & Lifecycles
 

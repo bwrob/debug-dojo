@@ -20,20 +20,11 @@
         { "Changelog" = "changelog.md" },
     ]
 
-    extra_css = [
-        "stylesheets/palette.css",
-        "stylesheets/custom.css",
-
-        "stylesheets/termynal.css",
-
-    ]
+    extra_css = ["stylesheets/palette.css", "stylesheets/custom.css"]
 
     extra_javascript = [
         "javascripts/mathjax.js",
         "https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js",
-
-        "javascripts/termynal.js",
-
     ]
 
     [project.validation]
@@ -129,6 +120,8 @@
         pymdownx.tabbed.combine_header_slug = true
         pymdownx.tasklist.custom_checkbox = true
         pymdownx.tilde = {}
+        termynal.include_assets = true
+        termynal.prompt_literal_start = ["$", ">>>", "ipdb>"]
         toc.permalink = true
         zensical.extensions.preview.targets.include = ["*"]
 

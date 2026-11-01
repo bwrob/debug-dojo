@@ -8,8 +8,7 @@ purpose: Document command-line syntax, flags, subcommands, and exit codes for th
 The `dojo` command-line interface provides tools to execute Python code with
 pre-configured debugging environments.
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
 $ dojo --help
 
@@ -27,7 +26,7 @@ Run a Python script or module with debugging tools installed.
 │ config  Show config.                                                         │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-// Display help for the run command
+# Display help for the run command
 $ dojo run --help
 
 <b>Usage: </b><b>dojo run [OPTIONS] [TARGET]</b>
@@ -44,8 +43,6 @@ $ dojo run --help
 │ --help                                       Show this message and exit.     │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
-
-</div>
 
 ## Commands
 
@@ -110,8 +107,7 @@ dojo config [OPTIONS]
 | `--config` | `-c` | Path | Path to configuration file to resolve. |
 | `--help`   |      | Flag | Show help message and exit.            |
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
 $ dojo config -c pyproject.toml
 
@@ -125,8 +121,6 @@ debuggers=DebuggersConfig(default=<DebuggerType.IPDB: 'ipdb'>,
 prompt_name='debug-dojo> '), features=FeaturesConfig(breakpoint='b',
 comparer='c', rich_inspect='i', rich_print='p'))
 ```
-
-</div>
 
 ## Exit Codes
 

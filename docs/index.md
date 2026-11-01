@@ -22,14 +22,13 @@ purpose: Introduce Debug Dojo, its core features, and provide an interactive ter
 shortcuts for side-by-side object comparison, formatted tracebacks, and
 seamless switching between `ipdb`, `pudb`, `pdb`, and `debugpy`.
 
-<div class="termy">
-
+<!-- termynal -->
 ```console
-// Install debug-dojo with all supported debuggers
+# Install debug-dojo with all supported debuggers
 $ uv add "debug-dojo[all-debuggers]"
 ---> 100%
 
-// Run any script with zero imports - helpers b(), p(), i(), c() are ready
+# Run any script with zero imports - helpers b(), p(), i(), c() are ready
 $ dojo run app.py
 
 Using configuration model: DebugDojoConfigV3.
@@ -40,14 +39,12 @@ DebugDojoConfigV3(debugger=ipdb, rich_traceback=True)
 │ {'service': 'api', 'port': 8080, 'active': True}                            │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-// Breakpoints stop directly in your configured debugger
+# Breakpoints stop directly in your configured debugger
 ipdb> n
 > /workspace/app.py(12)<module>()
 -> result = handle_request(service)
 ipdb> c
 ```
-
-</div>
 
 ## Key Features
 
