@@ -16,9 +16,7 @@
         "Typing :: Typed",
     ]
     dependencies = [
-        "dacite>=1.8.0",
         "rich>=15.0.0",
-        "tomlkit>=0.12.0",
         "typer>=0.16.0",
     ]
     description = "🏣 debug dojo, a place for zen debugging"
