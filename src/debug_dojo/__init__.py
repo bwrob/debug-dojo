@@ -21,3 +21,8 @@ Another way to use this module is to run the desired script or module with the
 $ dojo --verbose --config dojo.toml target_script.py --arg_1_for_script value1
 ```
 """
+
+from __future__ import annotations
+
+__version__ = "0.9.0"
+__all__ = ["__version__"]

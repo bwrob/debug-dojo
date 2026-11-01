@@ -2,9 +2,14 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from typer.testing import CliRunner
 
 from debug_dojo._cli import cli
+
+if TYPE_CHECKING:
+    from syrupy.assertion import SnapshotAssertion
 
 
 def test_no_args_prints_help(runner: CliRunner) -> None:
@@ -43,3 +48,10 @@ def test_run_debug_verbose(runner: CliRunner, test_target_inspect: str) -> None:
     result = runner.invoke(cli, ["run", "--verbose", test_target_inspect])
     assert result.exit_code == 0
     assert "Using debug-dojo configuration:" in result.output
+
+
+def test_cli_help_snapshot(runner: CliRunner, snapshot: SnapshotAssertion) -> None:
+    """Test that CLI help output matches the syrupy snapshot."""
+    result = runner.invoke(cli, ["--help"])
+    assert result.exit_code == 0
+    assert result.output == snapshot
