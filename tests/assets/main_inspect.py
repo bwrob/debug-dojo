@@ -1,4 +1,4 @@
-"""Example script demonstrating cl argument printing and inspection."""
+"""Example script demonstrating object inspection with injected helpers."""
 
 from __future__ import annotations
 

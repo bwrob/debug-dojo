@@ -1,22 +1,49 @@
+---
+diataxis: reference
+purpose: Detail configuration schema, options, file resolution order, and defaults for dojo.toml and pyproject.toml.
+---
+
 # Configuration
 
-You can configure the debugging tools using a `dojo.toml` or
-`pyproject.toml` file. The configuration allows you to specify which
-debugger to use, enable or disable features, and set various options.
+You can configure Debug Dojo using a standalone `dojo.toml` file or inside your
+project's `pyproject.toml` under the `[tool.debug_dojo]` table.
 
-`debug-dojo` looks for configuration in the following order:
+## Configuration Resolution Order
 
-1. A file specified by the `--config` CLI option.
+`debug-dojo` checks for configuration files in the following precedence order:
+
+1. File path specified by the `--config` / `-c` CLI flag.
 2. `dojo.toml` in the current working directory.
-3. `pyproject.toml` in the current working directory.
-4. `dojo.toml` in the user's config directory (e.g., `~/.config/dojo.toml`).
+3. `pyproject.toml` in the current working directory (`[tool.debug_dojo]`).
+4. Default configuration values (`DebugDojoConfigV3`).
 
-**Example `dojo.toml`:**
+<div class="termy">
 
-``` toml
+```console
+// Inspect resolved configuration from a local dojo.toml
+$ dojo config -c dojo.toml
+
+Using configuration file: /workspace/dojo.toml.
+Using configuration model: DebugDojoConfigV3.
+Current configuration model DebugDojoConfigV3.
+Using debug-dojo configuration:
+DebugDojoConfigV3(exceptions=ExceptionsConfig(locals_in_traceback=False,
+post_mortem=True, rich_traceback=True),
+debuggers=DebuggersConfig(default=<DebuggerType.IPDB: 'ipdb'>,
+prompt_name='debug-dojo> '), features=FeaturesConfig(breakpoint='b',
+comparer='c', rich_inspect='i', rich_print='p'))
+```
+
+</div>
+
+## Configuration File Examples
+
+=== "dojo.toml"
+
+```toml
 [debuggers]
     default = "ipdb"
-    prompt_name = "my-dojo> "
+    prompt_name = "debug-dojo> "
 
     [debuggers.debugpy]
         host = "localhost"
@@ -27,92 +54,101 @@ debugger to use, enable or disable features, and set various options.
     [debuggers.ipdb]
         context_lines = 20
 
-    # pdb and pudb have no specific configuration options currently
-
 [exceptions]
     locals_in_traceback = false
     post_mortem = true
     rich_traceback = true
 
 [features]
-    breakpoint = "b" # Mnemonic for setting breakpoints
-    comparer = "c"   # Mnemonic for side-by-side object comparison
-    rich_inspect = "i" # Mnemonic for rich object inspection
-    rich_print = "p"   # Mnemonic for rich pretty printing
-
-    # To disable a feature, set its mnemonic to an empty string:
-    # comparer = ""
-
-gamification = true # Enable or disable Dojo Belts system
+    breakpoint = "b"     # Global shortcut for setting breakpoints
+    comparer = "c"       # Global shortcut for side-by-side comparison
+    rich_inspect = "i"   # Global shortcut for Rich inspection
+    rich_print = "p"     # Global shortcut for Rich pretty printing
 ```
 
-## Configuration Sections
+=== "pyproject.toml"
 
-The configuration file is organized into several sections:
+```toml
+[tool.debug_dojo.debuggers]
+    default = "ipdb"
+    prompt_name = "debug-dojo> "
+
+    [tool.debug_dojo.debuggers.debugpy]
+        host = "localhost"
+        log_to_file = false
+        port = 1992
+        wait_for_client = true
+
+    [tool.debug_dojo.debuggers.ipdb]
+        context_lines = 20
+
+[tool.debug_dojo.exceptions]
+    locals_in_traceback = false
+    post_mortem = true
+    rich_traceback = true
+
+[tool.debug_dojo.features]
+    breakpoint = "b"
+    comparer = "c"
+    rich_inspect = "i"
+    rich_print = "p"
+```
+
+## Configuration Reference
+
+The tables below define each configuration section, key, data type, and default value.
 
 ### `[debuggers]`
 
-This section controls the behavior of the integrated debuggers.
+Controls debugger selection and shared REPL properties.
 
-- `default` (string, default: `ipdb`): Specifies the default debugger to use when
-  `debug-dojo` is invoked without a `--debugger` flag. Valid options are `debugpy`,
-  `ipdb`, `pdb`, and `pudb`.
-- `prompt_name` (string, default: `debug-dojo> `): Sets the prompt string displayed in
-  the debugger's REPL.
+| Key           | Type   | Default          | Description                                                            |
+| :------------ | :----- | :--------------- | :--------------------------------------------------------------------- |
+| `default`     | String | `"ipdb"`         | Default debugger backend: `"ipdb"`, `"pudb"`, `"pdb"`, or `"debugpy"`. |
+| `prompt_name` | String | `"debug-dojo> "` | Prompt string displayed in debugger REPL.                              |
 
 #### `[debuggers.debugpy]`
 
-Specific settings for the `debugpy` debugger.
+Settings for VS Code / remote debugging integration with Debugpy.
 
-- `host` (string, default: `localhost`): The host address for `debugpy` to listen on.
-- `log_to_file` (boolean, default: `false`): If `true`, `debugpy` will log its output to
-  a file.
-- `port` (integer, default: `1992`): The port number `debugpy` will use for
-  communication.
-- `wait_for_client` (boolean, default: `true`): If `true`, `debug-dojo` will pause
-  execution and wait for a debugger client (e.g., VS Code) to connect before proceeding.
+| Key               | Type    | Default       | Description                                                    |
+| :---------------- | :------ | :------------ | :------------------------------------------------------------- |
+| `host`            | String  | `"localhost"` | Host address for `debugpy` to listen on.                       |
+| `port`            | Integer | `1992`        | TCP port for `debugpy` communication.                          |
+| `log_to_file`     | Boolean | `false`       | When `true`, write `debugpy` diagnostic logs to a file.        |
+| `wait_for_client` | Boolean | `true`        | When `true`, pause execution until a debugger client attaches. |
 
 #### `[debuggers.ipdb]`
 
-Specific settings for the `ipdb` debugger.
+Settings for IPython Debugger integration.
 
-- `context_lines` (integer, default: `20`): The number of context lines to display
-  around the current line in `ipdb`.
+| Key             | Type    | Default | Description                                                       |
+| :-------------- | :------ | :------ | :---------------------------------------------------------------- |
+| `context_lines` | Integer | `20`    | Number of context lines shown around the current execution frame. |
 
-#### `[debuggers.pdb]` And `[debuggers.pudb]`
+#### `[debuggers.pdb]` & `[debuggers.pudb]`
 
-Currently, `pdb` and `pudb` do not have specific configurable options beyond their
-default behavior.
+Standard library `pdb` and visual full-screen console `pudb` use default backend
+settings.
 
 ### `[exceptions]`
 
-This section configures how `debug-dojo` handles exceptions.
+Controls traceback rendering and post-mortem failure handling.
 
-- `locals_in_traceback` (boolean, default: `false`): If `true`, local variables will be
-  included in the traceback output, providing more context for errors.
-- `post_mortem` (boolean, default: `true`): If `true`, `debug-dojo` will automatically
-  enter a post-mortem debugging session (using the configured debugger) when an
-  unhandled exception occurs.
-- `rich_traceback` (boolean, default: `true`): If `true`, tracebacks will be rendered
-  using `rich`, providing colorized and more readable output.
+| Key                   | Type    | Default | Description                                                                          |
+| :-------------------- | :------ | :------ | :----------------------------------------------------------------------------------- |
+| `rich_traceback`      | Boolean | `true`  | When `true`, render exceptions with Rich colorized tracebacks.                       |
+| `post_mortem`         | Boolean | `true`  | When `true`, enter an interactive post-mortem debugging session on unhandled errors. |
+| `locals_in_traceback` | Boolean | `false` | When `true`, display local variable dictionaries in traceback frames.                |
 
 ### `[features]`
 
-This section allows you to customize the mnemonics (short names) for the `debug-dojo`
-helper functions that are injected into builtins when `debug_dojo.install` is used.
-Setting a mnemonic to an empty string (`""`) will disable that feature.
+Customizes global shortcut names injected into Python's `builtins`. Set any key to an
+empty string (`""`) to disable that shortcut.
 
-- `breakpoint` (string, default: `b`): The mnemonic for the breakpoint function. (e.g.,
-  `b()`)
-- `comparer` (string, default: `c`): The mnemonic for the object comparison function.
-  (e.g., `c(obj1, obj2)`)
-- `rich_inspect` (string, default: `i`): The mnemonic for the rich object inspection
-  function. (e.g., `i(obj)`)
-- `rich_print` (string, default: `p`): The mnemonic for the rich pretty printing
-  function. (e.g., `p(obj)`)
-
-### `gamification`
-
-- `gamification` (boolean, default: `true`): Enables or disables the Dojo Belts system.
-  When enabled, `debug-dojo` tracks your debugging sessions and duration to award belts
-  as you gain experience.
+| Key            | Type   | Default | Injected Function                                       |
+| :------------- | :----- | :------ | :------------------------------------------------------ |
+| `breakpoint`   | String | `"b"`   | Set breakpoint using configured backend (`b()`).        |
+| `comparer`     | String | `"c"`   | Side-by-side object comparison table (`c(obj1, obj2)`). |
+| `rich_inspect` | String | `"i"`   | Rich object inspection with methods (`i(obj)`).         |
+| `rich_print`   | String | `"p"`   | Rich pretty-printing (`p(obj)`).                        |

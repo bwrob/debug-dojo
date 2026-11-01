@@ -1,10 +1,9 @@
 """Debugging tools for Python.
 
-This module provides functions to set up debugging tools like PuDB and Rich Traceback.
-It checks for the availability of these tools and configures them accordingly.
+This module provides utilities to configure debugging backends (IPDB, PuDB,
+PDB, Debugpy) and enhanced terminal inspection tools.
 
-Importing this module will install the debugging tools based on the configuration.
-Example usage:
+Importing `debug_dojo.install` injects debugging tools into Python's builtins:
 
 ```python
 import debug_dojo.install
@@ -12,13 +11,12 @@ import debug_dojo.install
 b()
 ```
 
-This will install the debugging tools and put debug breakpoint at this line.
+This installs debugging helpers (`b()`, `p()`, `i()`, `c()`) and triggers a breakpoint.
 
-Another way to use this module is to run the desired script or module with the
-`dojo` command-line interface.
+You can also run target scripts or modules using the `dojo` command-line interface:
 
 ```console
-$ dojo --verbose --config dojo.toml target_script.py --arg_1_for_script value1
+$ dojo run --verbose --config dojo.toml target_script.py value1
 ```
 """
 

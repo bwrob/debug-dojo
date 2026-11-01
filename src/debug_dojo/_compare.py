@@ -20,13 +20,13 @@ if TYPE_CHECKING:
 
 def _get_members(
     obj: object,
-    predicate: Callable[[str, Any], bool],  # pyright: ignore[reportExplicitAny]
-    formatter: Callable[[str, Any], str],  # pyright: ignore[reportExplicitAny]
+    predicate: Callable[[str, Any], bool],
+    formatter: Callable[[str, Any], str],
 ) -> list[str]:
     members: list[str] = []
     for name in sorted(dir(obj)):
         try:
-            value = getattr(obj, name)  # pyright: ignore[reportAny]
+            value = getattr(obj, name)
         except Exception:  # ruff: ignore[try-except-continue, blind-except]
             continue
 
@@ -48,8 +48,8 @@ def get_object_attributes(obj: object) -> list[str]:
     """
     return _get_members(
         obj,
-        lambda n, v: not n.startswith("__") and not callable(v),  # pyright: ignore[reportAny]
-        lambda n, v: f"{n}={v!r}",  # pyright: ignore[reportAny]
+        lambda n, v: not n.startswith("__") and not callable(v),
+        lambda n, v: f"{n}={v!r}",
     )
 
 
@@ -65,8 +65,8 @@ def get_object_methods(obj: object) -> list[str]:
     """
     return _get_members(
         obj,
-        lambda n, v: not n.startswith("_") and callable(v),  # pyright: ignore[reportAny]
-        lambda n, _v: n,  # pyright: ignore[reportAny]
+        lambda n, v: not n.startswith("_") and callable(v),
+        lambda n, _v: n,
     )
 
 
@@ -100,6 +100,11 @@ def _get_basic_info(obj: object) -> list[Text]:
 def _format_section(title: str, items: list[str], empty_message: str) -> list[Text]:
     """Format a section of the inspection output.
 
+    Args:
+        title (str): Title of the formatted section.
+        items (list[str]): Items to display in the section.
+        empty_message (str): Fallback message when items is empty.
+
     Returns:
         list[Text]: A list of Rich Text objects for the formatted section.
 
@@ -117,6 +122,9 @@ def _format_section(title: str, items: list[str], empty_message: str) -> list[Te
 def _get_attributes_section(obj: object) -> list[Text]:
     """Get the attributes section for the object info.
 
+    Args:
+        obj (object): The target object to inspect.
+
     Returns:
         list[Text]: A list of Rich Text objects for the attributes section.
 
@@ -130,6 +138,9 @@ def _get_attributes_section(obj: object) -> list[Text]:
 
 def _get_methods_section(obj: object) -> list[Text]:
     """Get the methods section for the object info.
+
+    Args:
+        obj (object): The target object to inspect.
 
     Returns:
         list[Text]: A list of Rich Text objects for the methods section.
@@ -175,7 +186,7 @@ def inspect_objects_side_by_side(
 ) -> None:
     """Display two Python objects side-by-side in the terminal using Rich.
 
-    Showing their attributes and methods in a simplified, aligned format.
+    Shows attributes and methods of both objects in a simplified, aligned format.
 
     Args:
         obj1 (object): The first object to display.

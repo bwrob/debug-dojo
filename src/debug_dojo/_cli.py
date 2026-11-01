@@ -63,22 +63,21 @@ def run(  # ruff: ignore[too-many-arguments]
     Args:
         ctx (typer.Context): The Typer context object.
         target_name (str | None): The path to the script, name of the module, or
-                                  name of the executable to run. If not provided,
-                                  the command will exit.
+            name of the executable to run. If not provided, the command will exit.
         config_path (Path | None): Path to a custom configuration file
-                                   (e.g., `dojo.toml`).
+            (for example, `dojo.toml`).
         debugger (DebuggerType | None): Override the default debugger specified
-                                        in the config.
+            in the config.
         verbose (bool): Enable verbose output, showing loaded configuration
-                        and installation steps.
+            and installation steps.
         module (bool): Treat `target_name` as a Python module to run
-                       (e.g., `dojo -m my_package.my_module`).
+            (for example, `dojo run -m my_package.my_module`).
         executable (bool): Treat `target_name` as an executable command to run
-                           (e.g., `dojo -e pytest`).
+            (for example, `dojo run -e pytest`).
 
     Raises:
         typer.Exit: If `--module` and `--exec` are used together, or if the target
-                    cannot be executed, or if an error occurs during execution.
+            cannot be executed, or if an error occurs during execution.
 
     """
     if module and executable:
@@ -121,7 +120,7 @@ def config(
         typer.Option("--config", "-c", help="Show configuration"),
     ] = None,
 ) -> None:
-    """Display resolved and updated config."""
+    """Display resolved and updated configuration."""
     config = load_config(config_path, verbose=True, debugger=None)
     rich_print(f"[blue]Using debug-dojo configuration:\n{config} [/blue]")
 

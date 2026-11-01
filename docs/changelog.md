@@ -1,3 +1,8 @@
+---
+diataxis: reference
+purpose: Chronological record of user-facing changes, features, and deprecations across releases.
+---
+
 # Changelog
 
 ## V0.8.0 (2026-01-31)

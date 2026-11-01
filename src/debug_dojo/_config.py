@@ -59,20 +59,18 @@ def _validate_model(
 
 
 def resolve_config_path(config_path: Path | None) -> Path | None:
-    """Resolve the configuration path.
-
-    Returning a default if none is provided.
+    """Resolve the configuration path, returning a default path if none is provided.
 
     Args:
         config_path (Path | None): The explicit path to the configuration file, or None.
 
     Returns:
         Path | None: The resolved absolute path to the configuration file, or None if no
-                     configuration file is found and no explicit path was given.
+            configuration file is found and no explicit path was given.
 
     Raises:
         FileNotFoundError: If an explicit `config_path` is provided but the file
-                           does not exist.
+            does not exist.
 
     """
     if config_path:
@@ -93,7 +91,7 @@ def resolve_config_path(config_path: Path | None) -> Path | None:
 def load_raw_config(config_path: Path) -> JSON:
     """Load the Debug Dojo configuration from a file.
 
-    Currently supports 'dojo.toml' or 'pyproject.toml'. If no path is provided, it
+    Currently supports `dojo.toml` or `pyproject.toml`. If no path is provided, it
     checks the current directory for these files.
 
     Args:

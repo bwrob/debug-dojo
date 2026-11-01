@@ -132,26 +132,26 @@ class FeaturesConfig:
 
 @dataclass
 class DebugDojoConfigV3:
-    """Configuration for Debug Dojo."""
+    """Configuration for Debug Dojo (version 3)."""
 
     exceptions: ExceptionsConfig = field(default_factory=ExceptionsConfig)
-    """Better exception messages."""
+    """Exception handling and traceback formatting settings."""
     debuggers: DebuggersConfig = field(default_factory=DebuggersConfig)
-    """Default debugger and configs."""
+    """Debugger backend selection and individual debugger configurations."""
     features: FeaturesConfig = field(default_factory=FeaturesConfig)
-    """Features mnemonics."""
+    """Shortcuts and mnemonics for injected debugging helpers."""
 
 
 @dataclass
 class DebugDojoConfigV2:
-    """Configuration for Debug Dojo."""
+    """Legacy configuration for Debug Dojo (version 2)."""
 
     exceptions: ExceptionsConfig = field(default_factory=ExceptionsConfig)
-    """Better exception messages."""
+    """Exception handling and traceback formatting settings."""
     debuggers: DebuggersConfig = field(default_factory=DebuggersConfig)
-    """Default debugger and configs."""
+    """Debugger backend selection and individual debugger configurations."""
     features: FeaturesConfig = field(default_factory=FeaturesConfig)
-    """Features mnemonics."""
+    """Shortcuts and mnemonics for injected debugging helpers."""
     gamification: bool = True
     """Enable or disable gamification (Dojo Belts)."""
 
@@ -159,7 +159,7 @@ class DebugDojoConfigV2:
         """Update the configuration to the latest version.
 
         Returns:
-            DebugDojoConfigV2: The updated configuration object.
+            DebugDojoConfigV3: The updated configuration object.
 
         """
         return DebugDojoConfigV3(

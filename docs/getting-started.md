@@ -1,142 +1,175 @@
 ---
 diataxis: tutorial
-purpose: Guide new users through installation, initial environment setup, and executing their first CLI command or Python call.
+purpose: Guide developers through installing Debug Dojo, running their first debug session, and using injected helper tools.
 ---
 
 # Getting Started
 
-This guide explains how to install and develop with **Debug Dojo**.
+This tutorial guides you through installing **Debug Dojo**, running a Python script
+with debugging tools pre-injected, and using global inspection helpers.
 
 ## Prerequisites
 
-Ensure you have Python 3.12 and `uv` installed.
+Ensure you have Python 3.10+ and [`uv`](https://docs.astral.sh/uv/) installed.
 
-## Installation
+## 1. Installation
 
-Install using `uv`:
+Install `debug-dojo` in your project virtual environment using `uv`:
 
-```bash
+```console
+uv add "debug-dojo[all-debuggers]"
+```
+
+The `all-debuggers` extra installs `ipdb`, `pudb`, and `debugpy`. If you only need the
+standard library `pdb`, install without extras:
+
+```console
 uv add debug-dojo
 ```
 
-## Basic Usage
+## 2. Zero-Import CLI Debugging
 
-Import the primary functions into your application:
+With `debug-dojo`, you can execute any Python script while automatically injecting
+inspection shortcuts into Python's `builtins`.
+
+Create a sample script named `debug_demo.py`:
 
 ```python
-from your_package import get_greeting
+"""Sample script demonstrating Debug Dojo builtins."""
 
-message = get_greeting("Developer")
-print(message)
+config_payload = {
+    "server": "us-east-1",
+    "retries": 3,
+    "features": ["auth", "caching", "metrics"],
+}
+
+# Injected helpers are available without importing!
+p(config_payload)
+i(config_payload)
+b()
 ```
 
-Replace `your_package` with the generated package name.
-
-## CLI Usage
-
-Run commands directly via `uv`:
+Run the script using `dojo run`:
 
 <div class="termy">
 
 ```console
-$ uv run debug-dojo greet "World"
+$ dojo run debug_demo.py
 
-✨ Hello, World!
+// Output formatted by Rich pretty-print
+{'server': 'us-east-1', 'retries': 3, 'features': ['auth', 'caching', 'metrics']}
 
-// Inspect CLI options and help
-$ uv run debug-dojo --help
+// Output formatted by Rich inspect
+╭─────────────────────────────── <class 'dict'> ───────────────────────────────╮
+│ dict() -> new empty dictionary                                               │
+│                                                                              │
+│ ╭──────────────────────────────────────────────────────────────────────────╮ │
+│ │ {'server': 'us-east-1', 'retries': 3, 'features': ['auth', 'caching'... │ │
+│ ╰──────────────────────────────────────────────────────────────────────────╯ │
+│                                                                              │
+│      clear = def clear(...) D.clear() -> None.  Remove all items from D.     │
+│       copy = def copy(...) D.copy() -> a shallow copy of D                   │
+│      items = def items(...) D.items() -> a set-like object providing a view  │
+│       keys = def keys(...) D.keys() -> a set-like object providing a view    │
+╰──────────────────────────────────────────────────────────────────────────────╯
 
-<b>Usage: </b><b>debug-dojo [OPTIONS] COMMAND [ARGS]...</b>
-
-╭─ Options ─────────────────────────────────────────╮
-│ --version  -v        Show version and exit.       │
-│ --help               Show this message and exit.  │
-╰───────────────────────────────────────────────────╯
-╭─ Commands ────────────────────────────────────────╮
-│ greet                Display a personalized       │
-│                      greeting.                    │
-╰───────────────────────────────────────────────────╯
+// Injected b() stops execution in your configured debugger
+ipdb> p config_payload['server']
+'us-east-1'
+ipdb> c
 ```
 
 </div>
 
-## Development Workflow
+## 3. Comparing Objects Side-by-Side
 
-Clone the project and synchronize development dependencies:
+Use the `c(obj1, obj2)` helper to compare two dictionaries, objects, or data models.
+Differences are displayed in a formatted side-by-side terminal table.
 
-```bash
-git clone \
-  https://github.com/bwrob/debug-dojo.git
-cd debug-dojo
-uv sync
+<div class="termy">
+
+```console
+$ python -c "import debug_dojo.install; c({'a': 1, 'b': 2}, {'a': 1, 'b': 3})"
+
+┌───────────────────────────────────────┬──────────────────────────────────────┐
+│ ╭───────────────────────────────────╮ │ ╭──────────────────────────────────╮ │
+│ │ <class 'dict'>                    │ │ │ <class 'dict'>                   │ │
+│ │                                   │ │ │                                  │ │
+│ │ Value:                            │ │ │ Value:                           │ │
+│ │   {'a': 1, 'b': 2}                │ │ │   {'a': 1, 'b': 3}               │ │
+│ │                                   │ │ │                                  │ │
+│ │ No attributes or methods to       │ │ │ No attributes or methods to      │ │
+│ │ display for this type.            │ │ │ display for this type.           │ │
+│ ╰───────────────────────────────────╯ │ ╰──────────────────────────────────╯ │
+└───────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
-Run test suites and quality checks with Poe the Poet:
+</div>
 
-```bash
-# Run tests
-uv run poe test
+## 4. In-Code Activation
 
-# Run quality checks
-uv run poe code-quality
+When running tests or scripts where you cannot use the `dojo run` CLI wrapper, import
+`debug_dojo.install` once in your module or test fixture:
+
+```python
+import debug_dojo.install
+
+# The following helpers are now globally accessible:
+# - b(): Set a breakpoint using the configured debugger
+# - p(obj): Rich pretty-print
+# - i(obj): Rich object inspection
+# - c(obj1, obj2): Side-by-side comparison table
 ```
 
-???+ tip "Hermetic Task Execution"
+## 5. Automatic Post-Mortem Debugging
 
-```text
-Always invoke tasks using `uv run poe <task>`. Tasks inherit project
-environment flags, strict encoding checks (`PYTHONUTF8=1`), and hermetic
-virtual environments.
+When `dojo run` encounters an unhandled exception, it formats the traceback with Rich
+syntax highlighting and enters a post-mortem debugging session at the exact frame
+where the failure occurred:
+
+<div class="termy">
+
+```console
+$ dojo run failing_script.py
+
+<b>Error while running failing_script.py:</b>
+ZeroDivisionError: division by zero
+
+Traceback (most recent call last):
+  File "/workspace/failing_script.py", line 4, in <module>
+    compute(0)
+  File "/workspace/failing_script.py", line 2, in compute
+    return 100 / divisor
+           ^^^^^^^^^^^^^
+ZeroDivisionError: division by zero
+
+<b>Entering post-mortem debugging session...</b>
+> /workspace/failing_script.py(2)compute()
+-> return 100 / divisor
+ipdb> p divisor
+0
+ipdb> q
 ```
 
-??? example "Advanced Testing & Marker Options"
+</div>
 
-    Free arguments can be forwarded directly through Poe to underlying
-    tools using `--`:
+## Architecture & Lifecycles
 
-    ```bash
-    uv run poe test -- -k "test_greeting" -v
-    ```
-
-### Verification Checklist
-
-- [x] Python 3.12 and `uv` installed
-- [x] Project cloned and dependencies locked
-- [ ] Run test suite with `uv run poe test`
-- [ ] Run code quality checks with `uv run poe code-quality`
-- [ ] Preview documentation with `uv run poe docs-serve`
-
-> [!NOTE]
-> To enable automated documentation deployment to GitHub Pages via
-> `.github/workflows/docs.yaml`, open your GitHub repository, navigate to **Settings** →
-> **Pages**, and set **Build and deployment** → **Source** to **GitHub Actions**.
-
-> [!TIP]
-> When browsing docs, press ++slash++ or ++cmd+k++ (or ++ctrl+k++ on Linux/Windows) to
-> instantly search documentation symbols and pages. Hovering internal links like
-> [API Reference](api-reference.md) activates floating link previews.
-
-### Tested Code Snippets
-
-Code snippets can be embedded directly from verified tests or source files using
-`--8<--`:
-
-```markdown
---8<-- "tests/test_config.py:10:15"
-```
-
-## Architecture & Diagrams
-
-Mermaid diagrams render natively in documentation. Below are examples illustrating
-the project structure, execution sequence, and state lifecycle:
+The diagrams below describe how `debug-dojo` sets up the debugging environment,
+executes targets, and manages failure states.
 
 ### Component Architecture
 
 ```mermaid
 flowchart TD
-    USER["User / Client"] -->|Input| APP["debug-dojo"]
-    APP --> CORE["Core Engine"]
-    CORE --> OUTPUT["Greeting Output"]
+    CLI["dojo run CLI"] --> CONFIG["Config Loader (_config.py)"]
+    CONFIG --> INSTALLER["Installers (_installers.py)"]
+    INSTALLER --> BUILTINS["Python builtins (b, p, i, c)"]
+    INSTALLER --> HOOK["sys.breakpointhook (IPDB / PuDB / PDB / Debugpy)"]
+    CLI --> EXEC["Target Execution (_execution.py)"]
+    BUILTINS --> EXEC
+    HOOK --> EXEC
+    EXEC -->|Unhandled Exception| PM["Post-Mortem Debugger"]
 ```
 
 ### Execution Lifecycle
@@ -145,23 +178,62 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor Dev as Developer
-    participant App as Application
-    participant Core as Core Module
-    Dev->>App: Invocation
-    App->>Core: get_greeting(name)
-    Core-->>App: "Hello, {name}!"
-    App-->>Dev: Formatted Result
+    participant CLI as dojo CLI
+    participant Cfg as Config Engine
+    participant Inst as Tool Installer
+    participant Target as Target Script
+    participant Dbg as Debugger Backend
+
+    Dev->>CLI: dojo run script.py
+    CLI->>Cfg: load_config(path)
+    Cfg-->>CLI: DebugDojoConfig
+    CLI->>Inst: install_by_config(config)
+    Inst->>Inst: Inject b, p, i, c into builtins
+    Inst->>Dbg: Configure sys.breakpointhook
+    CLI->>Target: Execute via runpy
+    Target->>Dbg: b() triggered
+    Dbg-->>Dev: Interactive Debugger Prompt
 ```
 
 ### State Lifecycle
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Standby
-    Standby --> Parsing: Receive Input
-    Parsing --> DefaultGreeting: Name is Blank
-    Parsing --> CustomGreeting: Name Provided
-    DefaultGreeting --> Completed: Return "Hello, World!"
-    CustomGreeting --> Completed: Return Formatted Name
+    [*] --> Initializing: Invoke dojo run
+    Initializing --> LoadingConfig: Read dojo.toml / pyproject.toml
+    LoadingConfig --> InjectingTools: Install b, p, i, c & hook
+    InjectingTools --> RunningTarget: Execute script / module / exec
+    RunningTarget --> Completed: Script exits successfully
+    RunningTarget --> PostMortem: Unhandled exception raised
+    PostMortem --> Terminated: Developer exits debugger
     Completed --> [*]
+    Terminated --> [*]
 ```
+
+## Development Workflow
+
+To contribute to Debug Dojo, clone the repository and synchronize the environment:
+
+```console
+git clone https://github.com/bwrob/debug-dojo.git
+cd debug-dojo
+uv sync
+```
+
+Run tests and verification tasks using Poe the Poet:
+
+```console
+# Run unit tests with coverage
+uv run poe test
+
+# Run all code quality checks
+uv run poe code-quality
+
+# Preview documentation locally
+uv run poe docs-serve
+```
+
+> [!TIP]
+> When browsing docs, press ++slash++ or ++cmd+k++ (or ++ctrl+k++ on Linux/Windows) to
+> search documentation symbols and pages. Hovering internal links activates floating
+> previews.

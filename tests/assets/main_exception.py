@@ -1,4 +1,4 @@
-"""Example script demonstrating cl argument printing and inspection."""
+"""Example script demonstrating exception handling and post-mortem debugging."""
 
 from __future__ import annotations
 
