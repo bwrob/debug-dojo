@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 from typer.testing import CliRunner
@@ -10,6 +11,21 @@ from debug_dojo._cli import cli
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
+
+ANSI_ESCAPE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+
+
+def strip_ansi(text: str) -> str:
+    """Remove ANSI escape sequences from text.
+
+    Args:
+        text: Input string possibly containing ANSI escape sequences.
+
+    Returns:
+        String with all ANSI escape sequences removed.
+
+    """
+    return ANSI_ESCAPE.sub("", text)
 
 
 def test_no_args_prints_help(runner: CliRunner) -> None:
@@ -54,4 +70,4 @@ def test_cli_help_snapshot(runner: CliRunner, snapshot: SnapshotAssertion) -> No
     """Test that CLI help output matches the syrupy snapshot."""
     result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
-    assert result.output == snapshot
+    assert strip_ansi(result.output) == snapshot

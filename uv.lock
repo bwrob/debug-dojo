@@ -530,7 +530,7 @@ test = [
 requires-dist = [
     { name = "dacite", specifier = ">=1.0.0" },
     { name = "debugpy", marker = "extra == 'all-debuggers'", specifier = ">=1.0.0" },
-    { name = "ipdb", marker = "extra == 'all-debuggers'", specifier = ">=0.12.0" },
+    { name = "ipdb", marker = "extra == 'all-debuggers'", specifier = ">=0.13.13" },
     { name = "pudb", marker = "extra == 'all-debuggers'", specifier = ">=2020.1" },
     { name = "rich", specifier = ">=15.0.0" },
     { name = "tomlkit", specifier = ">=0.7.0" },
