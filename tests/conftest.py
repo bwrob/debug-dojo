@@ -80,10 +80,10 @@ def expected_dict_output() -> str:
 
 @pytest.fixture
 def runner() -> CliRunner:
-    """Provide a Typer CLI runner fixture.
+    """Provide a Typer CLI runner fixture configured without ANSI color codes.
 
     Returns:
         CliRunner: A Typer CLI runner object.
 
     """
-    return CliRunner()
+    return CliRunner(env={"NO_COLOR": "1", "TERM": "dumb"})

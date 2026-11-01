@@ -15,17 +15,25 @@ if TYPE_CHECKING:
 ANSI_ESCAPE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 
 
-def strip_ansi(text: str) -> str:
-    """Remove ANSI escape sequences from text.
+def normalize_cli_output(text: str) -> str:
+    """Normalize ANSI escapes and whitespace in CLI output for deterministic snapshots.
 
     Args:
         text: Input string possibly containing ANSI escape sequences.
 
     Returns:
-        String with all ANSI escape sequences removed.
+        Clean normalized string with stripped ANSI and collapsed
+        consecutive blank lines.
 
     """
-    return ANSI_ESCAPE.sub("", text)
+    clean_text = ANSI_ESCAPE.sub("", text)
+    lines = [line.rstrip() for line in clean_text.splitlines()]
+    normalized_lines: list[str] = []
+    for line in lines:
+        if not line and normalized_lines and not normalized_lines[-1]:
+            continue
+        normalized_lines.append(line)
+    return "\n".join(normalized_lines).strip()
 
 
 def test_no_args_prints_help(runner: CliRunner) -> None:
@@ -66,8 +74,14 @@ def test_run_debug_verbose(runner: CliRunner, test_target_inspect: str) -> None:
     assert "Using debug-dojo configuration:" in result.output
 
 
+def test_normalize_cli_output_consecutive_blank_lines() -> None:
+    """Test that normalize_cli_output collapses consecutive blank lines."""
+    raw = "\x1b[32mhello\x1b[0m\n\n\nworld\n"
+    assert normalize_cli_output(raw) == "hello\n\nworld"
+
+
 def test_cli_help_snapshot(runner: CliRunner, snapshot: SnapshotAssertion) -> None:
     """Test that CLI help output matches the syrupy snapshot."""
     result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
-    assert strip_ansi(result.output) == snapshot
+    assert normalize_cli_output(result.output) == snapshot

@@ -1,11 +1,10 @@
 # serializer version: 1
 # name: test_cli_help_snapshot
   '''
-                                                                                  
-   Usage: debug_dojo [OPTIONS] COMMAND [ARGS]...                                  
-                                                                                  
-   Run a Python script or module with debugging tools installed.                  
-                                                                                  
+  Usage: debug_dojo [OPTIONS] COMMAND [ARGS]...
+  
+   Run a Python script or module with debugging tools installed.
+  
   ╭─ Options ────────────────────────────────────────────────────────────────────╮
   │ --install-completion          Install completion for the current shell.      │
   │ --show-completion             Show completion for the current shell, to copy │
@@ -16,7 +15,5 @@
   │ run     Run a Python script or module with debugging tools installed.        │
   │ config  Show config.                                                         │
   ╰──────────────────────────────────────────────────────────────────────────────╯
-  
-  
   '''
 # ---
