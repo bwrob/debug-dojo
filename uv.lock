@@ -3,10 +3,10 @@ revision = 5
 requires-python = ">=3.12"
 resolution-markers = [
     "(python_full_version >= '3.14' and platform_machine == 'aarch64' and sys_platform == 'linux') or (python_full_version >= '3.14' and platform_machine == 'arm64' and sys_platform == 'linux')",
-    "(python_full_version == '3.13.*' and platform_machine == 'aarch64' and sys_platform == 'linux') or (python_full_version == '3.13.*' and platform_machine == 'arm64' and sys_platform == 'linux')",
-    "(python_full_version < '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux') or (python_full_version < '3.13' and platform_machine == 'arm64' and sys_platform == 'linux')",
     "(python_full_version >= '3.14' and platform_machine != 'aarch64' and platform_machine != 'arm64') or (python_full_version >= '3.14' and sys_platform != 'linux')",
+    "(python_full_version == '3.13.*' and platform_machine == 'aarch64' and sys_platform == 'linux') or (python_full_version == '3.13.*' and platform_machine == 'arm64' and sys_platform == 'linux')",
     "(python_full_version == '3.13.*' and platform_machine != 'aarch64' and platform_machine != 'arm64') or (python_full_version == '3.13.*' and sys_platform != 'linux')",
+    "(python_full_version < '3.13' and platform_machine == 'aarch64' and sys_platform == 'linux') or (python_full_version < '3.13' and platform_machine == 'arm64' and sys_platform == 'linux')",
     "(python_full_version < '3.13' and platform_machine != 'aarch64' and platform_machine != 'arm64') or (python_full_version < '3.13' and sys_platform != 'linux')",
 ]
 
@@ -484,6 +484,7 @@ dev = [
     { name = "tach" },
     { name = "taplo", source = { directory = "../taplo" }, marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'arm64' and sys_platform == 'linux')" },
     { name = "taplo", version = "0.9.3", source = { registry = "https://pypi.org/simple" }, marker = "(platform_machine != 'aarch64' and platform_machine != 'arm64') or sys_platform != 'linux'" },
+    { name = "termynal" },
     { name = "typos" },
     { name = "typst" },
     { name = "zensical" },
@@ -493,6 +494,7 @@ docs = [
     { name = "griffe-warnings-deprecated" },
     { name = "markdown-exec" },
     { name = "mkdocstrings", extra = ["python"] },
+    { name = "termynal" },
     { name = "typst" },
     { name = "zensical" },
 ]
@@ -562,6 +564,7 @@ dev = [
     { name = "tach", specifier = ">=0.35.0" },
     { name = "taplo", marker = "(platform_machine != 'aarch64' and platform_machine != 'arm64') or sys_platform != 'linux'", specifier = ">=0.9.3" },
     { name = "taplo", marker = "(platform_machine == 'aarch64' and sys_platform == 'linux') or (platform_machine == 'arm64' and sys_platform == 'linux')", directory = "../taplo" },
+    { name = "termynal", specifier = ">=0.14.0" },
     { name = "typos", specifier = ">=1.30.0" },
     { name = "typst", specifier = ">=0.13.0" },
     { name = "zensical", specifier = ">=0.0.70" },
@@ -571,6 +574,7 @@ docs = [
     { name = "griffe-warnings-deprecated", specifier = ">=1.1.0" },
     { name = "markdown-exec", specifier = ">=1.12.0" },
     { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0.7" },
+    { name = "termynal", specifier = ">=0.14.0" },
     { name = "typst", specifier = ">=0.13.0" },
     { name = "zensical", specifier = ">=0.0.70" },
 ]
@@ -2388,6 +2392,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/46/79/cf31d7a93a8fdc6aa0fbb665be84426a8c5a557d9240b6239e9e11e35fc5/termcolor-3.3.0.tar.gz", hash = "sha256:348871ca648ec6a9a983a13ab626c0acce02f515b9e1983332b17af7979521c5", size = 14434, upload-time = "2025-12-29T12:55:21.882Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/33/d1/8bb87d21e9aeb323cc03034f5eaf2c8f69841e40e4853c2627edf8111ed3/termcolor-3.3.0-py3-none-any.whl", hash = "sha256:cf642efadaf0a8ebbbf4bc7a31cec2f9b5f21a9f726f4ccbb08192c9c26f43a5", size = 7734, upload-time = "2025-12-29T12:55:20.718Z" },
+]
+
+[[package]]
+name = "termynal"
+version = "0.14.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "markdown" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/26/8c/ea13868e6008ed964837db011648e3e7766e0ecfa1b42d7b9a4cf0c228e2/termynal-0.14.0.tar.gz", hash = "sha256:2918a1a6cf468497fbb3a72dc3726743988829eef1136d0c78a81df70ec869f6", size = 178022, upload-time = "2026-03-16T16:56:21.539Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c3/8f/c089f7c9f9fc1da25e6271386e5df84e1f6e0b04d2f0b408939b51b2876f/termynal-0.14.0-py3-none-any.whl", hash = "sha256:b5147545e29256d35148251f5c2d3d23dec1d2fb0b4ba464ff330a7de8b56fc6", size = 11754, upload-time = "2026-03-16T16:56:22.76Z" },
 ]
 
 [[package]]

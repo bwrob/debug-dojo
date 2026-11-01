@@ -58,6 +58,7 @@
         "griffe-warnings-deprecated>=1.1.0",
         "markdown-exec>=1.12.0",
         "mkdocstrings[python]>=1.0.7",
+        "termynal>=0.14.0",
         "typst>=0.13.0",
         "zensical>=0.0.70",
     ]
