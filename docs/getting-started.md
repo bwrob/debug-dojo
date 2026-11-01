@@ -10,21 +10,20 @@ with debugging tools pre-injected, and using global inspection helpers.
 
 ## Prerequisites
 
-Ensure you have Python 3.10+ and [`uv`](https://docs.astral.sh/uv/) installed.
+Ensure you have Python 3.12+ and [`uv`](https://docs.astral.sh/uv/) installed.
 
 ## 1. Installation
 
-Install `debug-dojo` in your project virtual environment using `uv`:
+Drop `debug-dojo` into any virtual environment at any moment using `uv pip install`:
 
 ```console
-uv add "debug-dojo[all-debuggers]"
+uv pip install debug-dojo
 ```
 
-The `all-debuggers` extra installs `ipdb`, `pudb`, and `debugpy`. If you only need the
-standard library `pdb`, install without extras:
+If you also want to install optional third-party debuggers (`ipdb`, `pudb`, `debugpy`):
 
 ```console
-uv add debug-dojo
+uv pip install "debug-dojo[all-debuggers]"
 ```
 
 ## 2. Zero-Import CLI Debugging
@@ -153,10 +152,9 @@ executes targets, and manages failure states.
 
 ```mermaid
 flowchart TD
-    CLI["dojo run CLI"] --> CONFIG["Config Loader (_config.py)"]
-    CONFIG --> INSTALLER["Installers (_installers.py)"]
+    CLI["dojo run CLI"] --> INSTALLER["Installers (_installers.py)"]
     INSTALLER --> BUILTINS["Python builtins (b, p, i, c)"]
-    INSTALLER --> HOOK["sys.breakpointhook (IPDB / PuDB / PDB / Debugpy)"]
+    INSTALLER --> HOOK["sys.breakpointhook (PDB / IPDB / PuDB / Debugpy)"]
     CLI --> EXEC["Target Execution (_execution.py)"]
     BUILTINS --> EXEC
     HOOK --> EXEC
@@ -170,15 +168,12 @@ sequenceDiagram
     autonumber
     actor Dev as Developer
     participant CLI as dojo CLI
-    participant Cfg as Config Engine
     participant Inst as Tool Installer
     participant Target as Target Script
     participant Dbg as Debugger Backend
 
     Dev->>CLI: dojo run script.py
-    CLI->>Cfg: load_config(path)
-    Cfg-->>CLI: DebugDojoConfig
-    CLI->>Inst: install_by_config(config)
+    CLI->>Inst: install_tools(debugger)
     Inst->>Inst: Inject b, p, i, c into builtins
     Inst->>Dbg: Configure sys.breakpointhook
     CLI->>Target: Execute via runpy
@@ -191,8 +186,7 @@ sequenceDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> Initializing: Invoke dojo run
-    Initializing --> LoadingConfig: Read dojo.toml / pyproject.toml
-    LoadingConfig --> InjectingTools: Install b, p, i, c & hook
+    Initializing --> InjectingTools: Install b, p, i, c & hook
     InjectingTools --> RunningTarget: Execute script / module / exec
     RunningTarget --> Completed: Script exits successfully
     RunningTarget --> PostMortem: Unhandled exception raised

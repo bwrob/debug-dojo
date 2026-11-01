@@ -24,16 +24,12 @@ seamless switching between `ipdb`, `pudb`, `pdb`, and `debugpy`.
 
 <!-- termynal -->
 ```console
-# Install debug-dojo with all supported debuggers
-$ uv add "debug-dojo[all-debuggers]"
+# Drop debug-dojo into any virtual environment
+$ uv pip install debug-dojo
 ---> 100%
 
 # Run any script with zero imports - helpers b(), p(), i(), c() are ready
 $ dojo run app.py
-
-Using configuration model: DebugDojoConfigV3.
-Using debug-dojo configuration:
-DebugDojoConfigV3(debugger=ipdb, rich_traceback=True)
 
 ╭─────────────────────────────── <class 'dict'> ───────────────────────────────╮
 │ {'service': 'api', 'port': 8080, 'active': True}                            │
@@ -48,18 +44,17 @@ ipdb> c
 
 ## Key Features
 
-- **Zero-Boilerplate CLI (`dojo run`)**: Run any Python script, module, or test
-  runner with debugging tools active without editing code.
-- **Injected Debugging Helpers**: Call `b()` (breakpoint), `p()` (pretty print),
+- **Nimble & Plug-and-Play (`dojo run`)**: Drop into any environment with
+  `uv pip install` and run immediately with zero configuration files, cache, or history
+  left behind.
+- **Ready for Any Debugger**: Seamlessly use `pdb`, `ipdb`, `pudb`, or `debugpy`
+  without enforcing any single backend.
+- **Opinionated Debugging Helpers**: Call `b()` (breakpoint), `p()` (pretty print),
   `i()` (inspect object), and `c()` (side-by-side compare) anywhere in your session.
 - **Side-by-Side Object Comparison**: Compare two objects side-by-side in formatted
   Rich tables to spot subtle differences instantly.
-- **Multiple Debugger Backends**: Switch between IPDB, PuDB, PDB, or Debugpy (VS Code
-  remote attach) via configuration or CLI flags.
 - **Rich Tracebacks & Post-Mortem**: Format unhandled exceptions with highlighted
-  source context and jump directly into a post-mortem REPL.
-- **Declarative Configuration**: Configure default backends, tracebacks, and helper
-  mnemonics through `dojo.toml` or `pyproject.toml`.
+  source context and jump directly into a debugger-agnostic post-mortem REPL.
 
 ## Quick Start
 

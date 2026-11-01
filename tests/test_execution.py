@@ -10,7 +10,6 @@ from unittest.mock import MagicMock, patch
 import pytest
 import typer
 
-from debug_dojo._config_models import DebuggerType, DojoSettings
 from debug_dojo._execution import (
     ExecMode,
     _configure_sys_argv,
@@ -21,6 +20,7 @@ from debug_dojo._execution import (
     _safe_execute,
     execute_with_debug,
 )
+from debug_dojo._installers import DebuggerType
 
 
 def test_configure_sys_argv() -> None:
@@ -35,8 +35,7 @@ def test_configure_sys_argv() -> None:
 
 def test_install_debug_tools_verbose() -> None:
     """Test installing debug tools with verbose=True."""
-    settings = DojoSettings()
-    _install_debug_tools("myscript.py", ["--foo"], verbose=True, settings=settings)
+    _install_debug_tools("myscript.py", ["--foo"], verbose=True, debugger=None)
 
 
 def test_get_runner_and_target_nonexistent() -> None:
@@ -46,24 +45,12 @@ def test_get_runner_and_target_nonexistent() -> None:
     assert exc.value.exit_code == 1
 
 
-def test_handle_exception_without_post_mortem() -> None:
-    """Test exception handler when post-mortem is disabled."""
-    settings = DojoSettings(post_mortem=False)
-
-    exc = RuntimeError("Test error without post mortem")
-    with pytest.raises(typer.Exit) as exit_exc:
-        _handle_exception(exc, "test_target", settings)
-    assert exit_exc.value.exit_code == 1
-
-
 @patch("pdb.post_mortem")
 def test_handle_exception_with_post_mortem_pdb(mock_pm: MagicMock) -> None:
     """Test exception handler enters PDB post-mortem when debugger is PDB."""
-    settings = DojoSettings(post_mortem=True, debugger=DebuggerType.PDB)
-
     exc = RuntimeError("Test error with pdb")
     with pytest.raises(typer.Exit) as exit_exc:
-        _handle_exception(exc, "test_target", settings)
+        _handle_exception(exc, "test_target", DebuggerType.PDB)
     assert exit_exc.value.exit_code == 1
     mock_pm.assert_called_once_with(exc.__traceback__)
 
@@ -101,52 +88,47 @@ def test_enter_post_mortem_pudb_fallback(mock_pdb_pm: MagicMock) -> None:
 def test_safe_execute_import_error() -> None:
     """Test safe_execute catches ImportError and raises Exit(1)."""
     runner = MagicMock(side_effect=ImportError("Cannot import target"))
-    settings = DojoSettings()
 
     with pytest.raises(typer.Exit) as exit_exc:
-        _safe_execute(runner, "bad_mod", settings)
+        _safe_execute(runner, "bad_mod")
     assert exit_exc.value.exit_code == 1
 
 
 def test_safe_execute_bdb_quit() -> None:
     """Test safe_execute catches BdbQuit and raises Exit(0)."""
     runner = MagicMock(side_effect=BdbQuit())
-    settings = DojoSettings()
 
     with pytest.raises(typer.Exit) as exit_exc:
-        _safe_execute(runner, "target", settings)
+        _safe_execute(runner, "target")
     assert exit_exc.value.exit_code == 0
 
 
 def test_safe_execute_keyboard_interrupt() -> None:
     """Test safe_execute catches KeyboardInterrupt and raises Exit(0)."""
     runner = MagicMock(side_effect=KeyboardInterrupt())
-    settings = DojoSettings()
 
     with pytest.raises(typer.Exit) as exit_exc:
-        _safe_execute(runner, "target", settings)
+        _safe_execute(runner, "target")
     assert exit_exc.value.exit_code == 0
 
 
 def test_safe_execute_system_exit_nonzero() -> None:
     """Test safe_execute catches SystemExit with non-zero exit code."""
     runner = MagicMock(side_effect=SystemExit(2))
-    settings = DojoSettings()
 
-    _safe_execute(runner, "target", settings)
+    _safe_execute(runner, "target")
 
 
 def test_safe_execute_system_exit_zero() -> None:
     """Test safe_execute catches SystemExit with code 0."""
     runner = MagicMock(side_effect=SystemExit(0))
-    settings = DojoSettings()
 
-    _safe_execute(runner, "target", settings)
+    _safe_execute(runner, "target")
 
 
 @patch("runpy.run_path")
 def test_execute_with_debug_default(mock_run_path: MagicMock, tmp_path: Path) -> None:
-    """Test execute_with_debug runs target with default settings when config is None."""
+    """Test execute_with_debug runs target with default debugger."""
     dummy_file = tmp_path / "dummy.py"
     dummy_file.write_text("print('hello')", encoding="utf-8")
     execute_with_debug(
@@ -154,6 +136,5 @@ def test_execute_with_debug_default(mock_run_path: MagicMock, tmp_path: Path) ->
         target_args=[],
         target_mode=ExecMode.FILE,
         verbose=False,
-        config=None,
     )
     mock_run_path.assert_called_once_with(str(dummy_file), run_name="__main__")

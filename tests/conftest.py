@@ -1,4 +1,4 @@
-"""Provide constants for tests."""
+"""Provide constants and fixtures for tests."""
 
 from __future__ import annotations
 
@@ -7,20 +7,7 @@ from pathlib import Path
 import pytest
 from typer.testing import CliRunner
 
-from debug_dojo._config_models import DojoSettings
-
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
-
-
-@pytest.fixture
-def config() -> DojoSettings:
-    """Provide a default settings object for tests.
-
-    Returns:
-        DojoSettings: A default runtime configuration object.
-
-    """
-    return DojoSettings()
 
 
 @pytest.fixture

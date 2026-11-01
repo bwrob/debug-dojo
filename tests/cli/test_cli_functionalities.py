@@ -37,18 +37,15 @@ def test_post_mortem(
     mock_post_mortem.assert_called_once()
 
 
-@patch("ipdb.post_mortem")
 @patch("pdb.post_mortem")
-def test_post_mortem_disabled(
+def test_post_mortem_default_pdb(
     mock_pdb_pm: MagicMock,
-    mock_ipdb_pm: MagicMock,
     runner: CliRunner,
     test_target_exception: str,
 ) -> None:
-    """Test disabling post-mortem debugging via --no-post-mortem."""
-    args = ["run", "--no-post-mortem", test_target_exception]
+    """Test post-mortem defaults to pdb when no debugger is specified."""
+    args = ["run", test_target_exception]
     result = runner.invoke(cli, args)
 
     assert result.exit_code != 0
-    mock_ipdb_pm.assert_not_called()
-    mock_pdb_pm.assert_not_called()
+    mock_pdb_pm.assert_called_once()

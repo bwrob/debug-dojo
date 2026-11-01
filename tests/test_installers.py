@@ -10,22 +10,22 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from debug_dojo._config_models import (
-    DebuggerType,
-    DojoSettings,
-)
 from debug_dojo._installers import (
     BREAKPOINT_ENV_VAR,
+    DEFAULT_DEBUGPY_HOST,
+    DEFAULT_DEBUGPY_PORT,
+    DEFAULT_IPDB_CONTEXT_LINES,
+    DEFAULT_PROMPT,
     IPDB_CONTEXT_SIZE,
+    DebuggerType,
     install_breakpoint,
-    install_by_config,
     install_compare,
     install_features,
     install_inspect,
     install_rich_print,
     install_tools,
+    rich_traceback,
     set_debugger,
-    set_exceptions,
     use_debugpy,
     use_ipdb,
     use_pdb,
@@ -45,7 +45,7 @@ def cleanup_builtins() -> Iterator[None]:
 
 @patch("pdb.set_trace")
 def test_use_pdb(mock_set_trace: MagicMock) -> None:
-    """Test that PDB is set as the default debugger."""
+    """Test that PDB is set as the active debugger."""
     use_pdb()
     assert os.environ[BREAKPOINT_ENV_VAR] == "pdb.set_trace"
     assert sys.breakpointhook == mock_set_trace
@@ -53,7 +53,7 @@ def test_use_pdb(mock_set_trace: MagicMock) -> None:
 
 @patch("pudb.set_trace")
 def test_use_pudb(mock_set_trace: MagicMock) -> None:
-    """Test that PuDB is set as the default debugger."""
+    """Test that PuDB is set as the active debugger."""
     use_pudb()
     assert os.environ[BREAKPOINT_ENV_VAR] == "pudb.set_trace"
     assert sys.breakpointhook == mock_set_trace
@@ -61,10 +61,10 @@ def test_use_pudb(mock_set_trace: MagicMock) -> None:
 
 @patch("ipdb.set_trace")
 def test_use_ipdb(mock_set_trace: MagicMock) -> None:
-    """Test that IPDB is set as the default debugger."""
-    use_ipdb(context_lines=10)
+    """Test that IPDB is set as the active debugger."""
+    use_ipdb()
     assert os.environ[BREAKPOINT_ENV_VAR] == "ipdb.set_trace"
-    assert os.environ[IPDB_CONTEXT_SIZE] == "10"
+    assert os.environ[IPDB_CONTEXT_SIZE] == DEFAULT_IPDB_CONTEXT_LINES
     assert sys.breakpointhook == mock_set_trace
 
 
@@ -76,51 +76,35 @@ def test_use_debugpy(
     mock_wait_for_client: MagicMock,
     mock_listen: MagicMock,
 ) -> None:
-    """Test that Debugpy is set as the default debugger."""
-    use_debugpy(host="localhost", port=5678, wait_for_client=True)
+    """Test that Debugpy is set as the active debugger."""
+    use_debugpy()
     assert os.environ[BREAKPOINT_ENV_VAR] == "debugpy.breakpoint"
     assert sys.breakpointhook == mock_breakpoint
-    mock_listen.assert_called_once_with(("localhost", 5678))
+    mock_listen.assert_called_once_with((DEFAULT_DEBUGPY_HOST, DEFAULT_DEBUGPY_PORT))
     mock_wait_for_client.assert_called_once()
-
-
-@patch("debugpy.listen")
-@patch("debugpy.wait_for_client")
-@patch("debugpy.breakpoint")
-def test_use_debugpy_no_wait(
-    mock_breakpoint: MagicMock,
-    mock_wait_for_client: MagicMock,
-    mock_listen: MagicMock,
-) -> None:
-    """Test that Debugpy can be used without waiting for client."""
-    use_debugpy(host="localhost", port=5678, wait_for_client=False)
-    assert os.environ[BREAKPOINT_ENV_VAR] == "debugpy.breakpoint"
-    assert sys.breakpointhook == mock_breakpoint
-    mock_listen.assert_called_once_with(("localhost", 5678))
-    mock_wait_for_client.assert_not_called()
 
 
 def test_inspect() -> None:
     """Test that the inspect function is installed in builtins."""
-    install_inspect("i")
+    install_inspect()
     assert hasattr(builtins, "i")
 
 
 def test_compare() -> None:
     """Test that the compare function is installed in builtins."""
-    install_compare("c")
+    install_compare()
     assert hasattr(builtins, "c")
 
 
 def test_breakpoint() -> None:
     """Test that the breakpoint function is installed in builtins."""
-    install_breakpoint("b")
+    install_breakpoint()
     assert hasattr(builtins, "b")
 
 
 def test_rich_print() -> None:
     """Test that the rich print function is installed in builtins."""
-    install_rich_print("p")
+    install_rich_print()
     assert hasattr(builtins, "p")
 
 
@@ -133,53 +117,64 @@ def test_install_features(
     mock_compare: MagicMock,
     mock_rich_print: MagicMock,
     mock_inspect: MagicMock,
-    config: DojoSettings,
 ) -> None:
-    """Test that the specified debugging features are installed."""
-    install_features(config)
+    """Test that all opinionated debugging features are installed."""
+    install_features()
 
-    mock_inspect.assert_called_once_with("i")
-    mock_rich_print.assert_called_once_with("p")
-    mock_compare.assert_called_once_with("c")
-    mock_breakpoint.assert_called_once_with("b")
+    mock_inspect.assert_called_once_with()
+    mock_rich_print.assert_called_once_with()
+    mock_compare.assert_called_once_with()
+    mock_breakpoint.assert_called_once_with()
+
+
+def test_set_debugger_none() -> None:
+    """Test that set_debugger with debugger=None does not enforce a debugger."""
+    set_debugger(None)
+    assert sys.ps1 == DEFAULT_PROMPT
 
 
 @patch("debug_dojo._installers.use_pdb")
 def test_set_debugger_pdb(mock_use_pdb: MagicMock) -> None:
     """Test that the PDB debugger is set correctly."""
-    settings = DojoSettings(debugger=DebuggerType.PDB)
-    set_debugger(settings)
-    mock_use_pdb.assert_called_once_with("pdb.set_trace")
-    assert sys.ps1 == settings.prompt_name
+    set_debugger(DebuggerType.PDB)
+    mock_use_pdb.assert_called_once_with()
+    assert sys.ps1 == DEFAULT_PROMPT
 
 
 @patch("debug_dojo._installers.use_ipdb")
 def test_set_debugger_ipdb(mock_use_ipdb: MagicMock) -> None:
     """Test that the IPDB debugger is set correctly."""
-    settings = DojoSettings(debugger=DebuggerType.IPDB, ipdb_context_lines=15)
-    set_debugger(settings)
-    mock_use_ipdb.assert_called_once_with("ipdb.set_trace", 15)
+    set_debugger(DebuggerType.IPDB)
+    mock_use_ipdb.assert_called_once_with()
+
+
+@patch("debug_dojo._installers.use_pudb")
+def test_set_debugger_pudb(mock_use_pudb: MagicMock) -> None:
+    """Test set_debugger with PUDB."""
+    set_debugger(DebuggerType.PUDB)
+    mock_use_pudb.assert_called_once_with()
+
+
+@patch("debug_dojo._installers.use_debugpy")
+def test_set_debugger_debugpy(mock_use_debugpy: MagicMock) -> None:
+    """Test set_debugger with DEBUGPY."""
+    set_debugger(DebuggerType.DEBUGPY)
+    mock_use_debugpy.assert_called_once_with()
 
 
 @patch("debug_dojo._installers.install_features")
-@patch("debug_dojo._installers.set_exceptions")
+@patch("debug_dojo._installers.rich_traceback")
 @patch("debug_dojo._installers.set_debugger")
 def test_install_tools(
     mock_set_debugger: MagicMock,
-    mock_set_exceptions: MagicMock,
+    mock_rich_traceback: MagicMock,
     mock_install_features: MagicMock,
-    config: DojoSettings,
 ) -> None:
-    """Test that the debugging tools are installed by settings."""
-    install_tools(config)
-    mock_set_debugger.assert_called_once_with(config)
-    mock_set_exceptions.assert_called_once_with(config)
-    mock_install_features.assert_called_once_with(config)
-
-
-def test_install_by_config_alias(config: DojoSettings) -> None:
-    """Test that install_by_config is an alias for install_tools."""
-    assert install_by_config is install_tools
+    """Test that the opinionated debugging tools are installed."""
+    install_tools(DebuggerType.PDB)
+    mock_set_debugger.assert_called_once_with(DebuggerType.PDB)
+    mock_rich_traceback.assert_called_once_with()
+    mock_install_features.assert_called_once_with()
 
 
 def test_use_pudb_not_installed() -> None:
@@ -200,54 +195,15 @@ def test_use_debugpy_not_installed() -> None:
         use_debugpy()
 
 
-def test_install_features_empty_mnemonics() -> None:
-    """Test install functions with empty mnemonics do nothing."""
-    install_inspect("")
-    install_compare("")
-    install_breakpoint("")
-    install_rich_print("")
-
-
 def test_inspect_with_kwargs() -> None:
     """Test calling inspect with custom kwargs."""
-    install_inspect("i")
+    install_inspect()
     inspect_fn = getattr(builtins, "i")  # ruff: ignore[get-attr-with-constant] -- dynamically retrieve injected mnemonic from builtins module
     inspect_fn({"foo": "bar"}, methods=False)
 
 
-@patch("debug_dojo._installers.use_pudb")
-def test_set_debugger_pudb(mock_use_pudb: MagicMock) -> None:
-    """Test set_debugger with PUDB."""
-    settings = DojoSettings(debugger=DebuggerType.PUDB)
-    set_debugger(settings)
-    mock_use_pudb.assert_called_once_with("pudb.set_trace")
-
-
-@patch("debug_dojo._installers.use_debugpy")
-def test_set_debugger_debugpy(mock_use_debugpy: MagicMock) -> None:
-    """Test set_debugger with DEBUGPY."""
-    settings = DojoSettings(
-        debugger=DebuggerType.DEBUGPY,
-        debugpy_host="0.0.0.0",
-        debugpy_port=5678,
-        debugpy_wait_for_client=False,
-    )
-    set_debugger(settings)
-    mock_use_debugpy.assert_called_once_with(
-        "debugpy.breakpoint",
-        "0.0.0.0",
-        5678,
-        wait_for_client=False,
-    )
-
-
-def test_set_exceptions_disabled() -> None:
-    """Test set_exceptions when rich_traceback is disabled."""
-    set_exceptions(DojoSettings(rich_traceback=False))
-
-
 @patch("rich.traceback.install")
-def test_set_exceptions_enabled(mock_install: MagicMock) -> None:
-    """Test set_exceptions when rich_traceback is enabled with locals."""
-    set_exceptions(DojoSettings(rich_traceback=True, show_locals=True))
-    mock_install.assert_called_once_with(show_locals=True)
+def test_rich_traceback(mock_install: MagicMock) -> None:
+    """Test rich_traceback installs Rich traceback without locals."""
+    rich_traceback()
+    mock_install.assert_called_once_with(show_locals=False)

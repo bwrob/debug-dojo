@@ -24,7 +24,7 @@ Authoritative engineering guidelines for working with `debug_dojo`.
   dojo run my_script.py
   dojo run -m my_module
   dojo run -e pytest
-  dojo config -c dojo.toml
+  dojo run -d ipdb my_script.py
   ```
 - Use strict typing across all function boundaries.
 - Adhere to the core architectural patterns defined in `AGENTS.md`.

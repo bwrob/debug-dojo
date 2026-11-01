@@ -26,39 +26,37 @@
   </a>
 </p>
 
-[**debug-dojo**](https://bwrob.github.io/debug-dojo/) is a powerful Python package
-designed to streamline your debugging workflow directly from the terminal. It integrates
-seamlessly with popular debuggers and enhances your inspection capabilities with
-beautiful, readable output.
+[**debug-dojo**](https://bwrob.github.io/debug-dojo/) is a nimble, plug-and-play Python
+package designed to streamline your debugging workflow directly from the terminal. Drop
+it into any environment with `uv pip install debug-dojo`—with zero configuration files,
+zero cache or history files left behind, and ready for any debugger.
 
 ## ✨ Features
 
-- **Unified Debugging Interface:** Easily launch your scripts or modules with your
-  preferred debugger (`debugpy`, `pudb`, `pdb`, `ipdb`).
-- **Dojo Belts Gamification:** Earn belts based on your debugging experience and track
-  your progress.
+- **Plug-and-Play & Zero Traces:** Add to any environment at any point. Leaves no
+  configuration files, cache, or history behind.
+- **Debugger Agnostic:** Ready for any debugger (`pdb`, `ipdb`, `pudb`, `debugpy`)
+  without enforcing one.
+- **CLI-Driven Control:** Pass all runtime options directly via command-line flags.
 - **Enhanced Output with Rich:** Leverages [`rich`](https://github.com/Textualize/rich)
-  for stunning, syntax-highlighted code, pretty-printed objects, and improved
-  tracebacks.
+  for syntax-highlighted code, pretty-printed objects, and formatted tracebacks.
 - **Side-by-side Object Comparison:** Quickly identify differences between two Python
-  objects.
-- **Interactive Object Inspection:** Dive deep into object structures with a powerful
-  `inspect` utility.
-- **Simplified Breakpoints:** Set breakpoints effortlessly with a concise helper
-  function.
+  objects with `c(obj1, obj2)`.
+- **Interactive Object Inspection & Breakpoints:** Inspect objects deeply with `i(obj)`,
+  pretty-print with `p(obj)`, and trigger breakpoints effortlessly with `b()`.
 
 ## 🚀 Installation
 
-Install `debug-dojo` using `pip`:
+Add `debug-dojo` to any environment using `uv`:
 
 ```bash
-pip install debug-dojo
+uv pip install debug-dojo
 ```
 
-For full debugger support, you might want to install optional dependencies:
+To install alongside optional third-party debuggers (`ipdb`, `pudb`, `debugpy`):
 
 ```bash
-pip install "debug-dojo[all-debuggers]"
+uv pip install "debug-dojo[all-debuggers]"
 ```
 
 ## 💻 CLI Usage
@@ -69,16 +67,10 @@ Run your Python script or module with `dojo run`:
 dojo run my_script.py
 ```
 
-Check your progress and current belt with:
+Specify a debugger or enable verbose output via CLI flags:
 
 ```console
-dojo belt
-```
-
-Specify a debugger, configuration file, or enable verbose output:
-
-```console
-dojo run --debugger ipdb --config dojo.toml --verbose --module my_module
+dojo run --debugger ipdb --verbose --module my_module
 ```
 
 Run an executable command with debugging tools:
@@ -89,39 +81,36 @@ dojo run --exec pytest
 
 ## 🐍 Usage in Code
 
-Integrate `debug-dojo` directly into your Python code for on-demand debugging and
-inspection utilities:
+Import `debug_dojo.install` directly in your Python code to inject helpers (`b`, `p`,
+`i`, `c`) into `builtins`:
 
 ```python
 import debug_dojo.install
-
-# Set a breakpoint and enter the debugger
-# debug_dojo.install.b() # Equivalent to breakpoint()
 
 object_1 = {"foo": 1, "bar": 2}
 object_2 = [1, 2, 3]
 
 # Pretty print an object with Rich
-debug_dojo.install.p(object_1)
+p(object_1)
 
 # Inspect an object using Rich
-debug_dojo.install.i(object_1)
+i(object_1)
 
 # Compare two objects side-by-side
-debug_dojo.install.c(object_1, object_2)
+c(object_1, object_2)
 
-# Enter the debugger (e.g., ipdb, pudb, pdb, debugpy based on config)
-# debug_dojo.install.b()
+# Enter the debugger
+# b()
 ```
 
 ## 📚 Documentation
 
-For comprehensive instructions on installation, configuration, advanced usage, and API
+For comprehensive instructions on installation, CLI flags, advanced usage, and API
 reference, please visit the
 [official documentation](https://bwrob.github.io/debug-dojo/).
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please refer to the
-[development guidelines](https://bwrob.github.io/debug-dojo/development/) for details on
-how to set up your development environment and submit changes.
+[development guidelines](https://bwrob.github.io/debug-dojo/getting-started/#development-workflow)
+for details on how to set up your development environment and submit changes.
