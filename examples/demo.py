@@ -9,11 +9,14 @@ variable transformations, loops, and optional exception triggers for testing:
 - Post-mortem debugging (on unhandled exceptions)
 
 Usage:
-    # Run from the start
-    uv run dojo examples/demo.py
+    # Break at main entrypoint
+    uv run dojo -b main examples/demo.py
 
     # Break directly inside process_order
     uv run dojo -b process_order examples/demo.py
+
+    # Break at line 1
+    uv run dojo -b 1 examples/demo.py
 
     # Trigger post-mortem exception debugging
     TRIGGER_ERROR=1 uv run dojo examples/demo.py
