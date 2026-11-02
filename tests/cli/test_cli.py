@@ -3,17 +3,22 @@
 from __future__ import annotations
 
 import re
+from importlib.metadata import PackageNotFoundError
 from typing import TYPE_CHECKING
+from unittest.mock import patch
 
-from typer.testing import CliRunner
+import pytest
 
-from debug_dojo._cli import cli
+from debug_dojo._cli import cli, get_version, main
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
+    from debug_dojo._cli import CliRunner
+
 ANSI_ESCAPE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 BOX_TRANS = str.maketrans("┌┐└┘", "╭╮╰╯")
+SYNTAX_ERROR_EXIT_CODE = 2
 
 
 def normalize_cli_output(text: str) -> str:
@@ -42,13 +47,29 @@ def test_no_args_prints_help(runner: CliRunner) -> None:
     """Test that running with no arguments prints help."""
     result = runner.invoke(cli, [])
     assert "Usage:" in result.output
-
-
-def test_help_flag(runner: CliRunner) -> None:
-    """Test the help message for the CLI."""
-    result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
-    assert "Usage:" in result.output
+
+
+def test_help_flags(runner: CliRunner) -> None:
+    """Test both -h and --help flags."""
+    for flag in ("-h", "--help"):
+        result = runner.invoke(cli, [flag])
+        assert result.exit_code == 0
+        assert "Usage:" in result.output
+
+
+def test_version_flags(runner: CliRunner) -> None:
+    """Test both -v and --version flags."""
+    for flag in ("-v", "--version"):
+        result = runner.invoke(cli, [flag])
+        assert result.exit_code == 0
+        assert "dojo " in result.output
+
+
+def test_get_version_fallback() -> None:
+    """Test get_version returns fallback on PackageNotFoundError."""
+    with patch("debug_dojo._cli.version", side_effect=PackageNotFoundError):
+        assert get_version() == "0.9.0"
 
 
 def test_non_existent_file(runner: CliRunner) -> None:
@@ -67,6 +88,50 @@ def test_options_only_no_target(runner: CliRunner) -> None:
     """Test that running with options but no target does not execute."""
     result = runner.invoke(cli, ["-b", "1"])
     assert result.exit_code == 0
+
+
+def test_break_with_equal_syntax(runner: CliRunner) -> None:
+    """Test -b=loc and --break=loc syntax."""
+    result = runner.invoke(cli, ["-b=10"])
+    assert result.exit_code == 0
+    result2 = runner.invoke(cli, ["--break=main"])
+    assert result2.exit_code == 0
+
+
+def test_break_missing_argument(runner: CliRunner) -> None:
+    """Test that -b with missing argument outputs error and returns exit code 2."""
+    result = runner.invoke(cli, ["-b"])
+    assert result.exit_code == SYNTAX_ERROR_EXIT_CODE
+    assert "requires an argument" in result.output
+
+    result2 = runner.invoke(cli, ["-b="])
+    assert result2.exit_code == SYNTAX_ERROR_EXIT_CODE
+    assert "requires an argument" in result2.output
+
+
+def test_unknown_option(runner: CliRunner) -> None:
+    """Test that an unknown option returns exit code 2."""
+    result = runner.invoke(cli, ["--unknown-flag"])
+    assert result.exit_code == SYNTAX_ERROR_EXIT_CODE
+    assert "Unknown option '--unknown-flag'" in result.output
+
+
+def test_delimiter_double_dash(runner: CliRunner, test_target_inspect: str) -> None:
+    """Test -- stops option parsing and forwards target and args."""
+    result = runner.invoke(cli, ["--", test_target_inspect, "--custom-arg"])
+    assert result.exit_code == 0
+
+    # Test delimiter alone without target
+    result_empty = runner.invoke(cli, ["--"])
+    assert result_empty.exit_code == 0
+
+
+def test_main_entrypoint(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test main() invokes cli() and calls sys.exit()."""
+    monkeypatch.setattr("sys.argv", ["dojo", "--version"])
+    with pytest.raises(SystemExit) as exc:
+        main()
+    assert exc.value.code == 0
 
 
 def test_normalize_cli_output_consecutive_blank_lines() -> None:

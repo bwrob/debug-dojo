@@ -108,4 +108,4 @@ Rich visual formatting:
 | :--- | :------------------------------------------------------------------------------------------------------- |
 | `0`  | Target executed successfully, or debugging session terminated cleanly (`BdbQuit` / `KeyboardInterrupt`). |
 | `1`  | Import error, mutually exclusive arguments, or unhandled exception during target execution.              |
-| `2`  | Invalid CLI invocation syntax (handled by Typer).                                                        |
+| `2`  | Invalid CLI invocation syntax or option parsing error.                                                   |

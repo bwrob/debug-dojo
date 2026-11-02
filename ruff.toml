@@ -14,13 +14,6 @@ line-length = 88
     preview = true
     select = ["ALL"]
 
-    [lint.flake8-bugbear]
-        extend-immutable-calls = ["typer.Argument", "typer.Option"]
-
-    # CLI defaults are Annotated typer.Typer parameters, not raw boolean traps.
-    [lint.flake8-boolean-trap]
-        extend-allowed-calls = ["typer.Argument", "typer.Option"]
-
     [lint.flake8-tidy-imports]
         ban-relative-imports = "all"
 
@@ -41,9 +34,6 @@ line-length = 88
         required-imports   = ["from __future__ import annotations"]
 
     [lint.per-file-ignores]
-        # CLI runtime annotations evaluated by Typer
-        "src/debug_dojo/_cli.py" = ["typing-only-standard-library-import"]
-
         # Debugger installation and adapter functions dynamically import debugger backends
         "src/debug_dojo/_installers.py" = [
             "import-outside-top-level",

@@ -127,10 +127,10 @@ Refer to `.agents/skills/guide-python/SKILL.md` for complete guidelines.
   hierarchies.
 - **Functional Style**: Write pure, composable, idempotent functions with
   explicit inputs and outputs. Avoid in-place mutation.
-- **CLI Framework**: Use **Typer** exclusively for any command-line interfaces
-  or CLI tools. Never use `argparse`, `click`, or manual `sys.argv` parsing.
-  Always declare CLI parameters using PEP 593 `typing.Annotated` and explicit
-  `typer.Typer()` applications (consult `.agents/skills/tool-typer/SKILL.md`).
+- **CLI Interface**: Built with lightweight standard library argument parsing
+  and formatted exclusively with **Rich** (`rich.console.Console`, `rich.panel.Panel`,
+  and `rich.table.Table`). Avoid heavy CLI frameworks like `click` or `typer` to
+  guarantee sub-10ms runner startup latency and zero argument-passthrough interference.
 - **Layer Boundaries**: The application follows strict layer boundaries:
   `cli` -> `core` -> external dependencies. The `core` module must never import
   from `cli`.

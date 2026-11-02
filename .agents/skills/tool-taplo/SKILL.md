@@ -67,7 +67,7 @@ exclude = [
 
 - **`align_entries = true`**: Aligns `=` signs within a table block.
 - **`indent_entries = true`**: Indents table entries with 4 spaces (`indent_string = "    "`).
-- **`indent_tables = true`**: Indents nested sub-tables (for example, `[cosmic-ray.distributor]`).
+- **`indent_tables = true`**: Indents nested sub-tables (for example, `[tool.uv.sources]`).
 - **`compact_arrays = false`**: Expands multi-line arrays for clean diff tracking.
 - **`reorder_keys = true`**: Sorts keys alphabetically within each table.
 - **`exclude`**: Excludes virtual environments (`.venv/`), build artifacts, and skill templates.
@@ -91,7 +91,7 @@ hooks = [
 
 ### Unformatted TOML in CI or Prek
 
-If CI or prek flags an unformatted TOML file (for example, `cosmic-ray.toml`):
+If CI or prek flags an unformatted TOML file (for example, `pyproject.toml`):
 
 ```bash
 uv run poe fix

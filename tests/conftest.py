@@ -5,7 +5,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
-from typer.testing import CliRunner
+
+from debug_dojo._cli import CliRunner
 
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 
@@ -56,10 +57,10 @@ def expected_dict_output() -> str:
 
 @pytest.fixture
 def runner() -> CliRunner:
-    """Provide a Typer CLI runner fixture configured without ANSI color codes.
+    """Provide a CLI runner fixture configured without ANSI color codes.
 
     Returns:
-        CliRunner: A Typer CLI runner object.
+        CliRunner: A test CLI runner object.
 
     """
-    return CliRunner(env={"NO_COLOR": "1", "TERM": "dumb"})
+    return CliRunner(env={"NO_COLOR": "1", "TERM": "dumb", "COLUMNS": "80"})
