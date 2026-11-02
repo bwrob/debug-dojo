@@ -1,8 +1,11 @@
-"""Internal IPython-powered debugger adapter (`dpdb`) with Rich visual enhancements."""
+"""IPython-powered interactive debugger (`dpdb`) with Rich visual enhancements."""
 
 from __future__ import annotations
 
+import ast
 import bdb
+import contextlib
+import functools
 import inspect
 import io
 import keyword
@@ -16,9 +19,12 @@ from pathlib import Path
 from types import CodeType, FrameType, ModuleType, TracebackType
 from typing import Any, Literal, cast, override
 
-from IPython.core.debugger import BdbQuit_excepthook, Pdb
+from IPython.core.debugger import Pdb
 from IPython.core.getipython import get_ipython
 from IPython.terminal.debugger import TerminalPdb
+from IPython.terminal.embed import (  # ruff: ignore[debugger] -- used by DojoPdb.do_interact to launch an embedded IPython shell
+    InteractiveShellEmbed,
+)
 from IPython.terminal.ipapp import TerminalIPythonApp
 from rich import box, inspect as rich_inspect
 from rich.console import Console
@@ -29,12 +35,14 @@ from rich.syntax import Syntax
 from rich.table import Table
 from rich.text import Text
 
-from debug_dojo.adapters._base import BREAKPOINT_ENV_VAR, DebuggerType
+BREAKPOINT_ENV_VAR = "PYTHONBREAKPOINT"
+DPDB_SET_TRACE_HOOK = "debug_dojo.set_trace"
 
 DEFAULT_CONTEXT_LINES = 20
 STEP_CONTEXT_LINES = 5
 MAX_MRO_PREVIEW = 4
 MAX_INLINE_BANNER_ITEMS = 4
+MAX_CHAINED_EXCEPTIONS = 5
 
 _HIDDEN_MODULE_PREFIXES: tuple[str, ...] = (
     "bdb",
@@ -98,6 +106,7 @@ _HELP_ROWS: tuple[tuple[str, str, str], ...] = (
     ("", "enable / disable <bp#>", "Enable or disable breakpoint(s) by number"),
     ("", "condition <bp#> [expr]", "Set or clear condition on a breakpoint"),
     ("Session", "interact", "Start interactive IPython shell in current frame"),
+    ("", "run / restart [args]", "Restart target program with current breakpoints"),
     ("", "!<statement>", "Execute Python statement in current frame namespace"),
     ("", "h / help [cmd]", "Show this command reference or help for a command"),
     ("", "q / quit / exit", "Abort execution and exit debugger"),
@@ -689,6 +698,100 @@ def _build_command_help_panel(cmd_name: str, raw_doc: str) -> Panel:
     )
 
 
+def _format_chained_exception_line(label: str, exc: BaseException) -> str:
+    """Format a single chained exception (`__cause__` or `__context__`) summary line.
+
+    Args:
+        label (str): Relationship label (`"Caused by"` or `"During handling of"`).
+        exc (BaseException): Chained exception instance.
+
+    Returns:
+        str: Rich-formatted summary line with optional innermost frame location.
+
+    """
+    tb = exc.__traceback__
+    while tb is not None and tb.tb_next is not None:
+        tb = tb.tb_next
+    fname = Path(tb.tb_frame.f_code.co_filename).name if tb is not None else ""
+    loc = f" — [cyan]{escape(fname)}:{tb.tb_lineno}[/cyan]" if tb is not None else ""
+    return (
+        f"[dim]{label}:[/dim] [bold yellow]{escape(type(exc).__name__)}[/bold yellow]: "
+        f"{escape(str(exc))}{loc}"
+    )
+
+
+def _format_exception_chain(exc: BaseException | None) -> list[str]:
+    """Collect formatted lines for any chained exceptions (`__cause__` / `__context__`).
+
+    Args:
+        exc (BaseException | None): Top-level exception being inspected.
+
+    Returns:
+        list[str]: Formatted lines describing the exception chain.
+
+    """
+    lines: list[str] = []
+    seen: set[int] = set()
+    cur = exc
+    while (
+        cur is not None and id(cur) not in seen and len(lines) < MAX_CHAINED_EXCEPTIONS
+    ):
+        seen.add(id(cur))
+        cause = cur.__cause__
+        context = None if cur.__suppress_context__ else cur.__context__
+        if cause is not None:
+            lines.append(_format_chained_exception_line("Caused by", cause))
+            cur = cause
+        elif context is not None:
+            lines.append(_format_chained_exception_line("During handling of", context))
+            cur = context
+        else:
+            break
+    return lines
+
+
+def _extract_callable_target(obj: object) -> object:
+    """Resolve `functools.partial`, `property`, classes, or callable instances.
+
+    Args:
+        obj (object): Candidate callable or descriptor object.
+
+    Returns:
+        object: Underlying function or method object.
+
+    """
+    target = obj
+    while isinstance(target, functools.partial):
+        target = target.func
+    if isinstance(target, property) and target.fget is not None:
+        return target.fget
+    if isinstance(target, type):
+        return getattr(target, "__init__", target)
+    if not inspect.isroutine(target) and callable(target):
+        return type(target).__call__
+    return target
+
+
+def _unwrap_callable_code(obj: object) -> CodeType | None:
+    """Extract the `CodeType` of a callable object if backed by a source file.
+
+    Args:
+        obj (object): Object evaluated from a breakpoint expression.
+
+    Returns:
+        CodeType | None: Resolved code object if its file exists on disk, else `None`.
+
+    """
+    target = _extract_callable_target(obj)
+    if callable(target):
+        with contextlib.suppress(Exception):
+            target = inspect.unwrap(target)
+    code = getattr(target, "__code__", None)
+    if isinstance(code, CodeType) and Path(code.co_filename).is_file():
+        return code
+    return None
+
+
 def _render_post_mortem_banner(tb: TracebackType, console: Console) -> None:
     """Render a Rich post-mortem exception header panel before entering interaction.
 
@@ -717,14 +820,13 @@ def _render_post_mortem_banner(tb: TracebackType, console: Console) -> None:
         f"[dim]Location:[/dim] [cyan]{escape(filename)}:{lineno}[/cyan] "
         f"in [bold]{escape(func)}()[/bold]"
     )
-    body = (
-        f"{exc_header}\n{location_line}\n[dim]Code:[/dim]     {escape(source_line)}"
-        if source_line
-        else f"{exc_header}\n{location_line}"
-    )
+    lines = [exc_header, location_line]
+    if source_line:
+        lines.append(f"[dim]Code:[/dim]     {escape(source_line)}")
+    lines.extend(_format_exception_chain(exc_val))
     console.print(
         Panel(
-            body,
+            "\n".join(lines),
             title="[bold red]💥 Dojo Post-Mortem[/bold red]",
             border_style="red",
             expand=False,
@@ -732,14 +834,30 @@ def _render_post_mortem_banner(tb: TracebackType, console: Console) -> None:
     )
 
 
-class DojoPdb(TerminalPdb):
+def _is_explicit_return_line(frame: FrameType) -> bool:
+    """Return `True` if the active source line in `frame` is a `return` statement.
+
+    Args:
+        frame (FrameType): Stack frame to inspect.
+
+    Returns:
+        bool: `True` when the stripped line starts with `return`.
+
+    """
+    line = linecache.getline(frame.f_code.co_filename, frame.f_lineno).strip()
+    return line == "return" or line.startswith(("return ", "return("))
+
+
+class DojoPdb(TerminalPdb):  # ruff: ignore[too-many-public-methods] -- overrides standard Pdb/Cmd command methods and lifecycle helpers
     """Enhanced IPython debugger with Rich inspection and live frame context."""
 
     displaying: dict[FrameType, dict[str, object]]
     _full_context: int
+    _last_paused_location: tuple[int, int] | None
     _last_printed_frame_id: int | None
     _managed_underscore_frames: set[int]
     _prev_locals_by_frame: dict[int, dict[str, str]]
+    _suppress_message: bool
 
     @override
     def __init__(
@@ -757,9 +875,11 @@ class DojoPdb(TerminalPdb):
             **kwargs (object): Keyword arguments forwarded to `TerminalPdb`.
 
         """
+        self._last_paused_location = None
         self._last_printed_frame_id = None
         self._managed_underscore_frames = set()
         self._prev_locals_by_frame = {}
+        self._suppress_message = False
         session_opts: dict[str, object] = {
             "bottom_toolbar": self._render_bottom_toolbar,
         }
@@ -773,6 +893,19 @@ class DojoPdb(TerminalPdb):
         self._full_context = self.context
         self.prompt = "dpdb> "
 
+    def close(self) -> None:
+        """Close prompt_toolkit event loop and executor resources."""
+        loop = getattr(self, "pt_loop", None)
+        if loop is not None and not loop.is_closed():
+            loop.close()
+        executor = getattr(self, "thread_executor", None)
+        if executor is not None:
+            executor.shutdown(wait=False)
+
+    def __del__(self) -> None:
+        """Ensure background loop and executor are closed on garbage collection."""
+        self.close()
+
     def _console(self) -> Console:
         """Return a Rich console bound to the debugger's `stdout` stream.
 
@@ -781,6 +914,17 @@ class DojoPdb(TerminalPdb):
 
         """
         return Console(file=self.stdout, highlight=True, soft_wrap=True)
+
+    @override
+    def message(self, msg: str) -> None:
+        """Print a message to stdout unless suppressed.
+
+        Args:
+            msg (str): Message text to output.
+
+        """
+        if not self._suppress_message:
+            super().message(msg)
 
     def _format_frame_location(self) -> tuple[str, str, int]:
         """Extract `(filename, function_name, lineno)` for the current stack frame.
@@ -831,10 +975,14 @@ class DojoPdb(TerminalPdb):
         self._prev_locals_by_frame[frame_key] = current_snapshot
 
         source_line = linecache.getline(frame.f_code.co_filename, lineno)
-        line_vars = _extract_line_variables(
-            source_line,
-            frame_locals,
-            frame.f_globals,
+        line_vars: list[str] = (
+            []
+            if return_banner is not None
+            else _extract_line_variables(
+                source_line,
+                frame_locals,
+                frame.f_globals,
+            )
         )
         watches = _format_watch_entries(
             self.displaying.get(frame),
@@ -899,18 +1047,51 @@ class DojoPdb(TerminalPdb):
             return False
         return bool(super().stop_here(frame))
 
+    def _should_skip_return_pause(
+        self,
+        frame: FrameType,
+    ) -> bool:
+        """Return whether `user_return` should advance past `frame` without pausing.
+
+        Args:
+            frame (FrameType): Returning stack frame.
+
+        Returns:
+            bool: `True` when pausing on the return event would be redundant.
+
+        """
+        if frame.f_code.co_name == "<module>":
+            return True
+        stripped = getattr(self, "lastcmd", "").strip()
+        cmd_name = stripped.split(maxsplit=1)[0] if stripped else ""
+        if cmd_name in {"r", "ret", "return"}:
+            return False
+        return (
+            id(frame),
+            frame.f_lineno,
+        ) == self._last_paused_location and _is_explicit_return_line(frame)
+
     @override
     def user_return(self, frame: FrameType, return_value: object) -> None:
-        """Handle function return events while skipping hidden runner frames.
+        """Handle function return events while skipping redundant or hidden returns.
 
         Args:
             frame (FrameType): Returning stack frame.
             return_value (object): Value returned by `frame`.
 
         """
+        if getattr(self, "_wait_for_mainpyfile", False):
+            return
         if self.skip_hidden and self._hidden_predicate(frame):
             return
-        super().user_return(frame, return_value)
+        if self._should_skip_return_pause(frame):
+            self.set_step()
+            return
+        self._suppress_message = True
+        try:
+            super().user_return(frame, return_value)
+        finally:
+            self._suppress_message = False
 
     @override
     def emptyline(self) -> bool:
@@ -969,12 +1150,20 @@ class DojoPdb(TerminalPdb):
             self.context = min(self._full_context, STEP_CONTEXT_LINES)
         else:
             self.context = self._full_context
+        frame_locals = cast(
+            "MutableMapping[str, object]", self._get_frame_locals(frame)
+        )
+        has_return = "__return__" in frame_locals
+        saved_return = frame_locals.pop("__return__", None) if has_return else None
         try:
             super().print_stack_entry(frame_lineno, prompt_prefix)
         finally:
+            if has_return:
+                frame_locals["__return__"] = saved_return
             self.context = self._full_context
         if is_current:
             self._last_printed_frame_id = id(frame)
+            self._last_paused_location = (id(frame), lineno)
             self._render_frame_context_banner(frame, lineno)
 
     @override
@@ -1006,6 +1195,44 @@ class DojoPdb(TerminalPdb):
         super().do_context(context)
         self._full_context = self.context
 
+    def _try_set_callable_break(
+        self,
+        expr: str,
+        cond_str: str | None,
+        *,
+        temporary: bool,
+    ) -> bool:
+        """Attempt to resolve and set a breakpoint on a callable object.
+
+        Args:
+            expr (str): Expression to evaluate in the current frame.
+            cond_str (str | None): Optional breakpoint condition expression.
+            temporary (bool): Whether the breakpoint is temporary.
+
+        Returns:
+            bool: `True` if a callable breakpoint was handled, `False` otherwise.
+
+        """
+        if getattr(self, "curframe", None) is None:
+            return False
+        if ":" in expr or expr.isdigit():
+            return False
+        val = self._getval_except(expr)
+        code = _unwrap_callable_code(val)
+        if code is None:
+            return False
+        filename = self.canonic(code.co_filename)
+        line = self.checkline(filename, code.co_firstlineno)
+        if not line:
+            return False
+        err = self.set_break(filename, line, temporary, cond_str, code.co_name)
+        if err:
+            self.error(err)
+        else:
+            bp = self.get_breaks(filename, line)[-1]
+            self.message(f"Breakpoint {bp.number} at {bp.file}:{bp.line}")
+        return True
+
     @override
     def do_break(self, arg: str, temporary: Literal[0, 1] | bool = 0) -> None:
         """Set a breakpoint or render a Rich table of active breakpoints (`b`).
@@ -1023,9 +1250,34 @@ class DojoPdb(TerminalPdb):
                 return
             console.print(_build_breakpoints_table(active_bps))
             return
+        target_part, sep, cond_part = arg.partition(",")
+        expr = target_part.strip()
+        cond_str = cond_part.strip() if sep else None
+        if self._try_set_callable_break(expr, cond_str, temporary=bool(temporary)):
+            return
         super().do_break(arg, temporary)
 
     do_b = do_break
+
+    @override
+    def do_continue(self, arg: str) -> bool | None:
+        """Continue execution until next breakpoint (`c`), or evaluate `c(...)`.
+
+        Args:
+            arg (str): Command argument, forwarded to evaluator when `c(...)`.
+
+        Returns:
+            bool | None: Superclass return value, or `None` when executing `c(...)`.
+
+        """
+        stripped = arg.strip()
+        if stripped.startswith("(") and stripped.endswith(")"):
+            self.default(f"c{stripped}")
+            return None
+        return super().do_continue(arg)
+
+    do_c = do_continue
+    do_cont = do_continue
 
     @override
     def do_display(self, arg: str) -> None:
@@ -1212,6 +1464,36 @@ class DojoPdb(TerminalPdb):
     do_a = do_args
 
     @override
+    def do_interact(self, arg: str) -> None:
+        """Start an interactive IPython shell in the current frame (`interact`).
+
+        Args:
+            arg (str): Unused command argument string.
+
+        """
+        del arg
+        frame = getattr(self, "curframe", None)
+        if frame is None:
+            self.error("No active frame.")
+            return
+        ns: dict[str, Any] = {
+            **frame.f_globals,
+            **self._get_frame_locals(frame),
+        }
+        self._console().print(
+            "[bold cyan]Interactive IPython shell "
+            "[dim](Ctrl-D or exit() to return to dpdb)[/dim][/bold cyan]"
+        )
+        embed_shell = InteractiveShellEmbed(banner1="", exit_msg="")  # ruff: ignore[debugger] -- do_interact intentionally instantiates an embedded IPython shell
+        embed_shell(local_ns=ns, global_ns=frame.f_globals)
+        frame_locals = cast(
+            "MutableMapping[str, object]", self._get_frame_locals(frame)
+        )
+        for k, v in ns.items():
+            if k not in frame.f_globals and not k.startswith("_ih"):
+                frame_locals[k] = v
+
+    @override
     def do_help(self, arg: str = "") -> bool | None:
         """Display the categorized command reference table or help for a command (`h`).
 
@@ -1273,11 +1555,30 @@ def _init_pdb() -> Pdb:
     return debugger_cls(context=DEFAULT_CONTEXT_LINES)
 
 
+def _bdb_quit_excepthook(
+    exc_type: type[BaseException],
+    exc_val: BaseException,
+    exc_tb: TracebackType | None,
+) -> None:
+    """Suppress `bdb.BdbQuit` at top level and forward all other exceptions.
+
+    Args:
+        exc_type (type[BaseException]): Exception class.
+        exc_val (BaseException): Exception instance.
+        exc_tb (TracebackType | None): Exception traceback.
+
+    """
+    if issubclass(exc_type, bdb.BdbQuit):
+        return
+    orig = getattr(_bdb_quit_excepthook, "excepthook_ori", sys.__excepthook__)
+    orig(exc_type, exc_val, exc_tb)
+
+
 def wrap_sys_excepthook() -> None:
-    """Wrap `sys.excepthook` with `BdbQuit_excepthook` once."""
-    if sys.excepthook != BdbQuit_excepthook:
-        BdbQuit_excepthook.excepthook_ori = sys.excepthook  # pyrefly: ignore[missing-attribute]
-        sys.excepthook = BdbQuit_excepthook
+    """Wrap `sys.excepthook` with `_bdb_quit_excepthook` once."""
+    if sys.excepthook is not _bdb_quit_excepthook:
+        _bdb_quit_excepthook.excepthook_ori = sys.excepthook  # pyrefly: ignore[missing-attribute]
+        sys.excepthook = _bdb_quit_excepthook
 
 
 def set_trace(frame: FrameType | None = None) -> None:
@@ -1303,7 +1604,7 @@ def set_trace(frame: FrameType | None = None) -> None:
 def setup() -> None:
     """Set internal DPDB as the active debugger."""
     wrap_sys_excepthook()
-    os.environ[BREAKPOINT_ENV_VAR] = DebuggerType.DPDB.set_trace_hook
+    os.environ[BREAKPOINT_ENV_VAR] = DPDB_SET_TRACE_HOOK
     sys.breakpointhook = cast("Any", set_trace)
 
 
@@ -1326,3 +1627,119 @@ def post_mortem(tb: TracebackType | None = None) -> None:
         )
         _render_post_mortem_banner(target_tb, console)
         pdb_instance.interaction(None, target_tb)
+
+
+def pm() -> None:
+    """Enter `dpdb` post-mortem debugging on the last unhandled exception."""
+    last_exc = getattr(sys, "last_exc", None)
+    tb = (
+        last_exc.__traceback__
+        if isinstance(last_exc, BaseException)
+        else getattr(sys, "last_traceback", None)
+    )
+    post_mortem(tb)
+
+
+def _find_symbol_lineno(filepath: str, symbol: str) -> int | None:
+    """Find the definition line number of a function or class in `filepath`.
+
+    Args:
+        filepath (str): Path to the Python source file.
+        symbol (str): Function or class name to locate.
+
+    Returns:
+        int | None: Definition line number if found, else `None`.
+
+    """
+    try:
+        source = Path(filepath).read_text(encoding="utf-8")
+        tree = ast.parse(source, filename=filepath)
+    except Exception:  # ruff: ignore[blind-except] -- gracefully return None if file cannot be read or parsed
+        return None
+    for node in ast.walk(tree):
+        if (
+            isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+            and node.name == symbol
+        ):
+            return node.lineno
+    return None
+
+
+def _apply_break_spec(pdb_instance: Pdb, default_file: str, spec: str) -> None:
+    """Register a single CLI breakpoint specification on `pdb_instance`.
+
+    Args:
+        pdb_instance (Pdb): Debugger instance on which to set the breakpoint.
+        default_file (str): Resolved path to the target script.
+        spec (str): Breakpoint specification (`line`, `file:line`, or `symbol`).
+
+    """
+    cleaned = spec.strip()
+    if ":" in cleaned:
+        file_part, _, line_part = cleaned.rpartition(":")
+        resolved_file = pdb_instance.lookupmodule(file_part) or str(
+            Path(file_part).resolve()
+        )
+        if line_part.isdigit():
+            lineno = pdb_instance.checkline(resolved_file, int(line_part)) or int(
+                line_part
+            )
+            _ = pdb_instance.set_break(resolved_file, lineno)
+        return
+    if cleaned.isdigit():
+        lineno = pdb_instance.checkline(default_file, int(cleaned)) or int(cleaned)
+        _ = pdb_instance.set_break(default_file, lineno)
+        return
+    sym_line = _find_symbol_lineno(default_file, cleaned)
+    if sym_line is not None:
+        lineno = pdb_instance.checkline(default_file, sym_line) or sym_line
+        _ = pdb_instance.set_break(default_file, lineno, funcname=cleaned)
+
+
+def has_active_breakpoints() -> bool:
+    """Return whether any `bdb.Breakpoint` is currently registered.
+
+    Returns:
+        bool: `True` when at least one active breakpoint exists in `bdb`.
+
+    """
+    return any(bp is not None for bp in bdb.Breakpoint.bpbynumber)
+
+
+def seed_cli_breakpoints(target_file: str, breaks: Sequence[str]) -> None:
+    """Register CLI-supplied breakpoints before target execution.
+
+    Args:
+        target_file (str): Path to the resolved target script.
+        breaks (Sequence[str]): Breakpoint specifications (`line`, `file:line`, `func`).
+
+    """
+    pdb_instance = _init_pdb()
+    resolved_default = str(Path(target_file).resolve())
+    for spec in breaks:
+        _apply_break_spec(pdb_instance, resolved_default, spec)
+
+
+def run_with_active_breakpoints(call: Callable[[], object]) -> None:
+    """Execute `call` under `dpdb` trace dispatch so active breakpoints fire.
+
+    Args:
+        call (Callable[[], object]): Zero-argument callable executing the target.
+
+    """
+    wrap_sys_excepthook()
+    pdb_instance = _init_pdb()
+    shell = getattr(pdb_instance, "shell", None)
+    if shell is not None and hasattr(shell, "restore_sys_module_state"):
+        shell.restore_sys_module_state()
+    pdb_instance.reset()
+    caller_frame = sys._getframe()  # ruff: ignore[private-member-access] -- anchor botframe to runner frame
+    pdb_instance.botframe = caller_frame
+    pdb_instance.set_continue()
+    prev_trace = sys.gettrace()
+    sys.settrace(pdb_instance.trace_dispatch)
+    try:
+        _ = call()
+    finally:
+        pdb_instance.quitting = True
+        sys.settrace(prev_trace)

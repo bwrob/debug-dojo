@@ -1,32 +1,27 @@
-"""Tests for debugger backend adapters in `debug_dojo.adapters`."""
+"""Tests for the internal `dpdb` debugger in `debug_dojo._dpdb`."""
 
 from __future__ import annotations
 
+import bdb
+import functools
 import io
 import os
 import sys
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
 
-from IPython.core.debugger import BdbQuit_excepthook, Pdb
+from IPython.core.debugger import Pdb
 from rich.console import Console
 
-from debug_dojo.adapters import (
+import debug_dojo
+import debug_dojo._dpdb as dpdb
+from debug_dojo._dpdb import (
     BREAKPOINT_ENV_VAR,
-    DebuggerType,
-    debugpy,
-    dpdb,
-    enter_post_mortem,
-    get_adapter,
-    ipdb,
-    pdb,
-    pudb,
-    setup_debugger,
-)
-from debug_dojo.adapters.dpdb import (
     DEFAULT_CONTEXT_LINES,
+    DPDB_SET_TRACE_HOOK,
     STEP_CONTEXT_LINES,
     DojoPdb,
+    _bdb_quit_excepthook,
     _build_breakpoints_table,
     _build_psource_panel,
     _build_stack_table,
@@ -34,26 +29,34 @@ from debug_dojo.adapters.dpdb import (
     _build_whatis_panel,
     _compute_locals_diff,
     _extract_arg_names,
+    _extract_callable_target,
     _extract_line_variables,
+    _find_symbol_lineno,
     _format_callable_signature,
+    _format_chained_exception_line,
+    _format_exception_chain,
     _format_return_banner,
     _format_shape_or_len,
     _format_watch_entries,
     _get_debugger_cls,
     _init_pdb,
+    _is_explicit_return_line,
     _is_runner_frame,
     _is_user_local,
     _join_inline_items,
     _render_post_mortem_banner,
     _snapshot_user_locals,
     _tokenize_identifiers,
+    _unwrap_callable_code,
+    has_active_breakpoints,
+    run_with_active_breakpoints,
+    seed_cli_breakpoints,
 )
 
 if TYPE_CHECKING:
     from pathlib import Path
     from types import FrameType
 
-    import pytest
 
 EXPECTED_PAIR_COUNT = 2
 
@@ -94,25 +97,6 @@ def _make_dojo_pdb(
         )
     dbg.reset()
     return dbg
-
-
-def test_debugger_type_set_trace_hooks() -> None:
-    """Test set_trace_hook property on DebuggerType."""
-    assert DebuggerType.DPDB.set_trace_hook == "debug_dojo.adapters.dpdb.set_trace"
-    assert DebuggerType.PDB.set_trace_hook == "pdb.set_trace"
-    assert DebuggerType.IPDB.set_trace_hook == "ipdb.set_trace"
-    assert DebuggerType.PUDB.set_trace_hook == "pudb.set_trace"
-    assert DebuggerType.DEBUGPY.set_trace_hook == "debugpy.breakpoint"
-
-
-def test_get_adapter_resolution() -> None:
-    """Test get_adapter maps DebuggerType values and None to adapter modules."""
-    assert get_adapter(None) is dpdb
-    assert get_adapter(DebuggerType.DPDB) is dpdb
-    assert get_adapter(DebuggerType.PDB) is pdb
-    assert get_adapter(DebuggerType.IPDB) is ipdb
-    assert get_adapter(DebuggerType.PUDB) is pudb
-    assert get_adapter(DebuggerType.DEBUGPY) is debugpy
 
 
 def test_format_shape_or_len() -> None:
@@ -681,8 +665,8 @@ def test_get_debugger_cls_no_shell() -> None:
     mock_app = MagicMock()
     mock_app.shell.debugger_cls = Pdb
     with (
-        patch("debug_dojo.adapters.dpdb.get_ipython", return_value=None),
-        patch("debug_dojo.adapters.dpdb.TerminalIPythonApp", return_value=mock_app),
+        patch("debug_dojo._dpdb.get_ipython", return_value=None),
+        patch("debug_dojo._dpdb.TerminalIPythonApp", return_value=mock_app),
     ):
         cls = _get_debugger_cls()
     assert cls is DojoPdb
@@ -697,8 +681,8 @@ def test_get_debugger_cls_no_shell_fallback() -> None:
     mock_app = MagicMock()
     mock_app.shell = None
     with (
-        patch("debug_dojo.adapters.dpdb.get_ipython", return_value=None),
-        patch("debug_dojo.adapters.dpdb.TerminalIPythonApp", return_value=mock_app),
+        patch("debug_dojo._dpdb.get_ipython", return_value=None),
+        patch("debug_dojo._dpdb.TerminalIPythonApp", return_value=mock_app),
     ):
         cls = _get_debugger_cls()
     assert cls is Pdb
@@ -707,7 +691,7 @@ def test_get_debugger_cls_no_shell_fallback() -> None:
 def test_get_debugger_cls_existing_shell() -> None:
     """Test _get_debugger_cls returns DojoPdb when an IPython shell is active."""
     mock_shell = MagicMock()
-    with patch("debug_dojo.adapters.dpdb.get_ipython", return_value=mock_shell):
+    with patch("debug_dojo._dpdb.get_ipython", return_value=mock_shell):
         cls = _get_debugger_cls()
     assert cls is DojoPdb
 
@@ -716,24 +700,33 @@ def test_init_pdb_uses_default_context() -> None:
     """Test _init_pdb passes DEFAULT_CONTEXT_LINES to debugger_cls."""
     mock_instance = MagicMock()
     mock_cls = MagicMock(return_value=mock_instance)
-    with patch("debug_dojo.adapters.dpdb._get_debugger_cls", return_value=mock_cls):
+    with patch("debug_dojo._dpdb._get_debugger_cls", return_value=mock_cls):
         pdb_inst = _init_pdb()
     assert pdb_inst is mock_instance
     mock_cls.assert_called_once_with(context=DEFAULT_CONTEXT_LINES)
 
 
 def test_wrap_sys_excepthook_idempotent() -> None:
-    """Test wrap_sys_excepthook wraps sys.excepthook once and is idempotent."""
+    """Test wrap_sys_excepthook wraps sys.excepthook once and suppresses BdbQuit."""
     orig_hook = sys.excepthook
     try:
         sentinel_hook = MagicMock()
         sys.excepthook = sentinel_hook
         dpdb.wrap_sys_excepthook()
-        assert sys.excepthook is BdbQuit_excepthook
-        assert getattr(BdbQuit_excepthook, "excepthook_ori", None) is sentinel_hook
+        assert sys.excepthook is _bdb_quit_excepthook
+        assert getattr(_bdb_quit_excepthook, "excepthook_ori", None) is sentinel_hook
 
         dpdb.wrap_sys_excepthook()
-        assert getattr(BdbQuit_excepthook, "excepthook_ori", None) is sentinel_hook
+        assert getattr(_bdb_quit_excepthook, "excepthook_ori", None) is sentinel_hook
+
+        # BdbQuit is suppressed
+        _bdb_quit_excepthook(bdb.BdbQuit, bdb.BdbQuit(), None)
+        sentinel_hook.assert_not_called()
+
+        # Other exceptions are forwarded
+        err = RuntimeError("fail")
+        _bdb_quit_excepthook(RuntimeError, err, None)
+        sentinel_hook.assert_called_once_with(RuntimeError, err, None)
     finally:
         sys.excepthook = orig_hook
 
@@ -752,7 +745,7 @@ def test_dpdb_set_trace_default_frame_and_shell_restore() -> None:
     )
     mock_pdb.set_trace.side_effect = record_set_trace
     mock_pdb.shell = mock_shell
-    with patch("debug_dojo.adapters.dpdb._init_pdb", return_value=mock_pdb):
+    with patch("debug_dojo._dpdb._init_pdb", return_value=mock_pdb):
         dpdb.set_trace()
     assert call_order == ["restore", "set_trace"]
 
@@ -761,7 +754,7 @@ def test_dpdb_set_trace_explicit_frame_without_shell() -> None:
     """Test dpdb.set_trace with explicit frame when pdb has no shell attribute."""
     mock_pdb = MagicMock(spec=Pdb)
     explicit_frame = sys._getframe()  # ruff: ignore[private-member-access] -- obtain real frame for test assertion
-    with patch("debug_dojo.adapters.dpdb._init_pdb", return_value=mock_pdb):
+    with patch("debug_dojo._dpdb._init_pdb", return_value=mock_pdb):
         dpdb.set_trace(frame=explicit_frame)
     mock_pdb.set_trace.assert_called_once_with(explicit_frame)
 
@@ -776,7 +769,7 @@ def test_dpdb_post_mortem_with_explicit_tb() -> None:
     fake_tb.tb_frame.f_code.co_name = "main"
     fake_tb.tb_lineno = 10
     with (
-        patch("debug_dojo.adapters.dpdb._init_pdb", return_value=dojo_pdb),
+        patch("debug_dojo._dpdb._init_pdb", return_value=dojo_pdb),
         patch.object(dojo_pdb, "reset") as mock_reset,
         patch.object(dojo_pdb, "interaction") as mock_interaction,
     ):
@@ -789,160 +782,380 @@ def test_dpdb_post_mortem_with_explicit_tb() -> None:
 def test_dpdb_post_mortem_without_active_exception() -> None:
     """Test dpdb.post_mortem does not call interaction when no traceback exists."""
     mock_pdb = MagicMock()
-    with patch("debug_dojo.adapters.dpdb._init_pdb", return_value=mock_pdb):
+    with patch("debug_dojo._dpdb._init_pdb", return_value=mock_pdb):
         dpdb.post_mortem(None)
     mock_pdb.reset.assert_called_once_with()
     mock_pdb.interaction.assert_not_called()
 
 
-@patch("debug_dojo.adapters.dpdb.set_trace")
+@patch("debug_dojo._dpdb.set_trace")
 def test_dpdb_setup(mock_set_trace: MagicMock) -> None:
     """Test dpdb.setup configures PYTHONBREAKPOINT and sys.breakpointhook."""
     dpdb.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "debug_dojo.adapters.dpdb.set_trace"
+    assert os.environ[BREAKPOINT_ENV_VAR] == DPDB_SET_TRACE_HOOK
     assert sys.breakpointhook == mock_set_trace
 
 
-@patch("pdb.set_trace")
-def test_pdb_setup(mock_set_trace: MagicMock) -> None:
-    """Test pdb.setup configures PYTHONBREAKPOINT and sys.breakpointhook."""
-    pdb.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "pdb.set_trace"
-    assert sys.breakpointhook == mock_set_trace
+def test_top_level_debug_dojo_api() -> None:
+    """Test debug_dojo.set_trace, post_mortem, and pm top-level exports."""
+    assert debug_dojo.set_trace is dpdb.set_trace
+    assert debug_dojo.post_mortem is dpdb.post_mortem
+    assert debug_dojo.pm is dpdb.pm
+
+    fake_exc = RuntimeError("crash")
+    with (
+        patch.object(sys, "last_exc", fake_exc, create=True),
+        patch("debug_dojo._dpdb.post_mortem") as mock_pm_last,
+    ):
+        debug_dojo.pm()
+        mock_pm_last.assert_called_once_with(fake_exc.__traceback__)
+
+    with (
+        patch.object(sys, "last_exc", None, create=True),
+        patch.object(sys, "last_traceback", None, create=True),
+        patch("debug_dojo._dpdb.post_mortem") as mock_pm_fallback,
+    ):
+        debug_dojo.pm()
+        mock_pm_fallback.assert_called_once_with(None)
 
 
-@patch("pdb.post_mortem")
-def test_pdb_post_mortem(mock_pm: MagicMock) -> None:
-    """Test pdb.post_mortem delegates to standard library pdb.post_mortem."""
-    pdb.post_mortem(None)
-    mock_pm.assert_called_once_with(None)
+def test_chained_exception_formatting() -> None:
+    """Test _format_chained_exception_line and _format_exception_chain."""
+    assert _format_exception_chain(None) == []
+
+    plain_err = ValueError("bad val")
+    line_no_tb = _format_chained_exception_line("Caused by", plain_err)
+    assert "ValueError" in line_no_tb
+    assert "bad val" in line_no_tb
+
+    def fail_inner() -> None:
+        msg = "inner boom"
+        raise KeyError(msg)
+
+    def fail_chained() -> None:
+        try:
+            fail_inner()
+        except KeyError as err:
+            msg = "outer boom"
+            raise RuntimeError(msg) from err
+
+    try:
+        fail_chained()
+    except RuntimeError as outer_err:
+        chain_lines = _format_exception_chain(outer_err)
+        assert len(chain_lines) == 1
+        assert "Caused by" in chain_lines[0]
+        assert "KeyError" in chain_lines[0]
+
+    # Implicit context chain
+    def capture_implicit_context() -> BaseException:
+        try:
+            try:
+                fail_inner()
+            except KeyError:
+                msg = "implicit outer"
+                raise ValueError(msg)  # ruff: ignore[raise-without-from-inside-except] -- intentionally test implicit __context__ chain
+        except ValueError as ctx_err:
+            return ctx_err
+        msg = "unreachable"  # pragma: no cover
+        raise AssertionError(msg)  # pragma: no cover
+
+    ctx_lines = _format_exception_chain(capture_implicit_context())
+    assert len(ctx_lines) == 1
+    assert "During handling of" in ctx_lines[0]
 
 
-@patch("ipdb.set_trace")
-def test_ipdb_setup(mock_set_trace: MagicMock) -> None:
-    """Test ipdb.setup configures PYTHONBREAKPOINT, context size, and hook."""
-    ipdb.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "ipdb.set_trace"
-    assert os.environ[ipdb.IPDB_CONTEXT_SIZE] == ipdb.DEFAULT_IPDB_CONTEXT_LINES
-    assert sys.breakpointhook == mock_set_trace
+def test_smart_callable_breakpoint_resolution() -> None:
+    """Test callable breakpoint unwrapping and resolution helpers."""
+
+    def real_fn(x: int, y: int) -> int:
+        return (x * 2) + y
+
+    partial_fn = functools.partial(real_fn, 1)
+    assert partial_fn(2) == 4  # ruff: ignore[magic-value-comparison] -- exercise helper body for 100% test coverage
+
+    class SampleCallable:
+        def __init__(self) -> None:
+            pass
+
+        def __call__(self) -> int:
+            return 42
+
+        @property
+        def prop(self) -> int:
+            return 7
+
+    inst = SampleCallable()
+    assert inst() == 42  # ruff: ignore[magic-value-comparison] -- exercise __call__ body for 100% test coverage
+    assert inst.prop == 7  # ruff: ignore[magic-value-comparison] -- exercise property body for 100% test coverage
+    assert _extract_callable_target(partial_fn) is real_fn
+    assert _extract_callable_target(SampleCallable.prop) is SampleCallable.prop.fget
+    assert _extract_callable_target(SampleCallable) is SampleCallable.__init__
+    assert _extract_callable_target(inst) is SampleCallable.__call__
+    assert _extract_callable_target(123) == 123  # ruff: ignore[magic-value-comparison] -- verify non-callable passthrough
+
+    assert _unwrap_callable_code(real_fn) is real_fn.__code__
+    assert _unwrap_callable_code(123) is None
+
+    # Test DojoPdb.do_break resolving an in-scope callable expression with condition
+    dbg = _make_dojo_pdb()
+    try:
+        dbg.clear_all_breaks()
+        dbg.setup(sys._getframe(), None)  # ruff: ignore[private-member-access] -- obtain real frame for test
+        dbg.do_break("real_fn, x > 0")
+        assert has_active_breakpoints() is True
+
+        # Test do_continue with c(...) routing to default
+        with patch.object(dbg, "default") as mock_default:
+            dbg.do_continue("(1, 2)")
+            mock_default.assert_called_once_with("c(1, 2)")
+
+        # Test normal do_continue delegates
+        with patch(
+            "IPython.core.debugger.Pdb.do_continue", return_value=1
+        ) as mock_super_c:
+            assert dbg.do_continue("") == 1
+            mock_super_c.assert_called_once_with("")
+    finally:
+        dbg.clear_all_breaks()
+        bdb.Breakpoint.next = 1
+        bdb.Breakpoint.bplist.clear()
+        bdb.Breakpoint.bpbynumber = [None]
 
 
-def test_ipdb_setup_not_installed() -> None:
-    """Test ipdb.setup falls back to dpdb when IPDB is not importable."""
-    with patch.dict("sys.modules", {"ipdb": None}):
-        ipdb.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "debug_dojo.adapters.dpdb.set_trace"
+def test_dojo_pdb_do_interact() -> None:
+    """Test DojoPdb.do_interact with and without an active frame."""
+    buf = io.StringIO()
+    dbg = _make_dojo_pdb(stdout=buf)
 
+    dbg.curframe = None
+    with patch.object(dbg, "error") as mock_err:
+        dbg.do_interact("")
+    mock_err.assert_called_once()
 
-@patch("ipdb.post_mortem")
-def test_ipdb_post_mortem(mock_pm: MagicMock) -> None:
-    """Test ipdb.post_mortem delegates to ipdb.post_mortem."""
-    ipdb.post_mortem(None)
-    mock_pm.assert_called_once_with(None)
+    test_frame = sys._getframe()  # ruff: ignore[private-member-access] -- obtain real frame for interact test
+    dbg.setup(test_frame, None)
+    mock_embed_instance = MagicMock()
+    expected_interact_val = 42
 
+    def fake_embed(*, local_ns: dict[str, object], **_kwargs: object) -> None:
+        local_ns["interact_var"] = expected_interact_val
 
-@patch("debug_dojo.adapters.dpdb.post_mortem")
-def test_ipdb_post_mortem_fallback(mock_dpdb_pm: MagicMock) -> None:
-    """Test ipdb.post_mortem falls back to dpdb.post_mortem when unimportable."""
-    with patch.dict("sys.modules", {"ipdb": None}):
-        ipdb.post_mortem(None)
-    mock_dpdb_pm.assert_called_once_with(None)
-
-
-@patch("pudb.set_trace")
-def test_pudb_setup(mock_set_trace: MagicMock) -> None:
-    """Test pudb.setup configures PYTHONBREAKPOINT and sys.breakpointhook."""
-    pudb.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "pudb.set_trace"
-    assert sys.breakpointhook == mock_set_trace
-
-
-def test_pudb_setup_not_installed() -> None:
-    """Test pudb.setup falls back to dpdb when PuDB is not importable."""
-    with patch.dict("sys.modules", {"pudb": None}):
-        pudb.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "debug_dojo.adapters.dpdb.set_trace"
-
-
-@patch("pudb.post_mortem")
-def test_pudb_post_mortem(mock_pm: MagicMock) -> None:
-    """Test pudb.post_mortem delegates to pudb.post_mortem."""
-    pudb.post_mortem(None)
-    mock_pm.assert_called_once_with(None)
-
-
-@patch("debug_dojo.adapters.dpdb.post_mortem")
-def test_pudb_post_mortem_fallback(mock_dpdb_pm: MagicMock) -> None:
-    """Test pudb.post_mortem falls back to dpdb.post_mortem when unimportable."""
-    with patch.dict("sys.modules", {"pudb": None}):
-        pudb.post_mortem(None)
-    mock_dpdb_pm.assert_called_once_with(None)
-
-
-@patch("debugpy.listen")
-@patch("debugpy.wait_for_client")
-@patch("debugpy.breakpoint")
-def test_debugpy_setup(
-    mock_breakpoint: MagicMock,
-    mock_wait_for_client: MagicMock,
-    mock_listen: MagicMock,
-) -> None:
-    """Test debugpy.setup configures breakpoint hook and waits for client."""
-    debugpy.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "debugpy.breakpoint"
-    assert sys.breakpointhook == mock_breakpoint
-    mock_listen.assert_called_once_with(
-        (debugpy.DEFAULT_DEBUGPY_HOST, debugpy.DEFAULT_DEBUGPY_PORT)
+    mock_embed_instance.side_effect = fake_embed
+    with patch(
+        "debug_dojo._dpdb.InteractiveShellEmbed",
+        return_value=mock_embed_instance,
+    ):
+        dbg.do_interact("")
+    mock_embed_instance.assert_called_once()
+    assert "Interactive IPython shell" in buf.getvalue()
+    assert (
+        dbg._get_frame_locals(test_frame).get("interact_var")  # ruff: ignore[private-member-access] -- verify interact local mutation
+        == expected_interact_val
     )
-    mock_wait_for_client.assert_called_once()
+    dbg.close()
 
 
-def test_debugpy_setup_not_installed() -> None:
-    """Test debugpy.setup falls back to dpdb when Debugpy is not importable."""
-    with patch.dict("sys.modules", {"debugpy": None}):
-        debugpy.setup()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "debug_dojo.adapters.dpdb.set_trace"
+def test_cli_breakpoint_helpers(tmp_path: Path) -> None:
+    """Test CLI breakpoint seeding and active breakpoint execution helpers."""
+    script = tmp_path / "sample.py"
+    script.write_text(
+        "def alpha():\n    return 1\n\nx = alpha()\n",
+        encoding="utf-8",
+    )
+
+    assert _find_symbol_lineno(str(script), "alpha") == 1
+    assert _find_symbol_lineno(str(script), "missing") is None
+    assert _find_symbol_lineno(str(tmp_path / "nonexistent.py"), "alpha") is None
+
+    dbg = _make_dojo_pdb()
+    try:
+        dbg.clear_all_breaks()
+        assert has_active_breakpoints() is False
+
+        with patch("debug_dojo._dpdb._init_pdb", return_value=dbg):
+            seed_cli_breakpoints(
+                str(script),
+                ["2", f"{script}:4", f"{script}:bad", "alpha", "unknown_sym"],
+            )
+            assert has_active_breakpoints() is True
+
+            called: list[bool] = []
+            mock_shell = MagicMock()
+            dbg.shell = mock_shell
+            run_with_active_breakpoints(lambda: called.append(True))
+            assert called == [True]
+            mock_shell.restore_sys_module_state.assert_called_once()
+
+            # Also test when shell is None
+            with patch.object(dbg, "shell", None):
+                run_with_active_breakpoints(lambda: called.append(False))
+            assert called == [True, False]
+    finally:
+        dbg.clear_all_breaks()
+        bdb.Breakpoint.next = 1
+        bdb.Breakpoint.bplist.clear()
+        bdb.Breakpoint.bpbynumber = [None]
 
 
-@patch("debug_dojo.adapters.dpdb.post_mortem")
-def test_debugpy_post_mortem(mock_dpdb_pm: MagicMock) -> None:
-    """Test debugpy.post_mortem delegates to internal dpdb.post_mortem."""
-    debugpy.post_mortem(None)
-    mock_dpdb_pm.assert_called_once_with(None)
+def test_is_explicit_return_line() -> None:
+    """Test _is_explicit_return_line checks whether line starts with return."""
+    mock_frame = MagicMock()
+    mock_frame.f_code.co_filename = "dummy.py"
+    mock_frame.f_lineno = 10
+    with patch("linecache.getline", return_value="return\n"):
+        assert _is_explicit_return_line(mock_frame) is True
+    with patch("linecache.getline", return_value="return x + 1\n"):
+        assert _is_explicit_return_line(mock_frame) is True
+    with patch("linecache.getline", return_value="return(x)\n"):
+        assert _is_explicit_return_line(mock_frame) is True
+    with patch("linecache.getline", return_value="x = 1\n"):
+        assert _is_explicit_return_line(mock_frame) is False
 
 
-@patch("debug_dojo.adapters.dpdb.setup")
-def test_setup_debugger_none_without_env(
-    mock_dpdb_setup: MagicMock,
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Test setup_debugger(None) calls dpdb.setup when PYTHONBREAKPOINT is unset."""
-    monkeypatch.delenv(BREAKPOINT_ENV_VAR, raising=False)
-    setup_debugger(None)
-    mock_dpdb_setup.assert_called_once_with()
+def test_dojo_pdb_close_and_message() -> None:
+    """Test DojoPdb loop/executor cleanup and message output suppression."""
+    dbg = _make_dojo_pdb()
+    mock_loop = MagicMock()
+    mock_loop.is_closed.return_value = False
+    mock_executor = MagicMock()
+    dbg.pt_loop = mock_loop
+    dbg.thread_executor = mock_executor
+    dbg.close()
+    mock_loop.close.assert_called_once()
+    mock_executor.shutdown.assert_called_once_with(wait=False)
+
+    # When pt_loop is closed and thread_executor is None, close does nothing
+    mock_loop.is_closed.return_value = True
+    del dbg.thread_executor
+    dbg.close()
+
+    # Test message method delegates when not suppressed
+    with patch("IPython.core.debugger.Pdb.message") as mock_super_msg:
+        dbg.message("hello world")
+        mock_super_msg.assert_called_once_with("hello world")
+
+    # Test message is suppressed when _suppress_message is True
+    dbg._suppress_message = True  # ruff: ignore[private-member-access] -- verify internal flag suppression
+    with patch("IPython.core.debugger.Pdb.message") as mock_super_msg:
+        dbg.message("suppressed")
+        mock_super_msg.assert_not_called()
 
 
-@patch("debug_dojo.adapters.dpdb.setup")
-def test_setup_debugger_none_respects_existing_env(
-    mock_dpdb_setup: MagicMock,
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
-    """Test setup_debugger(None) preserves existing PYTHONBREAKPOINT when set."""
-    monkeypatch.setenv(BREAKPOINT_ENV_VAR, "custom.debugger.set_trace")
-    setup_debugger(None)
-    mock_dpdb_setup.assert_not_called()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "custom.debugger.set_trace"
+def test_dojo_pdb_user_return_branches() -> None:
+    """Test DojoPdb.user_return skipping and pause handling."""
+    dbg = _make_dojo_pdb()
+
+    # 1. _wait_for_mainpyfile is True
+    dbg._wait_for_mainpyfile = True  # ruff: ignore[private-member-access] -- verify internal flag branch
+    with patch.object(Pdb, "user_return") as mock_super_ret:
+        dbg.user_return(MagicMock(), None)
+        mock_super_ret.assert_not_called()
+    dbg._wait_for_mainpyfile = False  # ruff: ignore[private-member-access] -- reset internal flag
+
+    # 2. _should_skip_return_pause: module frame returns True
+    mod_frame = MagicMock()
+    mod_frame.f_code.co_name = "<module>"
+    assert dbg._should_skip_return_pause(mod_frame) is True  # ruff: ignore[private-member-access] -- test return pause predicate
+
+    # 3. _should_skip_return_pause: return command 'r' / 'ret' returns False
+    func_frame = MagicMock()
+    func_frame.f_code.co_name = "sample_fn"
+    func_frame.f_lineno = 20
+    dbg.lastcmd = "r"
+    assert dbg._should_skip_return_pause(func_frame) is False  # ruff: ignore[private-member-access] -- test return pause predicate
+    dbg.lastcmd = "ret"
+    assert dbg._should_skip_return_pause(func_frame) is False  # ruff: ignore[private-member-access] -- test return pause predicate
+
+    # 4. _should_skip_return_pause: same paused location + explicit return
+    dbg.lastcmd = "n"
+    dbg._last_paused_location = (  # ruff: ignore[private-member-access] -- simulate previous pause
+        id(func_frame),
+        func_frame.f_lineno,
+    )
+    with patch("debug_dojo._dpdb._is_explicit_return_line", return_value=True):
+        assert dbg._should_skip_return_pause(func_frame) is True  # ruff: ignore[private-member-access] -- test return pause predicate
+
+        # When user_return encounters skip condition, it calls set_step() and returns
+        with patch.object(dbg, "set_step") as mock_step:
+            dbg.user_return(func_frame, None)
+            mock_step.assert_called_once()
 
 
-@patch("debug_dojo.adapters.pdb.setup")
-def test_setup_debugger_explicit(mock_pdb_setup: MagicMock) -> None:
-    """Test setup_debugger dispatches to explicit adapter setup."""
-    setup_debugger(DebuggerType.PDB)
-    mock_pdb_setup.assert_called_once_with()
+def test_dojo_pdb_callable_break_branches() -> None:
+    """Test all branches of _try_set_callable_break."""
+    dbg = _make_dojo_pdb()
 
+    # 1. curframe is None
+    dbg.curframe = None
+    assert (
+        dbg._try_set_callable_break("fn", None, temporary=False)  # ruff: ignore[private-member-access] -- test internal helper
+        is False
+    )
 
-@patch("debug_dojo.adapters.dpdb.post_mortem")
-def test_enter_post_mortem_default(mock_dpdb_pm: MagicMock) -> None:
-    """Test enter_post_mortem defaults to dpdb.post_mortem."""
-    enter_post_mortem(None, None)
-    mock_dpdb_pm.assert_called_once_with(None)
+    # Set active curframe
+    test_frame = sys._getframe()  # ruff: ignore[private-member-access] -- obtain frame for test
+    dbg.curframe = test_frame
+
+    # 2. expr with colon or digit
+    assert (
+        dbg._try_set_callable_break("file.py:10", None, temporary=False)  # ruff: ignore[private-member-access] -- test internal helper
+        is False
+    )
+    assert (
+        dbg._try_set_callable_break("42", None, temporary=False)  # ruff: ignore[private-member-access] -- test internal helper
+        is False
+    )
+
+    # 3. expr resolves to non-callable
+    with patch.object(dbg, "_getval_except", return_value=123):
+        assert (
+            dbg._try_set_callable_break("non_callable", None, temporary=False)  # ruff: ignore[private-member-access] -- test internal helper
+            is False
+        )
+
+    # 4. callable whose checkline returns 0 / None
+    def dummy_fn() -> None:
+        pass
+
+    dummy_fn()
+
+    with (
+        patch.object(dbg, "_getval_except", return_value=dummy_fn),
+        patch.object(dbg, "checkline", return_value=None),
+    ):
+        assert (
+            dbg._try_set_callable_break("dummy_fn", None, temporary=False)  # ruff: ignore[private-member-access] -- test internal helper
+            is False
+        )
+
+    # 5. callable where set_break returns an error string
+    with (
+        patch.object(dbg, "_getval_except", return_value=dummy_fn),
+        patch.object(dbg, "checkline", return_value=10),
+        patch.object(dbg, "set_break", return_value="Invalid line"),
+        patch.object(dbg, "error") as mock_err,
+    ):
+        assert (
+            dbg._try_set_callable_break("dummy_fn", None, temporary=False)  # ruff: ignore[private-member-access] -- test internal helper
+            is True
+        )
+        mock_err.assert_called_once_with("Invalid line")
+
+    # 6. callable where set_break succeeds
+    mock_bp = MagicMock()
+    mock_bp.number = 1
+    mock_bp.file = "test.py"
+    mock_bp.line = 10
+    with (
+        patch.object(dbg, "_getval_except", return_value=dummy_fn),
+        patch.object(dbg, "checkline", return_value=10),
+        patch.object(dbg, "set_break", return_value=None),
+        patch.object(dbg, "get_breaks", return_value=[mock_bp]),
+        patch.object(dbg, "message") as mock_msg,
+    ):
+        assert (
+            dbg._try_set_callable_break("dummy_fn", None, temporary=False)  # ruff: ignore[private-member-access] -- test internal helper
+            is True
+        )
+        mock_msg.assert_called_once_with("Breakpoint 1 at test.py:10")

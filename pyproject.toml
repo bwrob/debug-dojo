@@ -15,7 +15,7 @@
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Typing :: Typed",
     ]
-    dependencies = ["ipython>=9.0.0", "rich>=15.0.0", "typer>=0.16.0"]
+    dependencies = ["ipython>=9.0.0", "rich>=15.0.0", "typer>=0.27.0"]
     description = "🏣 debug dojo, a place for zen debugging"
     license = "MIT"
     license-files = ["LICENSE"]
@@ -33,9 +33,6 @@
     [project.scripts]
         debug-dojo = "debug_dojo._cli:main"
         dojo       = "debug_dojo._cli:main"
-
-    [project.optional-dependencies]
-        all-debuggers = ["debugpy>=1.0.0", "ipdb>=0.13.13", "pudb>=2020.1"]
 
 [build-system]
     build-backend = "uv_build"
@@ -79,7 +76,6 @@
         "pytest-sugar>=1.1.1",
         "pytest-xdist>=3.8.0",
         "syrupy>=6.1.0",
-        "debug-dojo[all-debuggers]",
     ]
 
 [tool.uv]

@@ -79,6 +79,13 @@ line-length = 88
             "suspicious-subprocess-import",
         ]
 
+        # Example scripts for user exploration and debugger testing.
+        "examples/*" = [
+            "implicit-namespace-package",
+            "print",
+            "unnecessary-assign",
+        ]
+
     [lint.pyupgrade]
         keep-runtime-typing = true
 

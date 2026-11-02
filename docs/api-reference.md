@@ -1,6 +1,6 @@
 ---
 diataxis: reference
-purpose: Document Python APIs, installer functions, execution engine, and comparison utilities.
+purpose: Document Python APIs, the dpdb debugger module, installer functions, execution engine, and comparison utilities.
 ---
 
 # API Reference
@@ -20,6 +20,10 @@ The internal module boundaries and import hierarchy are strictly enforced by
 
 Detailed API documentation for internal modules:
 
+### Debugger Submodule
+
+::: debug_dojo._dpdb
+
 ### Installer Submodule
 
 ::: debug_dojo._installers
@@ -35,7 +39,3 @@ Detailed API documentation for internal modules:
 ### Command Line Interface Submodule
 
 ::: debug_dojo._cli
-
-### Debugger Adapters Subpackage
-
-::: debug_dojo.adapters._base

@@ -14,17 +14,17 @@ Authoritative engineering guidelines for working with `debug_dojo`.
   ```python
   import debug_dojo.install
 
-  # b() -> trigger configured breakpoint
+  # b() -> trigger dpdb breakpoint
   # p(obj) -> pretty-print object with Rich
   # i(obj) -> inspect object with Rich
   # c(obj1, obj2) -> side-by-side object comparison
   ```
 - Command-line execution:
   ```bash
-  dojo run my_script.py
-  dojo run -m my_module
-  dojo run -e pytest
-  dojo run -d ipdb my_script.py
+  uvx debug-dojo my_script.py
+  dojo -b 42 my_script.py
+  dojo pytest
+  dojo my_module
   ```
 - Use strict typing across all function boundaries.
 - Adhere to the core architectural patterns defined in `AGENTS.md`.

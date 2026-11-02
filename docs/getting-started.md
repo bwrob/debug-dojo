@@ -1,40 +1,26 @@
 ---
 diataxis: tutorial
-purpose: Guide developers through installing Debug Dojo, running their first debug session, and using injected helper tools.
+purpose: Guide developers through running their first debug session with Debug Dojo, using dpdb commands, and inspecting objects.
 ---
 
 # Getting Started
 
-This tutorial guides you through installing **Debug Dojo**, running a Python script
-with debugging tools pre-injected, and using global inspection helpers.
+This tutorial guides you through running a Python script with **Debug Dojo**, inspecting
+state inside the `dpdb` interactive debugger, and using injected helper functions.
 
 ## Prerequisites
 
 Ensure you have Python 3.12+ and [`uv`](https://docs.astral.sh/uv/) installed.
 
-## 1. Installation
+## 1. Zero-Install CLI Debugging
 
-Drop `debug-dojo` into any virtual environment at any moment using `uv pip install`:
-
-```console
-uv pip install debug-dojo
-```
-
-If you also want to install optional third-party debuggers (`ipdb`, `pudb`, `debugpy`):
-
-```console
-uv pip install "debug-dojo[all-debuggers]"
-```
-
-## 2. Zero-Import CLI Debugging
-
-With `debug-dojo`, you can execute any Python script while automatically injecting
-inspection shortcuts into Python's `builtins`.
+With `debug-dojo`, you can execute any Python script via `uvx` while automatically
+configuring `dpdb` and injecting inspection shortcuts into Python's `builtins`.
 
 Create a sample script named `debug_demo.py`:
 
 ```python
-"""Sample script demonstrating Debug Dojo builtins."""
+"""Sample script demonstrating Debug Dojo builtins and dpdb."""
 
 config_payload = {
     "server": "us-east-1",
@@ -48,11 +34,11 @@ i(config_payload)
 b()
 ```
 
-Run the script using `dojo run`:
+Run the script using `uvx debug-dojo` (or `dojo` when installed):
 
 <!-- termynal -->
 ```console
-$ dojo run debug_demo.py
+$ uvx debug-dojo debug_demo.py
 
 # Output formatted by Rich pretty-print
 {'server': 'us-east-1', 'retries': 3, 'features': ['auth', 'caching', 'metrics']}
@@ -71,13 +57,13 @@ $ dojo run debug_demo.py
 │       keys = def keys(...) D.keys() -> a set-like object providing a view    │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 
-# Injected b() stops execution in your configured debugger
-ipdb> p config_payload['server']
+# b() stops execution in dpdb
+dpdb> p config_payload['server']
 'us-east-1'
-ipdb> c
+dpdb> c
 ```
 
-## 3. Comparing Objects Side-by-Side
+## 2. Comparing Objects Side-by-Side
 
 Use the `c(obj1, obj2)` helper to compare two dictionaries, objects, or data models.
 Differences are displayed in a formatted side-by-side terminal table.
@@ -99,30 +85,39 @@ $ python -c "import debug_dojo.install; c({'a': 1, 'b': 2}, {'a': 1, 'b': 3})"
 └───────────────────────────────────────┴──────────────────────────────────────┘
 ```
 
-## 4. In-Code Activation
+## 3. In-Code Activation
 
-When running tests or scripts where you cannot use the `dojo run` CLI wrapper, import
+When running tests or scripts where you do not use the `debug-dojo` CLI runner, import
 `debug_dojo.install` once in your module or test fixture:
 
 ```python
 import debug_dojo.install
 
 # The following helpers are now globally accessible:
-# - b(): Set a breakpoint using the configured debugger
+# - b(): Enter the dpdb debugger
 # - p(obj): Rich pretty-print
 # - i(obj): Rich object inspection
 # - c(obj1, obj2): Side-by-side comparison table
 ```
 
-## 5. Automatic Post-Mortem Debugging
+You can also use the `pdb` / `ipdb`-compatible top-level API or set
+`PYTHONBREAKPOINT=debug_dojo.set_trace`:
 
-When `dojo run` encounters an unhandled exception, it formats the traceback with Rich
-syntax highlighting and enters a post-mortem debugging session at the exact frame
+```python
+import debug_dojo
+
+debug_dojo.set_trace()
+```
+
+## 4. Automatic Post-Mortem Debugging
+
+When `debug-dojo` encounters an unhandled exception, it renders the traceback and crash
+banner with Rich and enters a `dpdb` post-mortem debugging session at the exact frame
 where the failure occurred:
 
 <!-- termynal -->
 ```console
-$ dojo run failing_script.py
+$ uvx debug-dojo failing_script.py
 
 <b>Error while running failing_script.py:</b>
 ZeroDivisionError: division by zero
@@ -136,11 +131,16 @@ Traceback (most recent call last):
 ZeroDivisionError: division by zero
 
 <b>Entering post-mortem debugging session...</b>
+╭──────────── Dojo Post-Mortem — ZeroDivisionError ────────────╮
+│ ZeroDivisionError: division by zero                          │
+│ Location: /workspace/failing_script.py:2 in compute()        │
+╰──────────────────────────────────────────────────────────────╯
 > /workspace/failing_script.py(2)compute()
--> return 100 / divisor
-ipdb> p divisor
+----> 2     return 100 / divisor
+  ↳ Line: divisor=0
+dpdb> p divisor
 0
-ipdb> q
+dpdb> q
 ```
 
 ## Architecture & Lifecycles
@@ -152,13 +152,13 @@ executes targets, and manages failure states.
 
 ```mermaid
 flowchart TD
-    CLI["dojo run CLI"] --> INSTALLER["Installers (_installers.py)"]
+    CLI["debug-dojo / dojo CLI"] --> INSTALLER["Installers (_installers.py)"]
     INSTALLER --> BUILTINS["Python builtins (b, p, i, c)"]
-    INSTALLER --> HOOK["sys.breakpointhook (PDB / IPDB / PuDB / Debugpy)"]
+    INSTALLER --> HOOK["sys.breakpointhook (dpdb.set_trace)"]
     CLI --> EXEC["Target Execution (_execution.py)"]
     BUILTINS --> EXEC
     HOOK --> EXEC
-    EXEC -->|Unhandled Exception| PM["Post-Mortem Debugger"]
+    EXEC -->|Unhandled Exception| PM["dpdb Post-Mortem (dpdb.post_mortem)"]
 ```
 
 ### Execution Lifecycle
@@ -167,30 +167,30 @@ flowchart TD
 sequenceDiagram
     autonumber
     actor Dev as Developer
-    participant CLI as dojo CLI
+    participant CLI as debug-dojo CLI
     participant Inst as Tool Installer
     participant Target as Target Script
-    participant Dbg as Debugger Backend
+    participant Dpdb as dpdb Debugger
 
-    Dev->>CLI: dojo run script.py
-    CLI->>Inst: install_tools(debugger)
+    Dev->>CLI: uvx debug-dojo script.py
+    CLI->>Inst: install_tools()
     Inst->>Inst: Inject b, p, i, c into builtins
-    Inst->>Dbg: Configure sys.breakpointhook
+    Inst->>Dpdb: Configure sys.breakpointhook
     CLI->>Target: Execute via runpy
-    Target->>Dbg: b() triggered
-    Dbg-->>Dev: Interactive Debugger Prompt
+    Target->>Dpdb: b() or breakpoint() triggered
+    Dpdb-->>Dev: Interactive dpdb> Prompt
 ```
 
 ### State Lifecycle
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Initializing: Invoke dojo run
-    Initializing --> InjectingTools: Install b, p, i, c & hook
+    [*] --> Initializing: Invoke debug-dojo
+    Initializing --> InjectingTools: Install b, p, i, c & dpdb hook
     InjectingTools --> RunningTarget: Execute script / module / exec
     RunningTarget --> Completed: Script exits successfully
     RunningTarget --> PostMortem: Unhandled exception raised
-    PostMortem --> Terminated: Developer exits debugger
+    PostMortem --> Terminated: Developer exits dpdb
     Completed --> [*]
     Terminated --> [*]
 ```

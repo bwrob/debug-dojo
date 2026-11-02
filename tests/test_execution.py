@@ -5,14 +5,15 @@ from __future__ import annotations
 import os
 import sys
 from bdb import BdbQuit
+from collections.abc import Callable
 from pathlib import Path
+from pdb import Restart
 from unittest.mock import MagicMock, patch
 
 import pytest
 import typer
 
 from debug_dojo._execution import (
-    ExecMode,
     _activate_venv_paths,
     _configure_project_venv,
     _configure_sys_argv,
@@ -20,12 +21,12 @@ from debug_dojo._execution import (
     _find_venv_in_ancestors,
     _get_runner_and_target,
     _handle_exception,
-    _install_debug_tools,
+    _is_importable_module,
+    _is_runner_only_traceback,
     _resolve_project_venv,
     _safe_execute,
     execute_with_debug,
 )
-from debug_dojo.adapters import DebuggerType
 
 
 def test_configure_sys_argv() -> None:
@@ -124,7 +125,7 @@ def test_configure_project_venv_when_none_and_external(
     monkeypatch.delenv("VIRTUAL_ENV", raising=False)
     monkeypatch.chdir(tmp_path)
     with patch("debug_dojo._execution._activate_venv_paths") as mock_activate:
-        _configure_project_venv("some.module", ExecMode.MODULE)
+        _configure_project_venv("some.module")
         mock_activate.assert_not_called()
 
         ext_venv = tmp_path / ".venv"
@@ -132,58 +133,113 @@ def test_configure_project_venv_when_none_and_external(
         (ext_venv / "pyvenv.cfg").write_text("home = /usr/bin\n", encoding="utf-8")
         script = tmp_path / "script.py"
         script.write_text("x = 1\n", encoding="utf-8")
-        _configure_project_venv(str(script), ExecMode.FILE)
+        _configure_project_venv(str(script))
         mock_activate.assert_called_once_with(ext_venv.resolve())
 
 
-def test_configure_sys_path_file_and_empty_sys_path(tmp_path: Path) -> None:
-    """Test _configure_sys_path sets sys.path[0] for file mode and empty sys.path."""
-    script = tmp_path / "script.py"
+def test_configure_sys_path(tmp_path: Path) -> None:
+    """Test _configure_sys_path sets sys.path[0] for non-empty and empty sys.path."""
     orig_path = list(sys.path)
     try:
-        _configure_sys_path(str(script), ExecMode.FILE)
-        assert sys.path[0] == str(tmp_path.resolve())
+        _configure_sys_path(str(tmp_path))
+        assert sys.path[0] == str(tmp_path)
 
         sys.path.clear()
-        _configure_sys_path(str(script), ExecMode.FILE)
-        assert sys.path == [str(tmp_path.resolve())]
-
-        sys.path = ["sentinel"]
-        _configure_sys_path("some.module", ExecMode.MODULE)
-        assert sys.path[0] == str(Path.cwd().resolve())
+        _configure_sys_path(str(tmp_path))
+        assert sys.path == [str(tmp_path)]
     finally:
         sys.path = orig_path
 
 
-def test_install_debug_tools_verbose() -> None:
-    """Test installing debug tools with verbose=True."""
-    _install_debug_tools("myscript.py", ["--foo"], verbose=True, debugger=None)
+def test_is_importable_module() -> None:
+    """Test _is_importable_module handles paths, .py files, modules, and errors."""
+    assert _is_importable_module("") is False
+    assert _is_importable_module("dir/file") is False
+    assert _is_importable_module("script.py") is False
+    assert _is_importable_module("debug_dojo") is True
+    with patch("importlib.util.find_spec", side_effect=ValueError("bad spec")):
+        assert _is_importable_module("broken.spec") is False
 
 
 def test_get_runner_and_target_nonexistent() -> None:
-    """Test get_runner_and_target raises Exit(1) on nonexistent file."""
+    """Test get_runner_and_target raises Exit(1) on unresolvable target."""
     with pytest.raises(typer.Exit) as exc:
-        _ = _get_runner_and_target("nonexistent_script_12345.py", ExecMode.FILE)
+        _ = _get_runner_and_target("nonexistent_script_12345.py")
     assert exc.value.exit_code == 1
 
 
-@patch("pdb.post_mortem")
-def test_handle_exception_with_post_mortem_pdb(mock_pm: MagicMock) -> None:
-    """Test exception handler enters PDB post-mortem when debugger is PDB."""
-    exc = RuntimeError("Test error with pdb")
+@patch("debug_dojo._dpdb.post_mortem")
+def test_handle_exception_with_post_mortem(mock_pm: MagicMock) -> None:
+    """Test exception handler enters dpdb post-mortem."""
+    exc = RuntimeError("Test error")
     with pytest.raises(typer.Exit) as exit_exc:
-        _handle_exception(exc, "test_target", DebuggerType.PDB)
+        _handle_exception(exc)
     assert exit_exc.value.exit_code == 1
     mock_pm.assert_called_once_with(exc.__traceback__)
 
 
 def test_safe_execute_import_error() -> None:
-    """Test safe_execute catches ImportError and raises Exit(1)."""
+    """Test safe_execute catches runner-only ImportError and raises Exit(1)."""
     runner = MagicMock(side_effect=ImportError("Cannot import target"))
 
     with pytest.raises(typer.Exit) as exit_exc:
         _safe_execute(runner, "bad_mod")
     assert exit_exc.value.exit_code == 1
+
+
+@patch("debug_dojo._dpdb.post_mortem")
+def test_safe_execute_user_import_error_enters_post_mortem(
+    mock_pm: MagicMock,
+) -> None:
+    """Test safe_execute enters post-mortem on user-frame ImportError."""
+
+    def user_runner(_target: str, **_kwargs: object) -> dict[str, object]:
+        msg = "nested import failure"
+        raise ImportError(msg)
+
+    with (
+        patch("debug_dojo._execution._is_runner_only_traceback", return_value=False),
+        pytest.raises(typer.Exit) as exit_exc,
+    ):
+        _safe_execute(user_runner, "script.py")
+    assert exit_exc.value.exit_code == 1
+    mock_pm.assert_called_once()
+
+
+def test_is_runner_only_traceback() -> None:
+    """Test _is_runner_only_traceback distinguishes runner vs user frames."""
+    assert _is_runner_only_traceback(None) is True
+
+    fake_tb = MagicMock()
+    fake_tb.tb_next = None
+    with patch("debug_dojo._dpdb._is_runner_frame", return_value=False):
+        assert _is_runner_only_traceback(fake_tb) is False
+
+
+def test_safe_execute_restart_and_active_breakpoints() -> None:
+    """Test _safe_execute loops on Restart and uses run_with_active_breakpoints."""
+    calls: list[int] = []
+
+    def restarting_runner(_target: str, **_kwargs: object) -> dict[str, object]:
+        calls.append(1)
+        if len(calls) == 1:
+            raise Restart
+        return {}
+
+    def invoke_fn(fn: Callable[[], object]) -> object:
+        return fn()
+
+    with (
+        patch("debug_dojo._dpdb.has_active_breakpoints", side_effect=[False, True]),
+        patch(
+            "debug_dojo._dpdb.run_with_active_breakpoints",
+            side_effect=invoke_fn,
+        ) as mock_run_bp,
+    ):
+        _safe_execute(restarting_runner, "target.py")
+
+    assert len(calls) == 2  # ruff: ignore[magic-value-comparison] -- initial run + 1 restart
+    mock_run_bp.assert_called_once()
 
 
 def test_safe_execute_bdb_quit() -> None:
@@ -218,15 +274,20 @@ def test_safe_execute_system_exit_zero() -> None:
     _safe_execute(runner, "target")
 
 
+@patch("debug_dojo._dpdb.seed_cli_breakpoints")
 @patch("runpy.run_path")
-def test_execute_with_debug_default(mock_run_path: MagicMock, tmp_path: Path) -> None:
-    """Test execute_with_debug runs target with default debugger."""
+def test_execute_with_debug_default(
+    mock_run_path: MagicMock,
+    mock_seed_bps: MagicMock,
+    tmp_path: Path,
+) -> None:
+    """Test execute_with_debug runs target and seeds optional CLI breakpoints."""
     dummy_file = tmp_path / "dummy.py"
     dummy_file.write_text("print('hello')", encoding="utf-8")
     execute_with_debug(
         target_name=str(dummy_file),
         target_args=[],
-        target_mode=ExecMode.FILE,
-        verbose=False,
+        breaks=["1"],
     )
+    mock_seed_bps.assert_called_once_with(str(dummy_file), ["1"])
     mock_run_path.assert_called_once_with(str(dummy_file), run_name="__main__")

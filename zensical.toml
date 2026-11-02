@@ -120,7 +120,7 @@
         pymdownx.tasklist.custom_checkbox = true
         pymdownx.tilde = {}
         termynal.include_assets = true
-        termynal.prompt_literal_start = ["$", ">>>", "ipdb>"]
+        termynal.prompt_literal_start = ["$", ">>>", "dpdb>"]
         toc.permalink = true
         zensical.extensions.preview.targets.include = ["*"]
 
