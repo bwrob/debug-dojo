@@ -1,16 +1,18 @@
 # serializer version: 1
 # name: test_cli_help_snapshot
   '''
-  Usage: run [OPTIONS] [target]
+  Usage: dojo [OPTIONS]
   
    Run a Python script, module, or command with the dpdb debugger.
   
   ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-  │   target      <str>  The target script, module, or command to debug.         │
+  │ target              The target script, module, or command to debug.          │
+  │ target_args         Arguments forwarded directly to the target program.      │
   ╰──────────────────────────────────────────────────────────────────────────────╯
   ╭─ Options ────────────────────────────────────────────────────────────────────╮
-  │ --break  -b      <str>  Set a breakpoint (line, file:line, or function)      │
-  │ --help                  Show this message and exit.                          │
+  │ -b, --break <loc>         Set a breakpoint (line, file:line, or function).   │
+  │ -v, --version             Show version and exit.                             │
+  │ -h, --help                Show this message and exit.                        │
   ╰──────────────────────────────────────────────────────────────────────────────╯
   '''
 # ---

@@ -13,7 +13,6 @@ from pdb import Restart
 from shutil import which
 from typing import TYPE_CHECKING
 
-import typer
 from rich import print as rich_print
 
 from debug_dojo import _dpdb
@@ -184,7 +183,7 @@ def _get_runner_and_target(target_name: str) -> tuple[Runner, str]:
         tuple[Runner, str]: The `runpy` runner function and resolved target string.
 
     Raises:
-        typer.Exit: If `target_name` cannot be resolved as a file, executable, or
+        SystemExit: If `target_name` cannot be resolved as a file, executable, or
             module.
 
     """
@@ -203,7 +202,7 @@ def _get_runner_and_target(target_name: str) -> tuple[Runner, str]:
         return runpy.run_module, target_name
 
     rich_print(f"[red]Could not resolve target {target_name}.[/red]")
-    raise typer.Exit(1)
+    raise SystemExit(1)
 
 
 def _is_runner_only_traceback(tb: TracebackType | None) -> bool:
@@ -235,11 +234,11 @@ def _handle_exception(e: Exception) -> None:
         e (Exception): The unhandled exception raised by the target.
 
     Raises:
-        typer.Exit: Always raises `Exit(1)` after post-mortem completes.
+        SystemExit: Always raises `SystemExit(1)` after post-mortem completes.
 
     """
     _dpdb.post_mortem(e.__traceback__)
-    raise typer.Exit(1) from e
+    raise SystemExit(1) from e
 
 
 def _invoke_target(runner: Runner, target_name: str) -> None:
@@ -267,7 +266,7 @@ def _run_once(runner: Runner, target_name: str) -> None:
 
     Raises:
         Restart: Propagated when the user requests a program restart inside `dpdb`.
-        typer.Exit: If an error occurs or the user terminates the session.
+        SystemExit: If an error occurs or the user terminates the session.
 
     """
     try:
@@ -277,14 +276,14 @@ def _run_once(runner: Runner, target_name: str) -> None:
     except ImportError as e:
         if _is_runner_only_traceback(e.__traceback__):
             rich_print(f"[red]Error importing {target_name}:[/red]\n{e}")
-            raise typer.Exit(1) from e
+            raise SystemExit(1) from e
         _handle_exception(e)
     except BdbQuit:
         rich_print("[red]Debugging session terminated by user.[/red]")
-        raise typer.Exit(0) from None
+        raise SystemExit(0) from None
     except KeyboardInterrupt:
         rich_print("[red]Execution interrupted by user.[/red]")
-        raise typer.Exit(0) from None
+        raise SystemExit(0) from None
     except SystemExit as e:
         if bool(e.code):
             rich_print(f"[red]Script exited with code {e.code}.[/red]")

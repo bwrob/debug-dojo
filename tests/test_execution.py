@@ -11,7 +11,6 @@ from pdb import Restart
 from unittest.mock import MagicMock, patch
 
 import pytest
-import typer
 
 from debug_dojo._execution import (
     _activate_venv_paths,
@@ -163,18 +162,18 @@ def test_is_importable_module() -> None:
 
 def test_get_runner_and_target_nonexistent() -> None:
     """Test get_runner_and_target raises Exit(1) on unresolvable target."""
-    with pytest.raises(typer.Exit) as exc:
+    with pytest.raises(SystemExit) as exc:
         _ = _get_runner_and_target("nonexistent_script_12345.py")
-    assert exc.value.exit_code == 1
+    assert exc.value.code == 1
 
 
 @patch("debug_dojo._dpdb.post_mortem")
 def test_handle_exception_with_post_mortem(mock_pm: MagicMock) -> None:
     """Test exception handler enters dpdb post-mortem."""
     exc = RuntimeError("Test error")
-    with pytest.raises(typer.Exit) as exit_exc:
+    with pytest.raises(SystemExit) as exit_exc:
         _handle_exception(exc)
-    assert exit_exc.value.exit_code == 1
+    assert exit_exc.value.code == 1
     mock_pm.assert_called_once_with(exc.__traceback__)
 
 
@@ -182,9 +181,9 @@ def test_safe_execute_import_error() -> None:
     """Test safe_execute catches runner-only ImportError and raises Exit(1)."""
     runner = MagicMock(side_effect=ImportError("Cannot import target"))
 
-    with pytest.raises(typer.Exit) as exit_exc:
+    with pytest.raises(SystemExit) as exit_exc:
         _safe_execute(runner, "bad_mod")
-    assert exit_exc.value.exit_code == 1
+    assert exit_exc.value.code == 1
 
 
 @patch("debug_dojo._dpdb.post_mortem")
@@ -199,10 +198,10 @@ def test_safe_execute_user_import_error_enters_post_mortem(
 
     with (
         patch("debug_dojo._execution._is_runner_only_traceback", return_value=False),
-        pytest.raises(typer.Exit) as exit_exc,
+        pytest.raises(SystemExit) as exit_exc,
     ):
         _safe_execute(user_runner, "script.py")
-    assert exit_exc.value.exit_code == 1
+    assert exit_exc.value.code == 1
     mock_pm.assert_called_once()
 
 
@@ -246,18 +245,18 @@ def test_safe_execute_bdb_quit() -> None:
     """Test safe_execute catches BdbQuit and raises Exit(0)."""
     runner = MagicMock(side_effect=BdbQuit())
 
-    with pytest.raises(typer.Exit) as exit_exc:
+    with pytest.raises(SystemExit) as exit_exc:
         _safe_execute(runner, "target")
-    assert exit_exc.value.exit_code == 0
+    assert exit_exc.value.code == 0
 
 
 def test_safe_execute_keyboard_interrupt() -> None:
     """Test safe_execute catches KeyboardInterrupt and raises Exit(0)."""
     runner = MagicMock(side_effect=KeyboardInterrupt())
 
-    with pytest.raises(typer.Exit) as exit_exc:
+    with pytest.raises(SystemExit) as exit_exc:
         _safe_execute(runner, "target")
-    assert exit_exc.value.exit_code == 0
+    assert exit_exc.value.code == 0
 
 
 def test_safe_execute_system_exit_nonzero() -> None:

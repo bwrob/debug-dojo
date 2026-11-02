@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
 
-from typer.testing import CliRunner
-
 from debug_dojo._cli import cli
+
+if TYPE_CHECKING:
+    from debug_dojo._cli import CliRunner
 
 
 @patch("debug_dojo._dpdb.set_trace")
