@@ -169,10 +169,10 @@ jobs:
               run: echo "UV_EXCLUDE_NEWER=$(python3 -c 'import datetime; print((datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(hours=1)).strftime("%Y-%m-%dT%H:%M:%SZ"))')" >> "$GITHUB_ENV"
 
             - name: 🛠️ Install lowest-direct project dependencies
-              run: uv sync --group test --resolution lowest-direct
+              run: uv sync --no-default-groups --group test --resolution lowest-direct
 
             - name: 🧪 Run pytest suite against lowest dependencies
-              run: uv run poe test
+              run: uv run pytest --cov --cov-report=term-missing
 
             - name: 📋 Summarize lowest-dependencies test failures
               if: failure()

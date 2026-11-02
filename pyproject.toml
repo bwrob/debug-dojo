@@ -15,7 +15,7 @@
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Typing :: Typed",
     ]
-    dependencies = ["ipython>=9.0.0", "rich>=15.0.0", "typer>=0.16.0"]
+    dependencies = ["ipython>=9.0.0", "rich>=15.0.0", "typer>=0.27.0"]
     description = "🏣 debug dojo, a place for zen debugging"
     license = "MIT"
     license-files = ["LICENSE"]

@@ -28,7 +28,7 @@
 [tasks.test-lowest]
     help = "Verify test suite against minimum declared dependency versions (lowest-direct)."
     sequence = [
-        { cmd = "uv sync --resolution lowest-direct" },
+        { cmd = "uv sync --no-default-groups --group test --resolution lowest-direct" },
         { cmd = "pytest --cov --cov-report=term-missing" },
         { cmd = "uv sync" },
     ]
