@@ -15,7 +15,7 @@
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Typing :: Typed",
     ]
-    dependencies = ["rich>=15.0.0", "typer>=0.16.0"]
+    dependencies = ["ipython>=9.0.0", "rich>=15.0.0", "typer>=0.16.0"]
     description = "🏣 debug dojo, a place for zen debugging"
     license = "MIT"
     license-files = ["LICENSE"]
@@ -31,7 +31,8 @@
         Repository    = "https://github.com/bwrob/debug-dojo.git"
 
     [project.scripts]
-        dojo = "debug_dojo._cli:main"
+        debug-dojo = "debug_dojo._cli:main"
+        dojo       = "debug_dojo._cli:main"
 
     [project.optional-dependencies]
         all-debuggers = ["debugpy>=1.0.0", "ipdb>=0.13.13", "pudb>=2020.1"]

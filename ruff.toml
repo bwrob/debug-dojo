@@ -44,8 +44,12 @@ line-length = 88
         # CLI runtime annotations evaluated by Typer
         "src/debug_dojo/_cli.py" = ["typing-only-standard-library-import"]
 
-        # Debugger installation functions need to dynamically import debugger backends
+        # Debugger installation and adapter functions dynamically import debugger backends
         "src/debug_dojo/_installers.py" = [
+            "import-outside-top-level",
+            "debugger",
+        ]
+        "src/debug_dojo/adapters/*.py" = [
             "import-outside-top-level",
             "debugger",
         ]

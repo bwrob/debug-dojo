@@ -34,11 +34,11 @@ $ dojo run --help
 │   target      <str>  The target script or module to debug.                   │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --debugger  -d      <debugpy|ipdb|pdb|pudb>  Specify the debugger to use     │
-│ --verbose   -v                               Enable verbose output           │
-│ --module    -m                               Run a module                    │
-│ --exec      -e                               Run a command                   │
-│ --help                                       Show this message and exit.     │
+│ --debugger  -d      <debugpy|dpdb|ipdb|pdb|pudb>  Specify the debugger       │
+│ --verbose   -v                                    Enable verbose output      │
+│ --module    -m                                    Run a module               │
+│ --exec      -e                                    Run a command              │
+│ --help                                            Show this message and exit │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -64,13 +64,13 @@ dojo run [OPTIONS] [TARGET] [TARGET_ARGS]...
 
 #### Options
 
-| Option       | Flag | Type   | Default | Description                                                       |
-| :----------- | :--- | :----- | :------ | :---------------------------------------------------------------- |
-| `--debugger` | `-d` | Choice | `None`  | Debugger backend (`debugpy`, `ipdb`, `pdb`, `pudb`).              |
-| `--verbose`  | `-v` | Flag   | `False` | Enable verbose output.                                            |
-| `--module`   | `-m` | Flag   | `False` | Treat `TARGET` as a Python module (runs with `runpy.run_module`). |
-| `--exec`     | `-e` | Flag   | `False` | Treat `TARGET` as an executable command (e.g. `pytest`).          |
-| `--help`     |      | Flag   |         | Show help message and exit.                                       |
+| Option       | Flag | Type   | Default | Description                                                                                                     |
+| :----------- | :--- | :----- | :------ | :-------------------------------------------------------------------------------------------------------------- |
+| `--debugger` | `-d` | Choice | `None`  | Debugger backend (`debugpy`, `dpdb`, `ipdb`, `pdb`, `pudb`). Defaults to `dpdb` if `PYTHONBREAKPOINT` is unset. |
+| `--verbose`  | `-v` | Flag   | `False` | Enable verbose output.                                                                                          |
+| `--module`   | `-m` | Flag   | `False` | Treat `TARGET` as a Python module (runs with `runpy.run_module`).                                               |
+| `--exec`     | `-e` | Flag   | `False` | Treat `TARGET` as an executable command (e.g. `pytest`).                                                        |
+| `--help`     |      | Flag   |         | Show help message and exit.                                                                                     |
 
 > [!WARNING]
 > `--module` (`-m`) and `--exec` (`-e`) are mutually exclusive. Passing both flags

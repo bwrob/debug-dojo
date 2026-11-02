@@ -35,3 +35,7 @@ Detailed API documentation for internal modules:
 ### Command Line Interface Submodule
 
 ::: debug_dojo._cli
+
+### Debugger Adapters Subpackage
+
+::: debug_dojo.adapters._base
