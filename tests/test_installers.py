@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import builtins
-import os
 import sys
 from collections.abc import Iterator
 from unittest.mock import MagicMock, patch
@@ -11,12 +10,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 from debug_dojo._installers import (
-    BREAKPOINT_ENV_VAR,
-    DEFAULT_DEBUGPY_HOST,
-    DEFAULT_DEBUGPY_PORT,
-    DEFAULT_IPDB_CONTEXT_LINES,
     DEFAULT_PROMPT,
-    IPDB_CONTEXT_SIZE,
     DebuggerType,
     install_breakpoint,
     install_compare,
@@ -26,10 +20,6 @@ from debug_dojo._installers import (
     install_tools,
     rich_traceback,
     set_debugger,
-    use_debugpy,
-    use_ipdb,
-    use_pdb,
-    use_pudb,
 )
 
 
@@ -41,47 +31,6 @@ def cleanup_builtins() -> Iterator[None]:
     for key in builtins_to_cleanup:
         if hasattr(builtins, key):
             delattr(builtins, key)
-
-
-@patch("pdb.set_trace")
-def test_use_pdb(mock_set_trace: MagicMock) -> None:
-    """Test that PDB is set as the active debugger."""
-    use_pdb()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "pdb.set_trace"
-    assert sys.breakpointhook == mock_set_trace
-
-
-@patch("pudb.set_trace")
-def test_use_pudb(mock_set_trace: MagicMock) -> None:
-    """Test that PuDB is set as the active debugger."""
-    use_pudb()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "pudb.set_trace"
-    assert sys.breakpointhook == mock_set_trace
-
-
-@patch("ipdb.set_trace")
-def test_use_ipdb(mock_set_trace: MagicMock) -> None:
-    """Test that IPDB is set as the active debugger."""
-    use_ipdb()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "ipdb.set_trace"
-    assert os.environ[IPDB_CONTEXT_SIZE] == DEFAULT_IPDB_CONTEXT_LINES
-    assert sys.breakpointhook == mock_set_trace
-
-
-@patch("debugpy.listen")
-@patch("debugpy.wait_for_client")
-@patch("debugpy.breakpoint")
-def test_use_debugpy(
-    mock_breakpoint: MagicMock,
-    mock_wait_for_client: MagicMock,
-    mock_listen: MagicMock,
-) -> None:
-    """Test that Debugpy is set as the active debugger."""
-    use_debugpy()
-    assert os.environ[BREAKPOINT_ENV_VAR] == "debugpy.breakpoint"
-    assert sys.breakpointhook == mock_breakpoint
-    mock_listen.assert_called_once_with((DEFAULT_DEBUGPY_HOST, DEFAULT_DEBUGPY_PORT))
-    mock_wait_for_client.assert_called_once()
 
 
 def test_inspect() -> None:
@@ -127,39 +76,12 @@ def test_install_features(
     mock_breakpoint.assert_called_once_with()
 
 
-def test_set_debugger_none() -> None:
-    """Test that set_debugger with debugger=None does not enforce a debugger."""
-    set_debugger(None)
-    assert sys.ps1 == DEFAULT_PROMPT
-
-
-@patch("debug_dojo._installers.use_pdb")
-def test_set_debugger_pdb(mock_use_pdb: MagicMock) -> None:
-    """Test that the PDB debugger is set correctly."""
+@patch("debug_dojo._installers.setup_debugger")
+def test_set_debugger(mock_setup_debugger: MagicMock) -> None:
+    """Test set_debugger delegates to setup_debugger and sets sys.ps1."""
     set_debugger(DebuggerType.PDB)
-    mock_use_pdb.assert_called_once_with()
+    mock_setup_debugger.assert_called_once_with(DebuggerType.PDB)
     assert sys.ps1 == DEFAULT_PROMPT
-
-
-@patch("debug_dojo._installers.use_ipdb")
-def test_set_debugger_ipdb(mock_use_ipdb: MagicMock) -> None:
-    """Test that the IPDB debugger is set correctly."""
-    set_debugger(DebuggerType.IPDB)
-    mock_use_ipdb.assert_called_once_with()
-
-
-@patch("debug_dojo._installers.use_pudb")
-def test_set_debugger_pudb(mock_use_pudb: MagicMock) -> None:
-    """Test set_debugger with PUDB."""
-    set_debugger(DebuggerType.PUDB)
-    mock_use_pudb.assert_called_once_with()
-
-
-@patch("debug_dojo._installers.use_debugpy")
-def test_set_debugger_debugpy(mock_use_debugpy: MagicMock) -> None:
-    """Test set_debugger with DEBUGPY."""
-    set_debugger(DebuggerType.DEBUGPY)
-    mock_use_debugpy.assert_called_once_with()
 
 
 @patch("debug_dojo._installers.install_features")
@@ -175,24 +97,6 @@ def test_install_tools(
     mock_set_debugger.assert_called_once_with(DebuggerType.PDB)
     mock_rich_traceback.assert_called_once_with()
     mock_install_features.assert_called_once_with()
-
-
-def test_use_pudb_not_installed() -> None:
-    """Test use_pudb when PuDB is not importable."""
-    with patch.dict("sys.modules", {"pudb": None}):
-        use_pudb()
-
-
-def test_use_ipdb_not_installed() -> None:
-    """Test use_ipdb when IPDB is not importable."""
-    with patch.dict("sys.modules", {"ipdb": None}):
-        use_ipdb()
-
-
-def test_use_debugpy_not_installed() -> None:
-    """Test use_debugpy when Debugpy is not importable."""
-    with patch.dict("sys.modules", {"debugpy": None}):
-        use_debugpy()
 
 
 def test_inspect_with_kwargs() -> None:

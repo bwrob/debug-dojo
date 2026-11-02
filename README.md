@@ -35,8 +35,10 @@ zero cache or history files left behind, and ready for any debugger.
 
 - **Plug-and-Play & Zero Traces:** Add to any environment at any point. Leaves no
   configuration files, cache, or history behind.
-- **Debugger Agnostic:** Ready for any debugger (`pdb`, `ipdb`, `pudb`, `debugpy`)
-  without enforcing one.
+- **Built-in IPython Debugger (`dpdb`) & Debugger Agnostic:** Ships with an internal
+  IPython-powered debugger (`dpdb`) used automatically when `PYTHONBREAKPOINT` is not
+  set and no other debugger is passed to the CLI, while remaining ready for any external
+  debugger (`pdb`, `ipdb`, `pudb`, `debugpy`).
 - **CLI-Driven Control:** Pass all runtime options directly via command-line flags.
 - **Enhanced Output with Rich:** Leverages [`rich`](https://github.com/Textualize/rich)
   for syntax-highlighted code, pretty-printed objects, and formatted tracebacks.
@@ -45,9 +47,16 @@ zero cache or history files left behind, and ready for any debugger.
 - **Interactive Object Inspection & Breakpoints:** Inspect objects deeply with `i(obj)`,
   pretty-print with `p(obj)`, and trigger breakpoints effortlessly with `b()`.
 
-## 🚀 Installation
+## 🚀 Installation & Zero-Install
 
-Add `debug-dojo` to any environment using `uv`:
+Run `debug-dojo` instantly in any `uv`-managed project without installing it into your
+project dependencies:
+
+```bash
+uvx debug-dojo run my_script.py
+```
+
+Or add `debug-dojo` to any environment using `uv`:
 
 ```bash
 uv pip install debug-dojo

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from bdb import BdbQuit
 from pathlib import Path
@@ -12,15 +13,19 @@ import typer
 
 from debug_dojo._execution import (
     ExecMode,
+    _activate_venv_paths,
+    _configure_project_venv,
     _configure_sys_argv,
-    _enter_post_mortem,
+    _configure_sys_path,
+    _find_venv_in_ancestors,
     _get_runner_and_target,
     _handle_exception,
     _install_debug_tools,
+    _resolve_project_venv,
     _safe_execute,
     execute_with_debug,
 )
-from debug_dojo._installers import DebuggerType
+from debug_dojo.adapters import DebuggerType
 
 
 def test_configure_sys_argv() -> None:
@@ -31,6 +36,123 @@ def test_configure_sys_argv() -> None:
         assert sys.argv == ["myscript.py", "--arg1", "val1"]
     finally:
         sys.argv = orig
+
+
+def test_find_venv_in_ancestors(tmp_path: Path) -> None:
+    """Test _find_venv_in_ancestors finds pyvenv.cfg in parent or returns None."""
+    nested = tmp_path / "a" / "b"
+    nested.mkdir(parents=True)
+    assert _find_venv_in_ancestors(nested) is None
+
+    venv_dir = tmp_path / ".venv"
+    venv_dir.mkdir()
+    (venv_dir / "pyvenv.cfg").write_text("home = /usr/bin\n", encoding="utf-8")
+    assert _find_venv_in_ancestors(nested) == venv_dir.resolve()
+
+
+def test_resolve_project_venv_uv_direct_and_relative(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test _resolve_project_venv with direct and ancestor UV_PROJECT_ENVIRONMENT."""
+    direct_venv = tmp_path / "custom_direct"
+    direct_venv.mkdir()
+    (direct_venv / "pyvenv.cfg").write_text("home = /usr/bin\n", encoding="utf-8")
+    monkeypatch.setenv("UV_PROJECT_ENVIRONMENT", str(direct_venv))
+    assert _resolve_project_venv(tmp_path) == direct_venv.resolve()
+
+    rel_venv = tmp_path / ".venv-custom"
+    rel_venv.mkdir()
+    (rel_venv / "pyvenv.cfg").write_text("home = /usr/bin\n", encoding="utf-8")
+    sub = tmp_path / "sub"
+    sub.mkdir()
+    monkeypatch.setenv("UV_PROJECT_ENVIRONMENT", ".venv-custom")
+    assert _resolve_project_venv(sub) == rel_venv.resolve()
+
+
+def test_resolve_project_venv_fallbacks(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test _resolve_project_venv fallback order."""
+    monkeypatch.setenv("UV_PROJECT_ENVIRONMENT", "missing-venv")
+    active_venv = tmp_path / "active_venv"
+    active_venv.mkdir()
+    (active_venv / "pyvenv.cfg").write_text("home = /usr/bin\n", encoding="utf-8")
+    monkeypatch.setenv("VIRTUAL_ENV", str(active_venv))
+    assert _resolve_project_venv(tmp_path) == active_venv.resolve()
+
+    # Invalid VIRTUAL_ENV falls back to ancestor .venv search
+    monkeypatch.setenv("VIRTUAL_ENV", str(tmp_path / "nonexistent"))
+    assert _resolve_project_venv(tmp_path) is None
+
+
+def test_activate_venv_paths(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test _activate_venv_paths registers site-packages and bin directories."""
+    venv_dir = tmp_path / ".venv"
+    posix_site = venv_dir / "lib" / "python3.12" / "site-packages"
+    bin_dir = venv_dir / "bin"
+    posix_site.mkdir(parents=True)
+    bin_dir.mkdir(parents=True)
+
+    monkeypatch.setenv("PATH", "")
+    with patch("site.addsitedir") as mock_addsitedir:
+        _activate_venv_paths(venv_dir)
+        assert os.environ["PATH"] == str(bin_dir)
+        mock_addsitedir.assert_called_once_with(str(posix_site))
+
+        # Second call with existing PATH entry does not duplicate bin_dir
+        monkeypatch.setenv("PATH", f"/usr/bin{os.pathsep}{bin_dir}")
+        _activate_venv_paths(venv_dir)
+        assert os.environ["PATH"] == f"/usr/bin{os.pathsep}{bin_dir}"
+
+        # Call with non-empty PATH not containing bin_dir prepends bin_dir
+        monkeypatch.setenv("PATH", "/usr/bin")
+        _activate_venv_paths(venv_dir)
+        assert os.environ["PATH"] == f"{bin_dir}{os.pathsep}/usr/bin"
+
+
+def test_configure_project_venv_when_none_and_external(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Test _configure_project_venv skips active/missing venv and activates external."""
+    monkeypatch.delenv("UV_PROJECT_ENVIRONMENT", raising=False)
+    monkeypatch.delenv("VIRTUAL_ENV", raising=False)
+    monkeypatch.chdir(tmp_path)
+    with patch("debug_dojo._execution._activate_venv_paths") as mock_activate:
+        _configure_project_venv("some.module", ExecMode.MODULE)
+        mock_activate.assert_not_called()
+
+        ext_venv = tmp_path / ".venv"
+        ext_venv.mkdir()
+        (ext_venv / "pyvenv.cfg").write_text("home = /usr/bin\n", encoding="utf-8")
+        script = tmp_path / "script.py"
+        script.write_text("x = 1\n", encoding="utf-8")
+        _configure_project_venv(str(script), ExecMode.FILE)
+        mock_activate.assert_called_once_with(ext_venv.resolve())
+
+
+def test_configure_sys_path_file_and_empty_sys_path(tmp_path: Path) -> None:
+    """Test _configure_sys_path sets sys.path[0] for file mode and empty sys.path."""
+    script = tmp_path / "script.py"
+    orig_path = list(sys.path)
+    try:
+        _configure_sys_path(str(script), ExecMode.FILE)
+        assert sys.path[0] == str(tmp_path.resolve())
+
+        sys.path.clear()
+        _configure_sys_path(str(script), ExecMode.FILE)
+        assert sys.path == [str(tmp_path.resolve())]
+
+        sys.path = ["sentinel"]
+        _configure_sys_path("some.module", ExecMode.MODULE)
+        assert sys.path[0] == str(Path.cwd().resolve())
+    finally:
+        sys.path = orig_path
 
 
 def test_install_debug_tools_verbose() -> None:
@@ -53,36 +175,6 @@ def test_handle_exception_with_post_mortem_pdb(mock_pm: MagicMock) -> None:
         _handle_exception(exc, "test_target", DebuggerType.PDB)
     assert exit_exc.value.exit_code == 1
     mock_pm.assert_called_once_with(exc.__traceback__)
-
-
-@patch("ipdb.post_mortem")
-def test_enter_post_mortem_ipdb(mock_pm: MagicMock) -> None:
-    """Test post-mortem with IPDB."""
-    _enter_post_mortem(None, DebuggerType.IPDB)
-    mock_pm.assert_called_once_with(None)
-
-
-@patch("pdb.post_mortem")
-def test_enter_post_mortem_ipdb_fallback(mock_pdb_pm: MagicMock) -> None:
-    """Test post-mortem fallback to PDB when IPDB is unimportable."""
-    with patch.dict("sys.modules", {"ipdb": None}):
-        _enter_post_mortem(None, DebuggerType.IPDB)
-    mock_pdb_pm.assert_called_once_with(None)
-
-
-@patch("pudb.post_mortem")
-def test_enter_post_mortem_pudb(mock_pm: MagicMock) -> None:
-    """Test post-mortem with PuDB."""
-    _enter_post_mortem(None, DebuggerType.PUDB)
-    mock_pm.assert_called_once_with(None)
-
-
-@patch("pdb.post_mortem")
-def test_enter_post_mortem_pudb_fallback(mock_pdb_pm: MagicMock) -> None:
-    """Test post-mortem fallback to PDB when PuDB is unimportable."""
-    with patch.dict("sys.modules", {"pudb": None}):
-        _enter_post_mortem(None, DebuggerType.PUDB)
-    mock_pdb_pm.assert_called_once_with(None)
 
 
 def test_safe_execute_import_error() -> None:

@@ -37,15 +37,15 @@ def test_post_mortem(
     mock_post_mortem.assert_called_once()
 
 
-@patch("pdb.post_mortem")
-def test_post_mortem_default_pdb(
-    mock_pdb_pm: MagicMock,
+@patch("debug_dojo.adapters.dpdb.post_mortem")
+def test_post_mortem_default_dpdb(
+    mock_dpdb_pm: MagicMock,
     runner: CliRunner,
     test_target_exception: str,
 ) -> None:
-    """Test post-mortem defaults to pdb when no debugger is specified."""
+    """Test post-mortem defaults to dpdb when no debugger is specified."""
     args = ["run", test_target_exception]
     result = runner.invoke(cli, args)
 
     assert result.exit_code != 0
-    mock_pdb_pm.assert_called_once()
+    mock_dpdb_pm.assert_called_once()

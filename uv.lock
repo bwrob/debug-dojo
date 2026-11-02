@@ -436,6 +436,7 @@ version = "0.9.0"
 source = { editable = "." }
 default-groups = ["dev", "docs", "lint", "mutation", "test"]
 dependencies = [
+    { name = "ipython" },
     { name = "rich" },
     { name = "typer" },
 ]
@@ -519,6 +520,7 @@ test = [
 requires-dist = [
     { name = "debugpy", marker = "extra == 'all-debuggers'", specifier = ">=1.0.0" },
     { name = "ipdb", marker = "extra == 'all-debuggers'", specifier = ">=0.13.13" },
+    { name = "ipython", specifier = ">=9.0.0" },
     { name = "pudb", marker = "extra == 'all-debuggers'", specifier = ">=2020.1" },
     { name = "rich", specifier = ">=15.0.0" },
     { name = "typer", specifier = ">=0.16.0" },
