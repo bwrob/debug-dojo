@@ -383,8 +383,18 @@ def cli(
     """
     out_file = sys.stdout if stdout is None else stdout
     err_file = sys.stderr if stderr is None else stderr
-    out_console = Console(file=out_file, highlight=False, soft_wrap=True)
-    err_console = Console(file=err_file, highlight=False, soft_wrap=True)
+    out_console = Console(
+        file=out_file,
+        highlight=False,
+        soft_wrap=True,
+        legacy_windows=False,
+    )
+    err_console = Console(
+        file=err_file,
+        highlight=False,
+        soft_wrap=True,
+        legacy_windows=False,
+    )
 
     raw_args = list(args) if args is not None else sys.argv[1:]
     if not raw_args:

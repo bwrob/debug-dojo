@@ -63,4 +63,4 @@ def runner() -> CliRunner:
         CliRunner: A test CLI runner object.
 
     """
-    return CliRunner(env={"NO_COLOR": "1", "TERM": "dumb"})
+    return CliRunner(env={"NO_COLOR": "1", "TERM": "dumb", "COLUMNS": "80"})

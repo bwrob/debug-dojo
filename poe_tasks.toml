@@ -65,19 +65,6 @@
     cmd  = "python scripts/verify_wheel.py"
     help = "Build wheel and verify clean imports in an isolated virtual environment."
 
-[tasks.test-mutation]
-    cmd  = "mutmut run"
-    help = "Run fast mutation testing across package source with mutmut."
-
-[tasks.test-mutation-cosmic]
-    help = "Run distributed mutation testing with cosmic-ray."
-    sequence = [
-        "_clean-cosmic",
-        { cmd = "cosmic-ray init cosmic-ray.toml session.sqlite" },
-        { cmd = "cosmic-ray exec session.sqlite" },
-        { cmd = "cr-report session.sqlite" },
-    ]
-
 
     # ------------------------------------------------------------------------------
     # Quality: Formatting, Linting, & Static Typing
@@ -245,15 +232,6 @@
 [tasks._clean-temp]
     script = "shutil:rmtree('.temp', ignore_errors=1)"
 
-[tasks._clean-mutation]
-    sequence = [
-        { script = "shutil:rmtree('.mutmut-cache', ignore_errors=1)" },
-        { script = "shutil:rmtree('mutants', ignore_errors=1)" },
-    ]
-
-[tasks._clean-cosmic]
-    cmd = "python -c \"import pathlib; pathlib.Path('session.sqlite').unlink(missing_ok=True)\""
-
 [tasks.clean]
     help = "Remove build artifacts, cache directories, and test coverage outputs."
     sequence = [
@@ -264,8 +242,6 @@
         "_clean-pytest",
         "_clean-ruff",
         "_clean-temp",
-        "_clean-mutation",
-        "_clean-cosmic",
     ]
 
     # ------------------------------------------------------------------------------

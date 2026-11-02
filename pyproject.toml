@@ -45,7 +45,6 @@
         { include-group = "test" },
         { include-group = "lint" },
         { include-group = "docs" },
-        { include-group = "mutation" },
     ]
     docs = [
         "griffe-warnings-deprecated>=1.1.0",
@@ -67,7 +66,6 @@
         "typos>=1.30.0",
         "zizmor>=1.23.0",
     ]
-    mutation = ["cosmic-ray>=8.7.0", "mutmut>=3.8.0"]
     test = [
         "hypothesis>=6.125.0",
         "pytest>=9.0.0",
@@ -79,7 +77,7 @@
     ]
 
 [tool.uv]
-    default-groups = ["dev", "test", "lint", "docs", "mutation"]
+    default-groups = ["dev", "test", "lint", "docs"]
     package        = true
 
     [tool.uv.sources]
@@ -94,12 +92,7 @@
             ".coveragerc",
             "tach.toml",
             ".zizmor.yml",
-            "cosmic-ray.toml",
         ]
-
-[tool.mutmut]
-    runner       = "pytest"
-    source_paths = ["src/"]
 
 [tool.poe]
     include = "poe_tasks.toml"

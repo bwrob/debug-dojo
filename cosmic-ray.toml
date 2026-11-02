@@ -1,8 +1,0 @@
-[cosmic-ray]
-    excluded-modules = []
-    module-path      = "src/debug_dojo"
-    test-command     = "pytest"
-    timeout          = 15.0
-
-    [cosmic-ray.distributor]
-        name = "local"
