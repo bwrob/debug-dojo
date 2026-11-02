@@ -87,11 +87,13 @@ def _make_dojo_pdb(
             return_value=MagicMock(colors="neutral"),
         ),
     ):
-        return DojoPdb(
+        dbg = DojoPdb(
             stdout=stream,
             context=5,
             pt_session_options=pt_session_options,
         )
+    dbg.reset()
+    return dbg
 
 
 def test_debugger_type_set_trace_hooks() -> None:
@@ -406,9 +408,9 @@ def test_dojo_pdb_print_and_inspect_commands() -> None:
     dbg.displayhook({"key": "val"})
     assert "'key': 'val'" in buf.getvalue()
 
-    frame: FrameType = sys._getframe()  # ruff: ignore[private-member-access] -- obtain frame for evaluation tests
-    dbg.curframe = frame
-    dbg.curframe_locals = {"alpha": [1, 2], "__ internal__": True}
+    alpha = [1, 2]
+    assert alpha
+    dbg.setup(sys._getframe(), None)  # ruff: ignore[private-member-access] -- obtain frame for evaluation tests
 
     buf.truncate(0)
     buf.seek(0)
@@ -434,8 +436,7 @@ def test_dojo_pdb_args_command() -> None:
     """Test DojoPdb table command: args (and alias a)."""
     buf = io.StringIO()
     dbg = _make_dojo_pdb(stdout=buf)
-    dbg.curframe = sys._getframe()  # ruff: ignore[private-member-access] -- obtain frame for args tests
-    dbg.curframe_locals = {}
+    dbg.setup(sys._getframe(), None)  # ruff: ignore[private-member-access] -- obtain frame for args tests
 
     # Test do_args on function without parameters vs function with parameters
     dbg.do_args("")
@@ -619,8 +620,9 @@ def test_whatis_and_psource_commands() -> None:
 
     buf = io.StringIO()
     dbg = _make_dojo_pdb(stdout=buf)
-    dbg.curframe = sys._getframe()  # ruff: ignore[private-member-access] -- obtain frame for whatis/psource test
-    dbg.curframe_locals = {"sample_callable": sample_callable, "num": 42}
+    num = 42
+    assert num == 42  # ruff: ignore[magic-value-comparison] -- bind local variable for whatis/psource evaluation
+    dbg.setup(sys._getframe(), None)  # ruff: ignore[private-member-access] -- obtain frame for whatis/psource test
 
     dbg.do_whatis("sample_callable")
     dbg.do_whatis("num")

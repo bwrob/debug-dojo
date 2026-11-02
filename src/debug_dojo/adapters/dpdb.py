@@ -1144,7 +1144,7 @@ class DojoPdb(TerminalPdb):
         target_expr = arg.strip()
         if not target_expr:
             rich_inspect(
-                self.curframe_locals,
+                self._get_frame_locals(self.curframe),
                 console=self._console(),
                 title="Frame Locals",
             )
@@ -1169,7 +1169,7 @@ class DojoPdb(TerminalPdb):
         target_expr = arg.strip()
         if not target_expr:
             rich_inspect(
-                self.curframe_locals,
+                self._get_frame_locals(self.curframe),
                 console=self._console(),
                 all=True,
                 title="Frame Locals",
