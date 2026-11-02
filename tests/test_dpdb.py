@@ -1027,7 +1027,7 @@ def test_dojo_pdb_close_and_message() -> None:
 
     # When pt_loop is closed and thread_executor is None, close does nothing
     mock_loop.is_closed.return_value = True
-    dbg.thread_executor = None
+    del dbg.thread_executor
     dbg.close()
 
     # Test message method delegates when not suppressed
