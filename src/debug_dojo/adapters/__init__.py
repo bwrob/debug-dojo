@@ -11,11 +11,13 @@ from debug_dojo.adapters._base import (
     get_adapter,
     setup_debugger,
 )
+from debug_dojo.adapters.dpdb import DojoPdb
 
 __all__ = [
     "BREAKPOINT_ENV_VAR",
     "DebuggerAdapter",
     "DebuggerType",
+    "DojoPdb",
     "debugpy",
     "dpdb",
     "enter_post_mortem",
