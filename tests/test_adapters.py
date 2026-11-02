@@ -41,6 +41,7 @@ from debug_dojo.adapters.dpdb import (
     _format_watch_entries,
     _get_debugger_cls,
     _init_pdb,
+    _is_runner_frame,
     _is_user_local,
     _join_inline_items,
     _render_post_mortem_banner,
@@ -120,14 +121,113 @@ def test_format_shape_or_len() -> None:
 
 
 def test_is_user_local_and_snapshot() -> None:
-    """Test _is_user_local filters dunders, pytest temps, and modules."""
+    """Test _is_user_local filters dunders, underscore, pytest temps, and modules."""
     assert _is_user_local("count", 42) is True
+    assert _is_user_local("_", 99) is False
     assert _is_user_local("__name__", "main") is False
     assert _is_user_local("@py_assert1", 1) is False
     assert _is_user_local("sys", sys) is False
 
-    snap = _snapshot_user_locals({"x": 10, "__doc__": "ignore", "sys": sys})
+    snap = _snapshot_user_locals({"x": 10, "_": 99, "__doc__": "ignore", "sys": sys})
     assert snap == {"x": "10"}
+
+
+def test_is_runner_frame_and_hidden_predicate() -> None:
+    """Test _is_runner_frame and DojoPdb._hidden_predicate hide framework frames."""
+    frozen_frame = MagicMock()
+    frozen_frame.f_code.co_filename = "<frozen runpy>"
+    frozen_frame.f_globals = {"__name__": "runpy"}
+    assert _is_runner_frame(frozen_frame) is True
+
+    runner_frame = MagicMock()
+    runner_frame.f_code.co_filename = "/path/to/_execution.py"
+    runner_frame.f_globals = {"__name__": "debug_dojo._execution"}
+    assert _is_runner_frame(runner_frame) is True
+
+    user_frame = MagicMock()
+    user_frame.f_code.co_filename = "/path/to/app.py"
+    user_frame.f_globals = {"__name__": "__main__"}
+    assert _is_runner_frame(user_frame) is False
+
+    dbg = _make_dojo_pdb()
+    dbg.curframe = runner_frame
+    # Active curframe is never hidden
+    assert dbg._hidden_predicate(runner_frame) is False  # ruff: ignore[private-member-access] -- verify overridden _hidden_predicate
+
+    dbg.curframe = user_frame
+    assert dbg._hidden_predicate(runner_frame) is True  # ruff: ignore[private-member-access] -- verify runner frame hidden when tbhide is active
+    assert dbg.stop_here(runner_frame) is False
+    with patch.object(Pdb, "user_return") as mock_super_return:
+        dbg.user_return(runner_frame, None)
+    mock_super_return.assert_not_called()
+
+    dbg.curframe = MagicMock()
+    with patch.object(Pdb, "_hidden_predicate", return_value=True):
+        assert dbg.stop_here(user_frame) is False
+
+    with patch.object(Pdb, "_hidden_predicate", return_value=False) as mock_super:
+        assert dbg._hidden_predicate(user_frame) is False  # ruff: ignore[private-member-access] -- verify delegation to superclass for user frames
+    mock_super.assert_called_once_with(user_frame)
+
+    with (
+        patch.object(dbg, "_hidden_predicate", return_value=False),
+        patch.object(Pdb, "stop_here", return_value=True) as mock_super_stop,
+        patch.object(Pdb, "user_return") as mock_super_ret_user,
+    ):
+        assert dbg.stop_here(user_frame) is True
+        dbg.user_return(user_frame, 42)
+    mock_super_stop.assert_called_once_with(user_frame)
+    mock_super_ret_user.assert_called_once_with(user_frame, 42)
+
+
+def test_dojo_pdb_emptyline_repeats_only_navigation() -> None:
+    """Test DojoPdb.emptyline repeats navigation commands and ignores others."""
+    dbg = _make_dojo_pdb()
+
+    dbg.lastcmd = "p x + 1"
+    assert dbg.emptyline() is False
+
+    dbg.lastcmd = ""
+    assert dbg.emptyline() is False
+
+    dbg.lastcmd = "next"
+    with patch.object(Pdb, "emptyline", return_value=False) as mock_super_empty:
+        assert dbg.emptyline() is False
+    mock_super_empty.assert_called_once_with()
+
+
+def test_dojo_pdb_store_last_result() -> None:
+    """Test DojoPdb._store_last_result binds _ unless _ is a user parameter."""
+    dbg = _make_dojo_pdb()
+
+    # No-op when curframe is None or value is None
+    dbg.curframe = None
+    dbg._store_last_result(42)  # ruff: ignore[private-member-access] -- verify _store_last_result helper
+
+    frame = MagicMock()
+    frame.f_code.co_varnames = ("x", "y")
+    locals_dict: dict[str, object] = {"x": 1, "y": 2}
+    dbg.curframe = frame
+    with patch.object(dbg, "_get_frame_locals", return_value=locals_dict):
+        dbg._store_last_result(None)  # ruff: ignore[private-member-access] -- verify None is ignored
+        assert "_" not in locals_dict
+
+        dbg._store_last_result(123)  # ruff: ignore[private-member-access] -- verify first evaluation binds _
+        assert locals_dict["_"] == 123  # ruff: ignore[magic-value-comparison] -- verify bound result value
+
+        # Even if co_varnames later appears to contain '_', managed frames update '_'
+        frame.f_code.co_varnames = ("x", "y", "_")
+        dbg._store_last_result(456)  # ruff: ignore[private-member-access] -- verify subsequent evaluation updates _
+        assert locals_dict["_"] == 456  # ruff: ignore[magic-value-comparison] -- verify updated result value
+
+    # Frame that already has '_' as a user parameter is never overwritten
+    user_underscore_frame = MagicMock()
+    user_underscore_frame.f_code.co_varnames = ("_",)
+    user_locals: dict[str, object] = {"_": "preserve_me"}
+    dbg.curframe = user_underscore_frame
+    with patch.object(dbg, "_get_frame_locals", return_value=user_locals):
+        dbg._store_last_result(999)  # ruff: ignore[private-member-access] -- verify user '_' parameter is preserved
+        assert user_locals["_"] == "preserve_me"
 
 
 def test_compute_locals_diff() -> None:

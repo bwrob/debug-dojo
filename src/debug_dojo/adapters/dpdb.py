@@ -36,6 +36,38 @@ STEP_CONTEXT_LINES = 5
 MAX_MRO_PREVIEW = 4
 MAX_INLINE_BANNER_ITEMS = 4
 
+_HIDDEN_MODULE_PREFIXES: tuple[str, ...] = (
+    "bdb",
+    "click",
+    "debug_dojo",
+    "runpy",
+    "typer",
+)
+
+_REPEATABLE_COMMANDS: frozenset[str] = frozenset(
+    {
+        "c",
+        "cont",
+        "continue",
+        "d",
+        "down",
+        "l",
+        "list",
+        "ll",
+        "longlist",
+        "n",
+        "next",
+        "r",
+        "return",
+        "s",
+        "step",
+        "u",
+        "unt",
+        "until",
+        "up",
+    }
+)
+
 _HELP_ROWS: tuple[tuple[str, str, str], ...] = (
     ("Stepping", "n / next", "Execute current line and stop at next line in frame"),
     ("", "s / step", "Step into function call on current line"),
@@ -101,9 +133,34 @@ def _is_user_local(name: str, val: object) -> bool:
         bool: `True` when the variable is a user-level binding.
 
     """
-    if (name.startswith("__") and name.endswith("__")) or name.startswith("@"):
+    if (
+        name == "_"
+        or (name.startswith("__") and name.endswith("__"))
+        or name.startswith("@")
+    ):
         return False
     return not isinstance(val, ModuleType)
+
+
+def _is_runner_frame(frame: FrameType) -> bool:
+    """Return whether `frame` belongs to an internal runner or CLI framework module.
+
+    Args:
+        frame (FrameType): Stack frame to inspect.
+
+    Returns:
+        bool: `True` if the frame belongs to `debug_dojo`, `runpy`, `bdb`, `typer`,
+            or `click`.
+
+    """
+    filename = frame.f_code.co_filename
+    if filename == "<frozen runpy>" or Path(filename).name in {"dojo", "debug-dojo"}:
+        return True
+    mod_name = str(frame.f_globals.get("__name__", ""))
+    return any(
+        mod_name == prefix or mod_name.startswith(f"{prefix}.")
+        for prefix in _HIDDEN_MODULE_PREFIXES
+    )
 
 
 def _snapshot_user_locals(frame_locals: Mapping[str, object]) -> dict[str, str]:
@@ -681,6 +738,7 @@ class DojoPdb(TerminalPdb):
     displaying: dict[FrameType, dict[str, object]]
     _full_context: int
     _last_printed_frame_id: int | None
+    _managed_underscore_frames: set[int]
     _prev_locals_by_frame: dict[int, dict[str, str]]
 
     @override
@@ -700,6 +758,7 @@ class DojoPdb(TerminalPdb):
 
         """
         self._last_printed_frame_id = None
+        self._managed_underscore_frames = set()
         self._prev_locals_by_frame = {}
         session_opts: dict[str, object] = {
             "bottom_toolbar": self._render_bottom_toolbar,
@@ -803,6 +862,93 @@ class DojoPdb(TerminalPdb):
 
     def _show_display(self) -> None:
         """Suppress stdlib plain-text display output (handled in context banner)."""
+
+    @override
+    def _hidden_predicate(self, frame: FrameType) -> bool:
+        """Return whether `frame` should be hidden from stack navigation and traces.
+
+        Args:
+            frame (FrameType): Stack frame to check.
+
+        Returns:
+            bool: `True` when the frame should be skipped when `skip_hidden` is active.
+
+        """
+        if frame in {self.curframe, getattr(self, "initial_frame", None)}:
+            return False
+        if self._predicates.get("tbhide", True) and _is_runner_frame(frame):
+            return True
+        return bool(super()._hidden_predicate(frame))
+
+    @override
+    def stop_here(self, frame: FrameType) -> bool:
+        """Return whether execution should stop at `frame` during stepping.
+
+        Args:
+            frame (FrameType): Candidate stack frame.
+
+        Returns:
+            bool: `False` when `frame` is hidden, otherwise superclass result.
+
+        """
+        if self.skip_hidden and self._hidden_predicate(frame):
+            if _is_runner_frame(frame):
+                self.stopframe = getattr(self, "botframe", None)
+                self.returnframe = None
+                self.stoplineno = -1
+            return False
+        return bool(super().stop_here(frame))
+
+    @override
+    def user_return(self, frame: FrameType, return_value: object) -> None:
+        """Handle function return events while skipping hidden runner frames.
+
+        Args:
+            frame (FrameType): Returning stack frame.
+            return_value (object): Value returned by `frame`.
+
+        """
+        if self.skip_hidden and self._hidden_predicate(frame):
+            return
+        super().user_return(frame, return_value)
+
+    @override
+    def emptyline(self) -> bool:
+        """Repeat `lastcmd` on empty Enter only when it is a safe navigation command.
+
+        Returns:
+            bool: Result of repeating `lastcmd`, or `False` when ignored.
+
+        """
+        stripped = self.lastcmd.strip()
+        cmd_name = stripped.split(maxsplit=1)[0] if stripped else ""
+        if cmd_name in _REPEATABLE_COMMANDS:
+            return bool(super().emptyline())
+        return False
+
+    def _store_last_result(self, val: object) -> None:
+        """Store `val` in `_` within the active frame unless `_` is a user parameter.
+
+        Args:
+            val (object): Evaluated expression value.
+
+        """
+        if val is None:
+            return
+        frame = getattr(self, "curframe", None)
+        if frame is None:
+            return
+        frame_key = id(frame)
+        if (
+            "_" in frame.f_code.co_varnames
+            and frame_key not in self._managed_underscore_frames
+        ):
+            return
+        self._managed_underscore_frames.add(frame_key)
+        frame_locals = cast(
+            "MutableMapping[str, object]", self._get_frame_locals(frame)
+        )
+        frame_locals["_"] = val
 
     @override
     def print_stack_entry(
@@ -942,6 +1088,7 @@ class DojoPdb(TerminalPdb):
 
         """
         if obj is not None:
+            self._store_last_result(obj)
             rich_pprint(obj, console=self._console(), expand_all=True)
 
     def _eval_arg(self, arg: str) -> tuple[bool, object]:
@@ -970,6 +1117,7 @@ class DojoPdb(TerminalPdb):
         """
         ok, val = self._eval_arg(arg)
         if ok:
+            self._store_last_result(val)
             rich_pprint(val, console=self._console(), expand_all=False)
 
     @override
@@ -982,6 +1130,7 @@ class DojoPdb(TerminalPdb):
         """
         ok, val = self._eval_arg(arg)
         if ok:
+            self._store_last_result(val)
             rich_pprint(val, console=self._console(), expand_all=True)
 
     @override
