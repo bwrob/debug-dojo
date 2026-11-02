@@ -12,8 +12,8 @@ from debug_dojo._cli import cli
     "run_args",
     [
         pytest.param([], id="file"),
-        pytest.param(["-m", "debug_dojo", "run"], id="module"),
-        pytest.param(["-e", "dojo", "run"], id="executable"),
+        pytest.param(["debug_dojo"], id="module"),
+        pytest.param(["dojo"], id="executable"),
     ],
 )
 def test_target(
@@ -22,8 +22,8 @@ def test_target(
     test_target_inspect: str,
     expected_dict_output: str,
 ) -> None:
-    """Test running a file target from CLI."""
-    args = ["run", *run_args, test_target_inspect]
+    """Test auto-detected file, module, and executable targets from CLI."""
+    args = [*run_args, test_target_inspect]
     result = runner.invoke(cli, args)
 
     assert result.exit_code == 0

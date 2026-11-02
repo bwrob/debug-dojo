@@ -26,72 +26,57 @@
   </a>
 </p>
 
-[**debug-dojo**](https://bwrob.github.io/debug-dojo/) is a nimble, plug-and-play Python
-package designed to streamline your debugging workflow directly from the terminal. Drop
-it into any environment with `uv pip install debug-dojo`—with zero configuration files,
-zero cache or history files left behind, and ready for any debugger.
+[**debug-dojo**](https://bwrob.github.io/debug-dojo/) is a standalone,
+zero-configuration Python debugger and runner built around `dpdb`—an IPython-powered
+interactive debugger with [`rich`](https://github.com/Textualize/rich) terminal panels,
+inline variable diffs, and built-in object inspection.
 
 ## ✨ Features
 
-- **Plug-and-Play & Zero Traces:** Add to any environment at any point. Leaves no
-  configuration files, cache, or history behind.
-- **Built-in IPython Debugger (`dpdb`) & Debugger Agnostic:** Ships with an internal
-  IPython-powered debugger (`dpdb`) used automatically when `PYTHONBREAKPOINT` is not
-  set and no other debugger is passed to the CLI, while remaining ready for any external
-  debugger (`pdb`, `ipdb`, `pudb`, `debugpy`).
-- **CLI-Driven Control:** Pass all runtime options directly via command-line flags.
-- **Enhanced Output with Rich:** Leverages [`rich`](https://github.com/Textualize/rich)
-  for syntax-highlighted code, pretty-printed objects, and formatted tracebacks.
-- **Side-by-side Object Comparison:** Quickly identify differences between two Python
-  objects with `c(obj1, obj2)`.
-- **Interactive Object Inspection & Breakpoints:** Inspect objects deeply with `i(obj)`,
-  pretty-print with `p(obj)`, and trigger breakpoints effortlessly with `b()`.
+- **Zero-Install & Zero-Config:** Run any script directly with
+  `uvx debug-dojo script.py`. Automatically discovers your project's `.venv` and leaves
+  no configuration, cache, or history files behind.
+- **Opinionated `dpdb` Debugger:** Combines IPython tab completion and syntax
+  highlighting with Rich tables (`w`, `a`, `b`, `display`, `h`), panels (`whatis`,
+  `psource`, `pinfo`), adaptive source context, and an inline frame context banner
+  (`Δ Changed`, `↳ Line`, `↩ Return`, `👁 Watch`).
+- **Automatic Post-Mortem:** Unhandled exceptions render a Rich traceback and drop
+  directly into a `dpdb` post-mortem session at the failing frame.
+- **Built-in Inspection Shortcuts:** Injects `b()` (breakpoint), `p(obj)` (Rich print),
+  `i(obj)` (Rich inspect), and `c(obj1, obj2)` (side-by-side comparison) into
+  `builtins`.
 
-## 🚀 Installation & Zero-Install
+## 🚀 Quick Start
 
-Run `debug-dojo` instantly in any `uv`-managed project without installing it into your
-project dependencies:
+Run any Python script directly with `uvx`:
 
 ```bash
-uvx debug-dojo run my_script.py
+uvx debug-dojo my_script.py
 ```
 
-Or add `debug-dojo` to any environment using `uv`:
+Or install `debug-dojo` into an environment with `uv`:
 
 ```bash
 uv pip install debug-dojo
 ```
 
-To install alongside optional third-party debuggers (`ipdb`, `pudb`, `debugpy`):
-
-```bash
-uv pip install "debug-dojo[all-debuggers]"
-```
-
 ## 💻 CLI Usage
 
-Run your Python script or module with `dojo run`:
+Run a Python script, executable command, or module directly with `debug-dojo` (or the
+`dojo` alias), optionally seeding breakpoints from the command line without editing the
+file:
 
 ```console
-dojo run my_script.py
-```
-
-Specify a debugger or enable verbose output via CLI flags:
-
-```console
-dojo run --debugger ipdb --verbose --module my_module
-```
-
-Run an executable command with debugging tools:
-
-```console
-dojo run --exec pytest
+debug-dojo my_script.py arg1 arg2
+debug-dojo -b 42 -b process_data my_script.py
+debug-dojo pytest -k test_feature
+debug-dojo my_package.my_module
 ```
 
 ## 🐍 Usage in Code
 
-Import `debug_dojo.install` directly in your Python code to inject helpers (`b`, `p`,
-`i`, `c`) into `builtins`:
+Import `debug_dojo.install` in your Python code to configure `dpdb` and inject helpers
+(`b`, `p`, `i`, `c`) into `builtins`:
 
 ```python
 import debug_dojo.install
@@ -108,18 +93,29 @@ i(object_1)
 # Compare two objects side-by-side
 c(object_1, object_2)
 
-# Enter the debugger
+# Enter the dpdb debugger
 # b()
+```
+
+Or use the standard `pdb` / `ipdb`-compatible top-level functions and
+`PYTHONBREAKPOINT` hook directly:
+
+```python
+import debug_dojo
+
+debug_dojo.set_trace()
+# debug_dojo.post_mortem()
+# debug_dojo.pm()
 ```
 
 ## 📚 Documentation
 
-For comprehensive instructions on installation, CLI flags, advanced usage, and API
-reference, please visit the
+For CLI flags, `dpdb` interactive commands, and API reference, visit the
 [official documentation](https://bwrob.github.io/debug-dojo/).
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please refer to the
+Contributions are welcome! Refer to the
 [development guidelines](https://bwrob.github.io/debug-dojo/getting-started/#development-workflow)
-for details on how to set up your development environment and submit changes.
+for instructions on setting up the development environment and running verification
+checks.

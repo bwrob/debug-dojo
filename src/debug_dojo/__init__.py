@@ -1,7 +1,4 @@
-"""Debugging tools for Python.
-
-This module provides utilities to configure debugging backends (IPDB, PuDB,
-PDB, Debugpy) and enhanced terminal inspection tools.
+"""Opinionated Python debugger and runner powered by `dpdb` and Rich.
 
 Importing `debug_dojo.install` injects debugging tools into Python's builtins:
 
@@ -11,16 +8,27 @@ import debug_dojo.install
 b()
 ```
 
-This installs debugging helpers (`b()`, `p()`, `i()`, `c()`) and triggers a breakpoint.
+This configures `dpdb` as the active debugger, installs debugging helpers
+(`b()`, `p()`, `i()`, `c()`), and triggers a breakpoint.
 
-You can also run target scripts or modules using the `dojo` command-line interface:
+You can also invoke `set_trace()`, `post_mortem()`, or `pm()` directly:
+
+```python
+import debug_dojo
+
+debug_dojo.set_trace()
+```
+
+Or run target scripts, modules, or commands directly from the CLI:
 
 ```console
-$ dojo run --verbose target_script.py value1
+$ uvx debug-dojo target_script.py value1
 ```
 """
 
 from __future__ import annotations
 
+from debug_dojo._dpdb import pm, post_mortem, set_trace
+
 __version__ = "0.9.0"
-__all__ = ["__version__"]
+__all__ = ["__version__", "pm", "post_mortem", "set_trace"]

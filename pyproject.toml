@@ -34,9 +34,6 @@
         debug-dojo = "debug_dojo._cli:main"
         dojo       = "debug_dojo._cli:main"
 
-    [project.optional-dependencies]
-        all-debuggers = ["debugpy>=1.0.0", "ipdb>=0.13.13", "pudb>=2020.1"]
-
 [build-system]
     build-backend = "uv_build"
     requires      = ["uv_build>=0.12.7,<0.14.0"]
@@ -79,7 +76,6 @@
         "pytest-sugar>=1.1.1",
         "pytest-xdist>=3.8.0",
         "syrupy>=6.1.0",
-        "debug-dojo[all-debuggers]",
     ]
 
 [tool.uv]

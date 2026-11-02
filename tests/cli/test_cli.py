@@ -44,43 +44,29 @@ def test_no_args_prints_help(runner: CliRunner) -> None:
     assert "Usage:" in result.output
 
 
-def test_run_debug_help(runner: CliRunner) -> None:
-    """Test the help message for the run command."""
-    result = runner.invoke(cli, ["run", "--help"])
+def test_help_flag(runner: CliRunner) -> None:
+    """Test the help message for the CLI."""
+    result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
-    assert "Usage: debug_dojo run" in result.output
+    assert "Usage:" in result.output
 
 
-def test_run_debug_non_existent_file(runner: CliRunner) -> None:
+def test_non_existent_file(runner: CliRunner) -> None:
     """Test that running with a non-existent file exits with an error."""
-    result = runner.invoke(cli, ["run", "non_existent_file.py"])
+    result = runner.invoke(cli, ["non_existent_file.py"])
     assert result.exit_code == 1
 
 
-def test_run_debug_invalid_module(runner: CliRunner) -> None:
+def test_invalid_module(runner: CliRunner) -> None:
     """Test that running with an invalid module exits with an error."""
-    result = runner.invoke(cli, ["run", "-m", "non_existent_module"])
+    result = runner.invoke(cli, ["non_existent_module_xyz"])
     assert result.exit_code == 1
 
 
-def test_run_debug_module_and_exec_exclusive(runner: CliRunner) -> None:
-    """Test that --module and --exec are mutually exclusive."""
-    result = runner.invoke(cli, ["run", "-m", "-e", "target"])
-    assert result.exit_code == 1
-
-
-def test_run_debug_verbose(runner: CliRunner, test_target_inspect: str) -> None:
-    """Test the --verbose flag."""
-    result = runner.invoke(cli, ["run", "--verbose", test_target_inspect])
-    assert result.exit_code == 0
-    assert "Using debugger:" in result.output
-
-
-def test_run_options_only_no_target(runner: CliRunner) -> None:
+def test_options_only_no_target(runner: CliRunner) -> None:
     """Test that running with options but no target does not execute."""
-    result = runner.invoke(cli, ["run", "-v"])
+    result = runner.invoke(cli, ["-b", "1"])
     assert result.exit_code == 0
-    assert "Using debugger:" in result.output
 
 
 def test_normalize_cli_output_consecutive_blank_lines() -> None:
