@@ -6,8 +6,8 @@ import builtins
 
 from rich import inspect as rich_inspect, print as rich_print, traceback
 
-from debug_dojo import _dpdb
-from debug_dojo._compare import inspect_objects_side_by_side
+from debug_dojo._core.compare import inspect_objects_side_by_side
+from debug_dojo._core.debugger import setup
 
 __all__ = ["install_tools"]
 
@@ -28,7 +28,7 @@ def install_tools() -> None:
     True
 
     """
-    _dpdb.setup()
+    setup()
     _ = traceback.install(show_locals=False)
     builtins.__dict__["b"] = breakpoint
     builtins.__dict__["p"] = rich_print

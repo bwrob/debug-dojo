@@ -22,7 +22,7 @@
     name = "debug-dojo"
     readme = "README.md"
     requires-python = ">=3.12"
-    version = "0.9.0"
+    version = "0.10.0"
 
     [project.urls]
         Documentation = "https://bwrob.github.io/debug-dojo/"
@@ -31,8 +31,8 @@
         Repository    = "https://github.com/bwrob/debug-dojo.git"
 
     [project.scripts]
-        debug-dojo = "debug_dojo._cli:main"
-        dojo       = "debug_dojo._cli:main"
+        debug-dojo = "debug_dojo.cli:main"
+        dojo       = "debug_dojo.cli:main"
 
 [build-system]
     build-backend = "uv_build"

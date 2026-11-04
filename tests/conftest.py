@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from debug_dojo._cli import CliRunner
+from debug_dojo.cli import CliRunner
 
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 

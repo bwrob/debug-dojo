@@ -1,4 +1,4 @@
-"""Tests for the `_cli` module."""
+"""Tests for the `cli` module."""
 
 from __future__ import annotations
 
@@ -9,12 +9,12 @@ from unittest.mock import patch
 
 import pytest
 
-from debug_dojo._cli import cli, get_version, main
+from debug_dojo.cli import cli, get_version, main
 
 if TYPE_CHECKING:
     from syrupy.assertion import SnapshotAssertion
 
-    from debug_dojo._cli import CliRunner
+    from debug_dojo.cli import CliRunner
 
 ANSI_ESCAPE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 BOX_TRANS = str.maketrans("┌┐└┘", "╭╮╰╯")
@@ -68,8 +68,8 @@ def test_version_flags(runner: CliRunner) -> None:
 
 def test_get_version_fallback() -> None:
     """Test get_version returns fallback on PackageNotFoundError."""
-    with patch("debug_dojo._cli.version", side_effect=PackageNotFoundError):
-        assert get_version() == "0.9.0"
+    with patch("debug_dojo.cli.version", side_effect=PackageNotFoundError):
+        assert get_version() == "0.10.0"
 
 
 def test_non_existent_file(runner: CliRunner) -> None:

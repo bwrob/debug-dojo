@@ -98,12 +98,12 @@ b()  # Trigger dpdb breakpoint
 
 ### Injected Helper Functions
 
-| Shortcut        | Description             | Underlying Implementation                          |
-| :-------------- | :---------------------- | :------------------------------------------------- |
-| `b()`           | Trigger breakpoint      | `debug_dojo._dpdb.set_trace` via `breakpoint()`    |
-| `p(obj)`        | Pretty-print object     | `rich.print(obj)`                                  |
-| `i(obj)`        | Detailed inspection     | `rich.inspect(obj, methods=True, private=True)`    |
-| `c(obj1, obj2)` | Side-by-side comparison | `debug_dojo._compare.inspect_objects_side_by_side` |
+| Shortcut        | Description             | Underlying Implementation                               |
+| :-------------- | :---------------------- | :------------------------------------------------------ |
+| `b()`           | Trigger breakpoint      | `debug_dojo.set_trace` via `breakpoint()`               |
+| `p(obj)`        | Pretty-print object     | `rich.print(obj)`                                       |
+| `i(obj)`        | Detailed inspection     | `rich.inspect(obj, methods=True, private=True)`         |
+| `c(obj1, obj2)` | Side-by-side comparison | `debug_dojo._core.compare.inspect_objects_side_by_side` |
 
 ## Installation
 

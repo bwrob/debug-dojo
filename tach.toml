@@ -22,14 +22,22 @@ respect_gitignore = true
     require_ignore_directive_reasons = "error"
     unused_ignore_directives         = "error"
 
-
 [[modules]]
-    depends_on = []
+    depends_on = ["debug_dojo._core"]
     layer      = "core"
     path       = "debug_dojo"
-
 
 [[modules]]
     depends_on = []
     layer      = "cli"
+    path       = "debug_dojo.cli"
+
+[[modules]]
+    depends_on = ["debug_dojo.cli"]
+    layer      = "cli"
     path       = "debug_dojo.__main__"
+
+[[modules]]
+    depends_on = []
+    layer      = "core"
+    path       = "debug_dojo._core"

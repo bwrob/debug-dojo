@@ -1,7 +1,5 @@
 graph TD
-    src.debug_dojo._installers --> src.debug_dojo._compare
-    src.debug_dojo._execution --> src.debug_dojo._installers
-    src.debug_dojo._cli --> src.debug_dojo._execution
-    src.debug_dojo._cli --> src.debug_dojo._installers
-    src.debug_dojo.install --> src.debug_dojo._installers
-    src.debug_dojo._compare
+    debug_dojo --> debug_dojo._core
+    debug_dojo.__main__ --> debug_dojo.cli
+    debug_dojo.cli
+    debug_dojo._core

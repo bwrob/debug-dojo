@@ -22,20 +22,20 @@ Detailed API documentation for internal modules:
 
 ### Debugger Submodule
 
-::: debug_dojo._dpdb
+::: debug_dojo._core.debugger
 
 ### Installer Submodule
 
-::: debug_dojo._installers
+::: debug_dojo._core.installers
 
 ### Execution Submodule
 
-::: debug_dojo._execution
+::: debug_dojo._core.execution
 
 ### Comparison Submodule
 
-::: debug_dojo._compare
+::: debug_dojo._core.compare
 
 ### Command Line Interface Submodule
 
-::: debug_dojo._cli
+::: debug_dojo.cli

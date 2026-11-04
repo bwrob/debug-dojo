@@ -12,7 +12,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from debug_dojo._execution import (
+from debug_dojo._core.execution import (
     _activate_venv_paths,
     _configure_project_venv,
     _configure_sys_argv,
@@ -123,7 +123,7 @@ def test_configure_project_venv_when_none_and_external(
     monkeypatch.delenv("UV_PROJECT_ENVIRONMENT", raising=False)
     monkeypatch.delenv("VIRTUAL_ENV", raising=False)
     monkeypatch.chdir(tmp_path)
-    with patch("debug_dojo._execution._activate_venv_paths") as mock_activate:
+    with patch("debug_dojo._core.execution._activate_venv_paths") as mock_activate:
         _configure_project_venv("some.module")
         mock_activate.assert_not_called()
 
@@ -167,7 +167,7 @@ def test_get_runner_and_target_nonexistent() -> None:
     assert exc.value.code == 1
 
 
-@patch("debug_dojo._dpdb.post_mortem")
+@patch("debug_dojo._core.execution.post_mortem")
 def test_handle_exception_with_post_mortem(mock_pm: MagicMock) -> None:
     """Test exception handler enters dpdb post-mortem."""
     exc = RuntimeError("Test error")
@@ -186,7 +186,7 @@ def test_safe_execute_import_error() -> None:
     assert exit_exc.value.code == 1
 
 
-@patch("debug_dojo._dpdb.post_mortem")
+@patch("debug_dojo._core.execution.post_mortem")
 def test_safe_execute_user_import_error_enters_post_mortem(
     mock_pm: MagicMock,
 ) -> None:
@@ -197,7 +197,9 @@ def test_safe_execute_user_import_error_enters_post_mortem(
         raise ImportError(msg)
 
     with (
-        patch("debug_dojo._execution._is_runner_only_traceback", return_value=False),
+        patch(
+            "debug_dojo._core.execution._is_runner_only_traceback", return_value=False
+        ),
         pytest.raises(SystemExit) as exit_exc,
     ):
         _safe_execute(user_runner, "script.py")
@@ -211,7 +213,7 @@ def test_is_runner_only_traceback() -> None:
 
     fake_tb = MagicMock()
     fake_tb.tb_next = None
-    with patch("debug_dojo._dpdb._is_runner_frame", return_value=False):
+    with patch("debug_dojo._core.execution.is_runner_frame", return_value=False):
         assert _is_runner_only_traceback(fake_tb) is False
 
 
@@ -229,9 +231,12 @@ def test_safe_execute_restart_and_active_breakpoints() -> None:
         return fn()
 
     with (
-        patch("debug_dojo._dpdb.has_active_breakpoints", side_effect=[False, True]),
         patch(
-            "debug_dojo._dpdb.run_with_active_breakpoints",
+            "debug_dojo._core.execution.has_active_breakpoints",
+            side_effect=[False, True],
+        ),
+        patch(
+            "debug_dojo._core.execution.run_with_active_breakpoints",
             side_effect=invoke_fn,
         ) as mock_run_bp,
     ):
@@ -273,7 +278,7 @@ def test_safe_execute_system_exit_zero() -> None:
     _safe_execute(runner, "target")
 
 
-@patch("debug_dojo._dpdb.seed_cli_breakpoints")
+@patch("debug_dojo._core.execution.seed_cli_breakpoints")
 @patch("runpy.run_path")
 def test_execute_with_debug_default(
     mock_run_path: MagicMock,

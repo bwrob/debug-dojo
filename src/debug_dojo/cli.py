@@ -15,7 +15,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from debug_dojo._execution import execute_with_debug
+from debug_dojo._core.execution import execute_with_debug
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Mapping, Sequence
@@ -105,13 +105,13 @@ def get_version() -> str:
     """Return the package version string.
 
     Returns:
-        str: Installed package version of debug-dojo, or fallback `"0.9.0"`.
+        str: Installed package version of debug-dojo, or fallback `"0.10.0"`.
 
     """
     try:
         return version("debug-dojo")
     except PackageNotFoundError:
-        return "0.9.0"
+        return "0.10.0"
 
 
 def render_help(console: Console) -> None:
