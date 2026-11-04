@@ -32,9 +32,9 @@ from debug_dojo._core.debugger.views import (
     _format_return_banner,
     _format_watch_entries,
     _is_explicit_return_line,
-    _is_runner_frame,
     _join_inline_items,
     _snapshot_user_locals,
+    is_runner_frame,
 )
 
 if TYPE_CHECKING:
@@ -218,7 +218,7 @@ class DojoPdb(TerminalPdb):  # ruff: ignore[too-many-public-methods] -- override
         """
         if frame in {self.curframe, getattr(self, "initial_frame", None)}:
             return False
-        if self._predicates.get("tbhide", True) and _is_runner_frame(frame):
+        if self._predicates.get("tbhide", True) and is_runner_frame(frame):
             return True
         return bool(super()._hidden_predicate(frame))
 
@@ -234,7 +234,7 @@ class DojoPdb(TerminalPdb):  # ruff: ignore[too-many-public-methods] -- override
 
         """
         if self.skip_hidden and self._hidden_predicate(frame):
-            if _is_runner_frame(frame):
+            if is_runner_frame(frame):
                 self.stopframe = getattr(self, "botframe", None)
                 self.returnframe = None
                 self.stoplineno = -1

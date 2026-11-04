@@ -15,7 +15,13 @@ from typing import TYPE_CHECKING
 
 from rich import print as rich_print
 
-from debug_dojo._core import dpdb
+from debug_dojo._core.debugger import (
+    has_active_breakpoints,
+    is_runner_frame,
+    post_mortem,
+    run_with_active_breakpoints,
+    seed_cli_breakpoints,
+)
 from debug_dojo._core.installers import install_tools
 
 if TYPE_CHECKING:
@@ -217,7 +223,7 @@ def _is_runner_only_traceback(tb: TracebackType | None) -> bool:
     while cur is not None:
         mod_name = str(cur.tb_frame.f_globals.get("__name__", "") or "")
         if not (
-            dpdb._is_runner_frame(cur.tb_frame)  # ruff: ignore[private-member-access] -- share internal runner frame predicate across package modules
+            is_runner_frame(cur.tb_frame)
             or mod_name.startswith(("importlib", "unittest"))
         ):
             return False
@@ -235,7 +241,7 @@ def _handle_exception(e: Exception) -> None:
         SystemExit: Always raises `SystemExit(1)` after post-mortem completes.
 
     """
-    dpdb.post_mortem(e.__traceback__)
+    post_mortem(e.__traceback__)
     raise SystemExit(1) from e
 
 
@@ -247,10 +253,8 @@ def _invoke_target(runner: Runner, target_name: str) -> None:
         target_name (str): The name of the target.
 
     """
-    if dpdb.has_active_breakpoints():
-        dpdb.run_with_active_breakpoints(
-            lambda: runner(target_name, run_name="__main__")
-        )
+    if has_active_breakpoints():
+        run_with_active_breakpoints(lambda: runner(target_name, run_name="__main__"))
     else:
         _ = runner(target_name, run_name="__main__")
 
@@ -327,5 +331,5 @@ def execute_with_debug(
     install_tools()
     runner, resolved_target = _get_runner_and_target(target_name)
     if breaks:
-        dpdb.seed_cli_breakpoints(resolved_target, breaks)
+        seed_cli_breakpoints(resolved_target, breaks)
     _safe_execute(runner, resolved_target)

@@ -22,7 +22,7 @@ Detailed API documentation for internal modules:
 
 ### Debugger Submodule
 
-::: debug_dojo._core.dpdb
+::: debug_dojo._core.debugger
 
 ### Installer Submodule
 

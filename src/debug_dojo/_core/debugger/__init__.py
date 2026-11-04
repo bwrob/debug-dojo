@@ -24,6 +24,7 @@ from debug_dojo._core.debugger.session import (
     setup,
     wrap_sys_excepthook,
 )
+from debug_dojo._core.debugger.views import is_runner_frame
 
 __all__ = [
     "BREAKPOINT_ENV_VAR",
@@ -37,6 +38,7 @@ __all__ = [
     "_init_pdb",
     "_unwrap_callable_code",
     "has_active_breakpoints",
+    "is_runner_frame",
     "pm",
     "post_mortem",
     "run_with_active_breakpoints",

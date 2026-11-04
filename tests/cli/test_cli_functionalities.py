@@ -24,7 +24,7 @@ def test_breakpoint_dpdb(
     mock_set_trace.assert_called_once()
 
 
-@patch("debug_dojo._core.execution.dpdb.post_mortem")
+@patch("debug_dojo._core.execution.post_mortem")
 def test_post_mortem_dpdb(
     mock_dpdb_pm: MagicMock,
     runner: CliRunner,

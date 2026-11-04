@@ -139,7 +139,7 @@ def _is_user_local(name: str, val: object) -> bool:
     return not isinstance(val, ModuleType)
 
 
-def _is_runner_frame(frame: FrameType) -> bool:
+def is_runner_frame(frame: FrameType) -> bool:
     """Return whether `frame` belongs to an internal runner or CLI framework module.
 
     Args:
@@ -158,6 +158,9 @@ def _is_runner_frame(frame: FrameType) -> bool:
         mod_name == prefix or mod_name.startswith(f"{prefix}.")
         for prefix in _HIDDEN_MODULE_PREFIXES
     )
+
+
+_is_runner_frame = is_runner_frame
 
 
 def _snapshot_user_locals(frame_locals: Mapping[str, object]) -> dict[str, str]:

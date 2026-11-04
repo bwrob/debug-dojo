@@ -38,16 +38,6 @@ target-version = "py312"
         # Package modules import internal subsystems via canonical debug_dojo._core absolute paths
         "src/debug_dojo/**/*" = ["import-private-name"]
 
-        # Debugger installation and adapter functions dynamically import debugger backends
-        "src/debug_dojo/_installers.py" = [
-            "import-outside-top-level",
-            "debugger",
-        ]
-        "src/debug_dojo/adapters/*.py" = [
-            "import-outside-top-level",
-            "debugger",
-        ]
-
         # pytest idioms: tests are assertion-driven and have no production
         # assert surface to protect; test code imports private modules for testing.
         "tests/**/*" = [
