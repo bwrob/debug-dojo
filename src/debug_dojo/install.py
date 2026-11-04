@@ -2,6 +2,6 @@
 
 from __future__ import annotations
 
-from debug_dojo._installers import install_tools
+from debug_dojo._core.installers import install_tools
 
 install_tools()

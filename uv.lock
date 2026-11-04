@@ -210,7 +210,7 @@ wheels = [
 
 [[package]]
 name = "debug-dojo"
-version = "0.9.0"
+version = "0.10.0"
 source = { editable = "." }
 default-groups = ["dev", "docs", "lint", "test"]
 dependencies = [

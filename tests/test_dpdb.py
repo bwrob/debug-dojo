@@ -1,4 +1,4 @@
-"""Tests for the internal `dpdb` debugger in `debug_dojo._dpdb`."""
+"""Tests for the internal `dpdb` debugger in `debug_dojo._core.dpdb`."""
 
 from __future__ import annotations
 
@@ -14,8 +14,8 @@ from IPython.core.debugger import Pdb
 from rich.console import Console
 
 import debug_dojo
-import debug_dojo._dpdb as dpdb
-from debug_dojo._dpdb import (
+from debug_dojo._core import dpdb
+from debug_dojo._core.dpdb import (
     BREAKPOINT_ENV_VAR,
     DEFAULT_CONTEXT_LINES,
     DPDB_SET_TRACE_HOOK,
@@ -126,8 +126,8 @@ def test_is_runner_frame_and_hidden_predicate() -> None:
     assert _is_runner_frame(frozen_frame) is True
 
     runner_frame = MagicMock()
-    runner_frame.f_code.co_filename = "/path/to/_execution.py"
-    runner_frame.f_globals = {"__name__": "debug_dojo._execution"}
+    runner_frame.f_code.co_filename = "/path/to/execution.py"
+    runner_frame.f_globals = {"__name__": "debug_dojo._core.execution"}
     assert _is_runner_frame(runner_frame) is True
 
     user_frame = MagicMock()
@@ -665,8 +665,11 @@ def test_get_debugger_cls_no_shell() -> None:
     mock_app = MagicMock()
     mock_app.shell.debugger_cls = Pdb
     with (
-        patch("debug_dojo._dpdb.get_ipython", return_value=None),
-        patch("debug_dojo._dpdb.TerminalIPythonApp", return_value=mock_app),
+        patch("debug_dojo._core.debugger.session.get_ipython", return_value=None),
+        patch(
+            "debug_dojo._core.debugger.session.TerminalIPythonApp",
+            return_value=mock_app,
+        ),
     ):
         cls = _get_debugger_cls()
     assert cls is DojoPdb
@@ -681,8 +684,11 @@ def test_get_debugger_cls_no_shell_fallback() -> None:
     mock_app = MagicMock()
     mock_app.shell = None
     with (
-        patch("debug_dojo._dpdb.get_ipython", return_value=None),
-        patch("debug_dojo._dpdb.TerminalIPythonApp", return_value=mock_app),
+        patch("debug_dojo._core.debugger.session.get_ipython", return_value=None),
+        patch(
+            "debug_dojo._core.debugger.session.TerminalIPythonApp",
+            return_value=mock_app,
+        ),
     ):
         cls = _get_debugger_cls()
     assert cls is Pdb
@@ -691,7 +697,9 @@ def test_get_debugger_cls_no_shell_fallback() -> None:
 def test_get_debugger_cls_existing_shell() -> None:
     """Test _get_debugger_cls returns DojoPdb when an IPython shell is active."""
     mock_shell = MagicMock()
-    with patch("debug_dojo._dpdb.get_ipython", return_value=mock_shell):
+    with patch(
+        "debug_dojo._core.debugger.session.get_ipython", return_value=mock_shell
+    ):
         cls = _get_debugger_cls()
     assert cls is DojoPdb
 
@@ -700,7 +708,9 @@ def test_init_pdb_uses_default_context() -> None:
     """Test _init_pdb passes DEFAULT_CONTEXT_LINES to debugger_cls."""
     mock_instance = MagicMock()
     mock_cls = MagicMock(return_value=mock_instance)
-    with patch("debug_dojo._dpdb._get_debugger_cls", return_value=mock_cls):
+    with patch(
+        "debug_dojo._core.debugger.session._get_debugger_cls", return_value=mock_cls
+    ):
         pdb_inst = _init_pdb()
     assert pdb_inst is mock_instance
     mock_cls.assert_called_once_with(context=DEFAULT_CONTEXT_LINES)
@@ -745,7 +755,7 @@ def test_dpdb_set_trace_default_frame_and_shell_restore() -> None:
     )
     mock_pdb.set_trace.side_effect = record_set_trace
     mock_pdb.shell = mock_shell
-    with patch("debug_dojo._dpdb._init_pdb", return_value=mock_pdb):
+    with patch("debug_dojo._core.debugger.session._init_pdb", return_value=mock_pdb):
         dpdb.set_trace()
     assert call_order == ["restore", "set_trace"]
 
@@ -754,7 +764,7 @@ def test_dpdb_set_trace_explicit_frame_without_shell() -> None:
     """Test dpdb.set_trace with explicit frame when pdb has no shell attribute."""
     mock_pdb = MagicMock(spec=Pdb)
     explicit_frame = sys._getframe()  # ruff: ignore[private-member-access] -- obtain real frame for test assertion
-    with patch("debug_dojo._dpdb._init_pdb", return_value=mock_pdb):
+    with patch("debug_dojo._core.debugger.session._init_pdb", return_value=mock_pdb):
         dpdb.set_trace(frame=explicit_frame)
     mock_pdb.set_trace.assert_called_once_with(explicit_frame)
 
@@ -769,7 +779,7 @@ def test_dpdb_post_mortem_with_explicit_tb() -> None:
     fake_tb.tb_frame.f_code.co_name = "main"
     fake_tb.tb_lineno = 10
     with (
-        patch("debug_dojo._dpdb._init_pdb", return_value=dojo_pdb),
+        patch("debug_dojo._core.debugger.session._init_pdb", return_value=dojo_pdb),
         patch.object(dojo_pdb, "reset") as mock_reset,
         patch.object(dojo_pdb, "interaction") as mock_interaction,
     ):
@@ -782,13 +792,13 @@ def test_dpdb_post_mortem_with_explicit_tb() -> None:
 def test_dpdb_post_mortem_without_active_exception() -> None:
     """Test dpdb.post_mortem does not call interaction when no traceback exists."""
     mock_pdb = MagicMock()
-    with patch("debug_dojo._dpdb._init_pdb", return_value=mock_pdb):
+    with patch("debug_dojo._core.debugger.session._init_pdb", return_value=mock_pdb):
         dpdb.post_mortem(None)
     mock_pdb.reset.assert_called_once_with()
     mock_pdb.interaction.assert_not_called()
 
 
-@patch("debug_dojo._dpdb.set_trace")
+@patch("debug_dojo._core.debugger.session.set_trace")
 def test_dpdb_setup(mock_set_trace: MagicMock) -> None:
     """Test dpdb.setup configures PYTHONBREAKPOINT and sys.breakpointhook."""
     dpdb.setup()
@@ -805,7 +815,7 @@ def test_top_level_debug_dojo_api() -> None:
     fake_exc = RuntimeError("crash")
     with (
         patch.object(sys, "last_exc", fake_exc, create=True),
-        patch("debug_dojo._dpdb.post_mortem") as mock_pm_last,
+        patch("debug_dojo._core.debugger.session.post_mortem") as mock_pm_last,
     ):
         debug_dojo.pm()
         mock_pm_last.assert_called_once_with(fake_exc.__traceback__)
@@ -813,7 +823,7 @@ def test_top_level_debug_dojo_api() -> None:
     with (
         patch.object(sys, "last_exc", None, create=True),
         patch.object(sys, "last_traceback", None, create=True),
-        patch("debug_dojo._dpdb.post_mortem") as mock_pm_fallback,
+        patch("debug_dojo._core.debugger.session.post_mortem") as mock_pm_fallback,
     ):
         debug_dojo.pm()
         mock_pm_fallback.assert_called_once_with(None)
@@ -943,7 +953,7 @@ def test_dojo_pdb_do_interact() -> None:
 
     mock_embed_instance.side_effect = fake_embed
     with patch(
-        "debug_dojo._dpdb.InteractiveShellEmbed",
+        "debug_dojo._core.debugger.debugger.InteractiveShellEmbed",
         return_value=mock_embed_instance,
     ):
         dbg.do_interact("")
@@ -973,7 +983,7 @@ def test_cli_breakpoint_helpers(tmp_path: Path) -> None:
         dbg.clear_all_breaks()
         assert has_active_breakpoints() is False
 
-        with patch("debug_dojo._dpdb._init_pdb", return_value=dbg):
+        with patch("debug_dojo._core.debugger.session._init_pdb", return_value=dbg):
             seed_cli_breakpoints(
                 str(script),
                 ["2", f"{script}:4", f"{script}:bad", "alpha", "unknown_sym"],
@@ -1073,7 +1083,9 @@ def test_dojo_pdb_user_return_branches() -> None:
         id(func_frame),
         func_frame.f_lineno,
     )
-    with patch("debug_dojo._dpdb._is_explicit_return_line", return_value=True):
+    with patch(
+        "debug_dojo._core.debugger.debugger._is_explicit_return_line", return_value=True
+    ):
         assert dbg._should_skip_return_pause(func_frame) is True  # ruff: ignore[private-member-access] -- test return pause predicate
 
         # When user_return encounters skip condition, it calls set_step() and returns

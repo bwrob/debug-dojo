@@ -5,13 +5,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from unittest.mock import MagicMock, patch
 
-from debug_dojo._cli import cli
+from debug_dojo.cli import cli
 
 if TYPE_CHECKING:
-    from debug_dojo._cli import CliRunner
+    from debug_dojo.cli import CliRunner
 
 
-@patch("debug_dojo._dpdb.set_trace")
+@patch("debug_dojo._core.debugger.session.set_trace")
 def test_breakpoint_dpdb(
     mock_set_trace: MagicMock,
     runner: CliRunner,
@@ -24,7 +24,7 @@ def test_breakpoint_dpdb(
     mock_set_trace.assert_called_once()
 
 
-@patch("debug_dojo._dpdb.post_mortem")
+@patch("debug_dojo._core.execution.dpdb.post_mortem")
 def test_post_mortem_dpdb(
     mock_dpdb_pm: MagicMock,
     runner: CliRunner,

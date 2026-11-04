@@ -15,8 +15,8 @@ from typing import TYPE_CHECKING
 
 from rich import print as rich_print
 
-from debug_dojo import _dpdb
-from debug_dojo._installers import install_tools
+from debug_dojo._core import dpdb
+from debug_dojo._core.installers import install_tools
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Sequence
@@ -154,22 +154,20 @@ def _configure_sys_path(entry_dir: str) -> None:
 
 
 def _is_importable_module(target_name: str) -> bool:
-    """Return `True` if `target_name` resolves to an importable Python module spec.
+    """Return `True` if `target_name` resolves to an importable Python module.
 
     Args:
-        target_name (str): Candidate module or package name.
+        target_name (str): Dotted module name.
 
     Returns:
-        bool: `True` when `importlib.util.find_spec` locates the module.
+        bool: `True` if `target_name` can be located by import machinery.
 
     """
-    if not target_name or "/" in target_name or "\\" in target_name:
-        return False
     if target_name.endswith(".py"):
         return False
     try:
         return importlib.util.find_spec(target_name) is not None
-    except (ImportError, ValueError, AttributeError):
+    except (ValueError, ImportError):
         return False
 
 
@@ -219,7 +217,7 @@ def _is_runner_only_traceback(tb: TracebackType | None) -> bool:
     while cur is not None:
         mod_name = str(cur.tb_frame.f_globals.get("__name__", "") or "")
         if not (
-            _dpdb._is_runner_frame(cur.tb_frame)  # ruff: ignore[private-member-access] -- share internal runner frame predicate across package modules
+            dpdb._is_runner_frame(cur.tb_frame)  # ruff: ignore[private-member-access] -- share internal runner frame predicate across package modules
             or mod_name.startswith(("importlib", "unittest"))
         ):
             return False
@@ -237,7 +235,7 @@ def _handle_exception(e: Exception) -> None:
         SystemExit: Always raises `SystemExit(1)` after post-mortem completes.
 
     """
-    _dpdb.post_mortem(e.__traceback__)
+    dpdb.post_mortem(e.__traceback__)
     raise SystemExit(1) from e
 
 
@@ -249,8 +247,8 @@ def _invoke_target(runner: Runner, target_name: str) -> None:
         target_name (str): The name of the target.
 
     """
-    if _dpdb.has_active_breakpoints():
-        _dpdb.run_with_active_breakpoints(
+    if dpdb.has_active_breakpoints():
+        dpdb.run_with_active_breakpoints(
             lambda: runner(target_name, run_name="__main__")
         )
     else:
@@ -329,5 +327,5 @@ def execute_with_debug(
     install_tools()
     runner, resolved_target = _get_runner_and_target(target_name)
     if breaks:
-        _dpdb.seed_cli_breakpoints(resolved_target, breaks)
+        dpdb.seed_cli_breakpoints(resolved_target, breaks)
     _safe_execute(runner, resolved_target)

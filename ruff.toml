@@ -1,5 +1,6 @@
-exclude     = [".venv*", "site", "dist"]
-line-length = 88
+exclude        = [".venv*", "site", "dist"]
+line-length    = 88
+target-version = "py312"
 
 [lint]
     future-annotations = true
@@ -34,6 +35,9 @@ line-length = 88
         required-imports   = ["from __future__ import annotations"]
 
     [lint.per-file-ignores]
+        # Package modules import internal subsystems via canonical debug_dojo._core absolute paths
+        "src/debug_dojo/**/*" = ["import-private-name"]
+
         # Debugger installation and adapter functions dynamically import debugger backends
         "src/debug_dojo/_installers.py" = [
             "import-outside-top-level",

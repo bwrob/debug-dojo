@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from debug_dojo._installers import install_tools
+from debug_dojo._core.installers import install_tools
 
 
 @pytest.fixture(autouse=True)  # ruff: ignore[pytest-fixture-autouse] -- fixture must automatically reset Python builtins state after every installer test
@@ -20,7 +20,7 @@ def cleanup_builtins() -> Iterator[None]:
 
 
 @patch("rich.traceback.install")
-@patch("debug_dojo._dpdb.setup")
+@patch("debug_dojo._core.installers.setup")
 def test_install_tools(
     mock_setup_dpdb: MagicMock,
     mock_traceback_install: MagicMock,

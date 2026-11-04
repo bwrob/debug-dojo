@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from rich.text import Text
 
-from debug_dojo._compare import (
+from debug_dojo._core.compare import (
     get_object_attributes,
     get_object_methods,
     get_simplified_object_info,

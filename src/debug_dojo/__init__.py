@@ -22,13 +22,13 @@ debug_dojo.set_trace()
 Or run target scripts, modules, or commands directly from the CLI:
 
 ```console
-$ uvx debug-dojo target_script.py value1
+$ uvx debug-dojo target_script.py value_1
 ```
 """
 
 from __future__ import annotations
 
-from debug_dojo._dpdb import pm, post_mortem, set_trace
+from debug_dojo._core.debugger import pm, post_mortem, set_trace
 
-__version__ = "0.9.0"
+__version__ = "0.10.0"
 __all__ = ["__version__", "pm", "post_mortem", "set_trace"]
