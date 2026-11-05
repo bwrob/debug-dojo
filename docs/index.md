@@ -37,7 +37,7 @@ dpdb> n
 > /workspace/app.py(12)<module>()
      10     service = {"service": "api", "port": 8080}
      11     b()
----> 12     result = handle_request(service)
+----> 12     result = handle_request(service)
   ↳ Line: service={'service': 'api', 'port': 8080}
 dpdb> c
 ```
@@ -71,11 +71,14 @@ uvx debug-dojo script.py
 # Run with the installed dojo alias
 dojo script.py
 
-# Run a Python module
-dojo -m my_package.worker
+# Run an importable Python module
+dojo my_package.worker
 
 # Run an executable command with debugging tools active
-dojo -e pytest
+dojo pytest
+
+# Set initial breakpoints from the CLI
+dojo -b 42 -b handle_request app.py
 ```
 
 ### 2. In-Code Activation

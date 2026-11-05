@@ -107,6 +107,9 @@ You can also use the `pdb` / `ipdb`-compatible top-level API or set
 import debug_dojo
 
 debug_dojo.set_trace()
+# Or enter post-mortem debugging directly:
+# debug_dojo.post_mortem()
+# debug_dojo.pm()
 ```
 
 ## 4. Automatic Post-Mortem Debugging
@@ -152,13 +155,13 @@ executes targets, and manages failure states.
 
 ```mermaid
 flowchart TD
-    CLI["debug-dojo / dojo CLI"] --> INSTALLER["Installers (_installers.py)"]
+    CLI["debug-dojo / dojo CLI (cli.py)"] --> INSTALLER["Installers (_core/installers.py)"]
     INSTALLER --> BUILTINS["Python builtins (b, p, i, c)"]
-    INSTALLER --> HOOK["sys.breakpointhook (dpdb.set_trace)"]
-    CLI --> EXEC["Target Execution (_execution.py)"]
+    INSTALLER --> HOOK["sys.breakpointhook (_core/debugger/session.py)"]
+    CLI --> EXEC["Target Execution (_core/execution.py)"]
     BUILTINS --> EXEC
     HOOK --> EXEC
-    EXEC -->|Unhandled Exception| PM["dpdb Post-Mortem (dpdb.post_mortem)"]
+    EXEC -->|Unhandled Exception| PM["dpdb Post-Mortem (_core/debugger/session.py)"]
 ```
 
 ### Execution Lifecycle

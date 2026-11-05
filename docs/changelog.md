@@ -15,14 +15,27 @@ and this project adheres to
 
 ### Added
 
-- Opinionated, plug-and-play debugging experience with zero configuration overhead.
-- Debugger-agnostic post-mortem debugging that dispatches to the active debugger (PDB, IPDB, PuDB) with safe fallback to standard `pdb.post_mortem`.
+- Built-in `dpdb` (Dojo Pdb) interactive terminal debugger powered by IPython and Rich with colored syntax highlighting, tab completion, and adaptive source context ([#146](https://github.com/bwrob/debug-dojo/pull/146), [#147](https://github.com/bwrob/debug-dojo/pull/147)).
+- Inline frame context banner displaying modified locals (`Δ Changed:`), active-line variable values (`↳ Line:`), return values (`↩ Return:`), and watched expressions (`👁 Watch:`) on every step ([#146](https://github.com/bwrob/debug-dojo/pull/146)).
+- Rich inspection commands in `dpdb`: call stack tables (`w`), function argument inspector (`a`), expression watches (`display` / `undisplay`), and rich object inspection (`pinfo`, `whatis`, `psource`) ([#146](https://github.com/bwrob/debug-dojo/pull/146)).
+- Zero-configuration runner with automatic target resolution for scripts, executable commands in `.venv` or `PATH`, and importable modules without flags ([#147](https://github.com/bwrob/debug-dojo/pull/147), [#148](https://github.com/bwrob/debug-dojo/pull/148)).
+- Command-line breakpoint seeding via `-b` / `--break` supporting line numbers, `file:line`, or function names prior to execution ([#146](https://github.com/bwrob/debug-dojo/pull/146), [#148](https://github.com/bwrob/debug-dojo/pull/148)).
+
+### Changed
+
+- Replaced heavy `typer` and `click` dependencies with a lightweight standard library argument parser styled exclusively with Rich, achieving sub-10ms startup latency and zero argument-passthrough interference ([#148](https://github.com/bwrob/debug-dojo/pull/148)).
+- Relocated public interface to package root (`debug_dojo`, `debug_dojo.install`, `debug_dojo.cli`) and isolated subsystems under `debug_dojo._core` ([#149](https://github.com/bwrob/debug-dojo/pull/149)).
+- Decomposed monolithic debugger module into modular subpackage `debug_dojo._core.debugger` (`views`, `breakpoints`, `debugger`, `session`) ([#149](https://github.com/bwrob/debug-dojo/pull/149)).
+
+### Fixed
+
+- Added `UV_NO_SOURCES_PACKAGE: taplo` in Docs deployment workflow to prevent local directory resolution failures during GitHub Pages builds ([#150](https://github.com/bwrob/debug-dojo/pull/150)).
 
 ### Removed
 
-- Removed file-based configuration loading and models (`dojo.toml`, `pyproject.toml`, `_config.py`, and `_config_models.py`).
-- Removed `dojo config` CLI command and `--config` option.
-- Removed `dacite` and `tomlkit` runtime dependencies.
+- Removed file-based configuration loading and models (`dojo.toml`, `pyproject.toml`, `_config.py`, and `_config_models.py`) in favor of zero-configuration operation ([#145](https://github.com/bwrob/debug-dojo/pull/145)).
+- Removed `dojo config` and `dojo belt` CLI commands, along with legacy gamification mechanics ([#145](https://github.com/bwrob/debug-dojo/pull/145)).
+- Removed `dacite`, `tomlkit`, `typer`, and `click` runtime dependencies ([#145](https://github.com/bwrob/debug-dojo/pull/145), [#148](https://github.com/bwrob/debug-dojo/pull/148)).
 
 ## V0.9.0 (2026-11-01)
 
