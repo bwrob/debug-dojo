@@ -13,6 +13,8 @@ and this project adheres to
 
 ## Unreleased
 
+## V0.10.0 (2026-11-05)
+
 ### Added
 
 - Built-in `dpdb` (Dojo Pdb) interactive terminal debugger powered by IPython and Rich with colored syntax highlighting, tab completion, and adaptive source context ([#146](https://github.com/bwrob/debug-dojo/pull/146), [#147](https://github.com/bwrob/debug-dojo/pull/147)).
