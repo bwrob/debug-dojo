@@ -1,5 +1,8 @@
 name: Docs
 
+env:
+    UV_NO_SOURCES_PACKAGE: taplo
+
 on:
     push:
         branches:
