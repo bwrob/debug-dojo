@@ -10,18 +10,20 @@ commands with the `dpdb` interactive debugger and Rich inspection helpers pre-in
 
 <!-- termynal -->
 ```console
-$ debug-dojo --help
+$ dojo --help
 
-<b>Usage: </b><b>debug-dojo [OPTIONS] [TARGET]</b>
+<b>Usage:</b> <b>dojo</b> [OPTIONS] [target] [target_args...]
 
 Run a Python script, module, or command with the dpdb debugger.
 
 ╭─ Arguments ──────────────────────────────────────────────────────────────────╮
-│   target      [target]  The target script, module, or command to debug.      │
+│ target              The target script, module, or command to debug.          │
+│ target_args         Arguments forwarded directly to the target program.      │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ╭─ Options ────────────────────────────────────────────────────────────────────╮
-│ --break  -b  TEXT  Set a breakpoint (line, file:line, or function)           │
-│ --help             Show this message and exit.                               │
+│ -b, --break <loc>   Set a breakpoint (line, file:line, or function).         │
+│ -v, --version       Show version and exit.                                   │
+│ -h, --help          Show this message and exit.                              │
 ╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -32,23 +34,25 @@ helpers (`b()`, `p()`, `i()`, `c()`), Rich tracebacks, and `dpdb` post-mortem ex
 handling pre-injected:
 
 ```console
-uvx debug-dojo [OPTIONS] [TARGET] [TARGET_ARGS]...
-dojo [OPTIONS] [TARGET] [TARGET_ARGS]...
+uvx debug-dojo [OPTIONS] [target] [target_args...]
+dojo [OPTIONS] [target] [target_args...]
 ```
 
 ### Arguments
 
-| Argument      | Type              | Description                                                         |
-| :------------ | :---------------- | :------------------------------------------------------------------ |
-| `TARGET`      | String (Optional) | Path to script, executable command on `PATH`, or module name.       |
-| `TARGET_ARGS` | List of Strings   | Optional trailing arguments forwarded to the target via `sys.argv`. |
+| Argument      | Type              | Description                                                                    |
+| :------------ | :---------------- | :----------------------------------------------------------------------------- |
+| `target`      | String (Optional) | Path to script, executable command on `PATH` or `.venv`, or importable module. |
+| `target_args` | List of Strings   | Optional trailing arguments forwarded directly to the target via `sys.argv`.   |
 
 ### Options
 
-| Option    | Flag | Type        | Default | Description                                                                |
-| :-------- | :--- | :---------- | :------ | :------------------------------------------------------------------------- |
-| `--break` | `-b` | `list[str]` | `None`  | Set a breakpoint (`line`, `file:line`, or function name) before execution. |
-| `--help`  |      | Flag        |         | Show help message and exit.                                                |
+| Option          | Flag | Type        | Default | Description                                                                   |
+| :-------------- | :--- | :---------- | :------ | :---------------------------------------------------------------------------- |
+| `--break <loc>` | `-b` | `list[str]` | `None`  | Set a breakpoint (`line`, `file:line`, or function name) before execution.    |
+| `--version`     | `-v` | Flag        |         | Show package version and exit.                                                |
+| `--help`        | `-h` | Flag        |         | Show help message and exit.                                                   |
+| `--`            |      | Delimiter   |         | Explicitly terminate option parsing; forwards all remaining tokens to target. |
 
 ### Automatic Target Resolution
 
