@@ -1,0 +1,43 @@
+name: PyPI
+
+on:
+    push:
+        tags:
+            - "v*"
+    workflow_dispatch:
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: false
+
+permissions:
+    contents: read
+
+jobs:
+    publish:
+        name: Build and publish to PyPI
+        runs-on: ubuntu-latest
+        environment: pypi
+        permissions:
+            contents: read
+            id-token: write # Required for PyPI Trusted Publishing OIDC token
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v7
+              with:
+                  persist-credentials: false
+
+            - name: Install uv and setup Python
+              uses: astral-sh/setup-uv@v10.3.2
+              with:
+                  python-version: "3.12"
+                  enable-cache: false
+
+            - name: Build distributions
+              run: uv build
+
+            - name: Verify wheel imports in isolated environment
+              run: python scripts/verify_wheel.py
+
+            - name: Publish to PyPI
+              uses: pypa/gh-action-pypi-publish@release/v1
